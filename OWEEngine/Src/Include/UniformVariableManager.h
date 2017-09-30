@@ -138,7 +138,7 @@ public:
             if(location == -1)
                 continue;
 
-            Add(nameBuf.data(), { location, type });
+            Add(nameBuf.data(), { location, type, nullptr });
         }
     }
 
