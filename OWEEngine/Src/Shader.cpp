@@ -49,6 +49,11 @@ bool Shader::IsBound(void) const
     return cur == program_;
 }
 
+UniformVariableManager Shader::CreateUniformMgr(void) const
+{
+    return UniformVariableManager(program_);
+}
+
 GLuint Shader::_Unsafe_GetProgramName(void) const
 {
     return program_;

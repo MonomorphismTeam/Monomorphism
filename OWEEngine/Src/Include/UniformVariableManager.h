@@ -17,24 +17,88 @@ By AirGuanZ
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_UniformAux)
 
-//TODO: 完成_UniformTypeChecker
-//可以用tuple形参来进行多个模板参数包的分隔
-template<typename...Dsts, typename...Srcs>
-bool _UniformTypeCheckerAux(GLenum type, const std::tuple<Dsts...> &, const std::pair<std::tuple<Srcs...>, GLenum> &src)
-{
-    return false;
-}
+//TODO: 用StaticList(type, VarTypes)改写_UniformTypeChecker
+//这样一长串特化看起来太蠢了
 
-template<typename...Dsts>
-bool _UniformTypeCheckerAux(GLenum type, const std::tuple<Dsts...> &, const std::pair<std::tuple<Dsts...>, GLenum> &src)
+template<typename...VarTypes> struct _UniformTypeCheckerAux
 {
-    return type == src.second;
-}
+    static bool _Check(GLenum type) { return false; }
+};
 
-template<typename...Dsts, typename T, typename...Others>
-bool _UniformTypeCheckerAux(GLenum type, const std::tuple<Dsts...> &fst, const T &src, std::add_const_t<Others&>...others)
+template<> struct _UniformTypeCheckerAux<GLfloat>
 {
-    return _UniformTypeCheckerAux(type, fst, src) || _UniformTypeCheckerAux(type, fst, others...);
+    static bool _Check(GLenum type) { return type == GL_FLOAT; }
+};
+
+template<> struct _UniformTypeCheckerAux<GLfloat, GLfloat>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC2; }
+};
+
+template<> struct _UniformTypeCheckerAux<GLfloat, GLfloat, GLfloat>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC3; }
+};
+
+template<> struct _UniformTypeCheckerAux<GLfloat, GLfloat, GLfloat, GLfloat>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC4; }
+};
+
+template<> struct _UniformTypeCheckerAux<GLint>
+{
+    static bool _Check(GLenum type) { return type == GL_INT; }
+};
+
+template<> struct _UniformTypeCheckerAux<GLint, GLint>
+{
+    static bool _Check(GLenum type) { return type == GL_INT_VEC2; }
+};
+
+template<> struct _UniformTypeCheckerAux<GLint, GLint, GLint>
+{
+    static bool _Check(GLenum type) { return type == GL_INT_VEC3; }
+};
+
+template<> struct _UniformTypeCheckerAux<GLint, GLint, GLint, GLint>
+{
+    static bool _Check(GLenum type) { return type == GL_INT_VEC4; }
+};
+
+template<> struct _UniformTypeCheckerAux<glm::vec2>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC2; }
+};
+
+template<> struct _UniformTypeCheckerAux<glm::vec3>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC3; }
+};
+
+template<> struct _UniformTypeCheckerAux<glm::vec4>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC4; }
+};
+
+template<> struct _UniformTypeCheckerAux<glm::mat2x2>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_MAT2; }
+};
+
+template<> struct _UniformTypeCheckerAux<glm::mat3x3>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_MAT3; }
+};
+
+template<> struct _UniformTypeCheckerAux<glm::mat4x4>
+{
+    static bool _Check(GLenum type) { return type == GL_FLOAT_MAT4; }
+};
+
+template<typename...VarTypes>
+bool _UniformTypeChecker(GLenum type)
+{
+    return _UniformTypeCheckerAux<VarTypes...>::_Check(type);
 }
 
 class _UniformVariableManager
@@ -44,37 +108,84 @@ public:
     {
         GLint location;
         GLenum type;
+
+        _UniformAux::_UniformVariableBase *_var;
     };
 
+    struct UniformNameLengthError { std::string name; };
     struct UniformTypeError { std::string name; GLenum actType; };
     struct UniformNotFoundError { std::string name; };
 
-    _UniformVariableManager(GLuint prog);
+    _UniformVariableManager(GLuint prog)
+    {
+        assert(glIsProgram(prog));
+        //取得active uniform variable数量
+        GLint activeCnt = 0;
+        glGetProgramiv(prog, GL_ACTIVE_UNIFORMS, &activeCnt);
+
+        //查询每个variable信息
+        for(GLint i = 0; i != activeCnt; ++i)
+        {
+            constexpr size_t UNIFORM_NAME_BUF_LEN = 128;
+            GLenum type; GLsizei nameLen;
+            std::vector<GLchar> nameBuf(UNIFORM_NAME_BUF_LEN, 'a');
+            glGetActiveUniform(prog, i, UNIFORM_NAME_BUF_LEN, &nameLen, nullptr, &type, nameBuf.data());
+            if(nameLen > UNIFORM_NAME_BUF_LEN - 1)
+                throw UniformNameLengthError{ std::string(nameBuf.data()) };
+
+            //glGetUniformLocation失败说明是个数组或者结构，不被uniform variable支持
+            GLint location = glGetUniformLocation(prog, nameBuf.data());
+            if(location == -1)
+                continue;
+
+            Add(nameBuf.data(), { location, type });
+        }
+    }
 
     ~_UniformVariableManager(void)
     {
         //do nothing
     }
 
+    //添加一个新的uniform variable记录
     void Add(const std::string &name, const VarInfo& info)
     {
         vars_[name] = info;
     }
 
+    //查找一个uniform variable是否存在
     bool FindUniform(const std::string &name) const
     {
         return vars_.find(name) != vars_.end();
     }
 
+    //取得特定uniform variable的box class用于设置它
     template<typename...VarTypes>
-    _UniformVariable<VarTypes...> GetUniform(const std::string &name) const
+    _UniformVariable<VarTypes...> &GetUniform(const std::string &name)
     {
         auto it = vars_.find(name);
         if(it == vars_.end())
             throw UniformNotFoundError{ name };
-        if(!_UniformTypeChecker<VarTypes...>(it->second.type))
-            throw UniformTypeError{ name, it->second.type };
-        return _UniformVariable<VarTypes...>(it->second.location);
+        VarInfo &info = it->second;
+        if(!_UniformTypeChecker<VarTypes...>(info.type))
+            throw UniformTypeError{ name, info.type };
+        if(!info._var)
+            info._var = new _UniformVariable<VarTypes...>(info.location);
+        return *dynamic_cast<_UniformVariable<VarTypes...>*>(info._var);
+    }
+
+    void Bind(void) const
+    {
+        for(auto it : vars_)
+        {
+            if(it.second._var)
+                it.second._var->Bind();
+        }
+    }
+
+    const std::map<std::string, VarInfo> &_GetAllUniforms(void) const
+    {
+        return vars_;
     }
 
 private:

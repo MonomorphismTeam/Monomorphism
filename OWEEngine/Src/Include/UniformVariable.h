@@ -1,4 +1,4 @@
-/*================================================================
+﻿/*================================================================
 Filename: UniformVariable.h
 Date: 2017.9.24
 By AirGuanZ
@@ -76,8 +76,14 @@ inline void _SetUniform(GLint loc, const glm::mat4x4 &m)
     glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
 }
 
+class _UniformVariableBase
+{
+public:
+    virtual void Bind(void) const = 0;
+};
+
 template<typename...VarTypes>
-class _UniformVariable
+class _UniformVariable : public _UniformVariableBase
 {
 public:
     template<int I>
@@ -103,7 +109,7 @@ public:
     }
 
     //使用该变量值
-    void Bind(void)
+    void Bind(void) const
     {
         _BindAux(std::make_index_sequence<std::tuple_size<decltype(var_)>::value>());
     }
@@ -136,7 +142,7 @@ public:
 
 private:
     template<std::size_t...I>
-    void _BindAux(std::index_sequence<I...>)
+    void _BindAux(std::index_sequence<I...>) const
     {
         _SetUniform(loc_, std::get<I>(var_)...);
     }

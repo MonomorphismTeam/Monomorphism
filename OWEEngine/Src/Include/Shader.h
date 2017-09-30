@@ -11,6 +11,7 @@ By AirGuanZ
 #include "Common.h"
 #include "GLHeaders.h"
 #include "ShaderAux.h"
+#include "UniformVariableManager.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 
@@ -42,6 +43,8 @@ public:
     //这函数没啥用，没事儿别调
     void Unbind(void) const;
     bool IsBound(void) const;
+
+    UniformVariableManager CreateUniformMgr(void) const;
 
     GLuint _Unsafe_GetProgramName(void) const;
 

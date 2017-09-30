@@ -41,6 +41,10 @@ public:
             return -1;
         }
 
+        auto mgr = shader.CreateUniformMgr();
+        auto offset = mgr.GetUniform<glm::vec3>("offset");
+        offset.SetVals(glm::vec3{ 1.0f, 2.0f, 3.0f });
+
         //Ö÷Ñ­»·
         while(!closed_)
         {
@@ -48,6 +52,7 @@ public:
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             shader.Bind();
+            mgr.Bind();
             //Draw something
             shader.Unbind();
 
