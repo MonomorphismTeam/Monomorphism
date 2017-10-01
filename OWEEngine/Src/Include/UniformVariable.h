@@ -19,6 +19,7 @@ __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_UniformAux)
 
 //用重载表述OGL不同类型glUniform使之具有统一形式
+
 inline void _SetUniform(GLint loc, GLfloat fv0)
 {
     glUniform1f(loc, fv0);
@@ -76,10 +77,12 @@ inline void _SetUniform(GLint loc, const glm::mat4x4 &m)
     glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
 }
 
+//提供给uniform variable的容器，用于统一bind操作
 class _UniformVariableBase
 {
 public:
     virtual void Bind(void) const = 0;
+    virtual ~_UniformVariableBase(void) { };
 };
 
 template<typename...VarTypes>
@@ -93,6 +96,11 @@ public:
         :loc_(loc)
     {
 
+    }
+
+    ~_UniformVariable(void)
+    {
+        //do nothing
     }
 
     //设置整个Uniform variable的值

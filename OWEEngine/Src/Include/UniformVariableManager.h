@@ -144,7 +144,11 @@ public:
 
     ~_UniformVariableManager(void)
     {
-        //do nothing
+        for(auto it : vars_)
+        {
+            if(it.second._var)
+                delete it.second._var;
+        }
     }
 
     //添加一个新的uniform variable记录

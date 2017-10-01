@@ -17,6 +17,9 @@
     <Filter Include="Shader">
       <UniqueIdentifier>{ac9a0c2c-976a-4d1a-90a1-59cc9c3f3128}</UniqueIdentifier>
     </Filter>
+    <Filter Include="GLBuffer">
+      <UniqueIdentifier>{6b10e359-fbe6-4843-86c4-5e153a3c29a2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Test.cpp" />
@@ -63,6 +66,9 @@
     </ClInclude>
     <ClInclude Include="..\Src\Include\UniformVariableManager.h">
       <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\Include\VertexBuffer.h">
+      <Filter>GLBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
