@@ -70,5 +70,8 @@
     <ClInclude Include="..\Src\Include\VertexBuffer.h">
       <Filter>GLBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Src\Include\AttribVariableManager.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

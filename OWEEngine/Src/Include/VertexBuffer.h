@@ -7,6 +7,7 @@ By AirGuanZ
 #define __OWE_VERTEX_BUFFER_H__
 
 #include <cassert>
+#include <iostream>
 
 #include "Common.h"
 #include "GLHeaders.h"
@@ -68,7 +69,10 @@ public:
     {
         assert(IsAvailable() == false && initData != nullptr && elemCnt > 0);
         glGenBuffers(1, &vbo_);
-        glNamedBufferData(vbo_, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<false, _Copy>());
+        glBindBuffer(GL_VERTEX_ARRAY, vbo_);
+        glBufferData(GL_VERTEX_ARRAY, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<false, _Copy>());
+        //我的显卡驱动太老不支持...MD
+        //glNamedBufferData(vbo_, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<false, _Copy>());
         elemCnt_ = elemCnt;
         return true;
     }
@@ -82,16 +86,18 @@ public:
     {
         assert(IsAvailable() == false && initData != nullptr && elemCnt > 0);
         glGenBuffers(1, &vbo_);
-        glNamedBufferData(vbo_, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<true, _Copy>());
+        glBindBuffer(GL_VERTEX_ARRAY, vbo_);
+        glBufferData(GL_VERTEX_ARRAY, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<true, _Copy>());
         elemCnt_ = elemCnt;
         return true;
     }
 
     bool Initialize(size_t elemCnt)
     {
-        assert(IsAvailable() == false && initData != nullptr && elemCnt > 0);
+        assert(IsAvailable() == false && elemCnt > 0);
         glGenBuffers(1, &vbo_);
-        glNamedBufferData(vbo_, elemCnt * sizeof(_ElemType), nullptr, _VertexBufferUsage<true, _Copy>());
+        glBindBuffer(GL_VERTEX_ARRAY, vbo_);
+        glBufferData(GL_VERTEX_ARRAY, elemCnt * sizeof(_ElemType), nullptr, _VertexBufferUsage<true, _Copy>());
         elemCnt_ = elemCnt;
         return true;
     }

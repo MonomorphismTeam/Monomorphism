@@ -26,6 +26,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Include\ASCIIFile.h" />
+    <ClInclude Include="..\Src\Include\AttribVariableManager.h" />
     <ClInclude Include="..\Src\Include\Common.h" />
     <ClInclude Include="..\Src\Include\GLHeaders.h" />
     <ClInclude Include="..\Src\Include\InputManager.h" />

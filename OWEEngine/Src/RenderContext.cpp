@@ -45,10 +45,6 @@ namespace
         glfwMakeContextCurrent(glfwWindow);
         if(desc.winLeft >= 0 && desc.winTop >= 0)
             glfwSetWindowPos(glfwWindow, desc.winLeft, desc.winTop);
-        else
-        {
-
-        }
         glfwSwapInterval(desc.vsync ? 1 : 0);
 
         glewExperimental = GL_TRUE;

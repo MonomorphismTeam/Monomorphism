@@ -100,7 +100,6 @@ bool _UniformTypeChecker(GLenum type)
 {
     return _UniformTypeCheckerAux<VarTypes...>::_Check(type);
 }
-
 class _UniformVariableManager
 {
 public:
@@ -122,17 +121,16 @@ public:
         //取得active uniform variable数量
         GLint activeCnt = 0;
         glGetProgramiv(prog, GL_ACTIVE_UNIFORMS, &activeCnt);
-
+        using namespace std;
         //查询每个variable信息
         for(GLint i = 0; i != activeCnt; ++i)
         {
-            constexpr size_t UNIFORM_NAME_BUF_LEN = 128;
-            GLenum type; GLsizei nameLen;
-            std::vector<GLchar> nameBuf(UNIFORM_NAME_BUF_LEN, 'a');
-            glGetActiveUniform(prog, i, UNIFORM_NAME_BUF_LEN, &nameLen, nullptr, &type, nameBuf.data());
-            if(nameLen > UNIFORM_NAME_BUF_LEN - 1)
-                throw UniformNameLengthError{ std::string(nameBuf.data()) };
-
+            GLenum type;
+            GLint maxLen;
+            glGetProgramiv(prog, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
+            std::vector<GLchar> nameBuf(maxLen + 1, 'a');
+            GLsizei nameLen, size;
+            glGetActiveUniform(prog, i, maxLen, &nameLen, &size, &type, nameBuf.data());
             //glGetUniformLocation失败说明是个数组或者结构，不被uniform variable支持
             GLint location = glGetUniformLocation(prog, nameBuf.data());
             if(location == -1)
@@ -176,6 +174,18 @@ public:
         if(!info._var)
             info._var = new _UniformVariable<VarTypes...>(info.location);
         return *dynamic_cast<_UniformVariable<VarTypes...>*>(info._var);
+    }
+
+    template<typename...VarTypes>
+    _ImmediateUniformVariable<VarTypes...> GetImmediateUniform(const std::string &name)
+    {
+        auto it = vars_.find(name);
+        if(it == vars_.end())
+            throw UniformNotFoundError{ name };
+        VarInfo &info = it->second;
+        if(!_UniformTypeChecker<VarTypes...>(info.type))
+            throw UniformTypeError{ name, info.type };
+        return _ImmediateUniformVariable<VarTypes...>(info.location);
     }
 
     void Bind(void) const

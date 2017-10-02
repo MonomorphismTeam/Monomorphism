@@ -89,14 +89,10 @@ template<typename...VarTypes>
 class _UniformVariable : public _UniformVariableBase
 {
 public:
+    friend class _UniformVariableManager;
+
     template<int I>
     using _VarType = typename std::tuple_element<I, std::tuple<VarTypes...>>::type;
-
-    _UniformVariable(GLint loc)
-        :loc_(loc)
-    {
-
-    }
 
     ~_UniformVariable(void)
     {
@@ -119,6 +115,12 @@ public:
     //使用该变量值
     void Bind(void) const
     {
+        _BindAux(std::make_index_sequence<std::tuple_size<decltype(var_)>::value>());
+    }
+
+    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... var)
+    {
+        var_ = std::tuple<VarTypes...>(var...);
         _BindAux(std::make_index_sequence<std::tuple_size<decltype(var_)>::value>());
     }
 
@@ -149,6 +151,12 @@ public:
     }
 
 private:
+    _UniformVariable(GLint loc)
+        :loc_(loc)
+    {
+
+    }
+
     template<std::size_t...I>
     void _BindAux(std::index_sequence<I...>) const
     {
@@ -159,10 +167,34 @@ private:
     std::tuple<VarTypes...> var_;
 };
 
+template<typename...VarTypes>
+class _ImmediateUniformVariable
+{
+public:
+    friend class _UniformVariableManager;
+
+    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... vars) const
+    {
+        _SetUniform(loc_, vars...);
+    }
+
+private:
+    _ImmediateUniformVariable(GLuint loc)
+        :loc_(loc)
+    {
+
+    }
+
+    GLuint loc_;
+};
+
 __OWE_END_NAMESPACE__(_UniformAux)
 
 template<typename...VarTypes>
 using UniformVariable = _UniformAux::_UniformVariable<VarTypes...>;
+
+template<typename...VarTypes>
+using ImmediateUniformVariable = _UniformAux::_ImmediateUniformVariable<VarTypes...>;
 
 __OWE_END_NAMESPACE__(OWE)
 
