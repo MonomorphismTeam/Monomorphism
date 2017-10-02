@@ -17,7 +17,7 @@ By AirGuanZ
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_UniformAux)
 
-//TODO: 用StaticList(type, VarTypes)改写_UniformTypeChecker
+//IMPROVE: 用StaticList(type, VarTypes)改写_UniformTypeChecker
 //这样一长串特化看起来太蠢了
 
 template<typename...VarTypes> struct _UniformTypeCheckerAux

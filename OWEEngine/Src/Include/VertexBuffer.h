@@ -71,8 +71,6 @@ public:
         glGenBuffers(1, &vbo_);
         glBindBuffer(GL_VERTEX_ARRAY, vbo_);
         glBufferData(GL_VERTEX_ARRAY, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<false, _Copy>());
-        //我的显卡驱动太老不支持...MD
-        //glNamedBufferData(vbo_, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<false, _Copy>());
         elemCnt_ = elemCnt;
         return true;
     }
