@@ -9,6 +9,9 @@ By AirGuanZ
 #include <cassert>
 #include <map>
 #include <string>
+#include <vector>
+
+#include <glm\glm.hpp>
 
 #include "Common.h"
 #include "GLHeaders.h"
@@ -20,7 +23,91 @@ __OWE_BEGIN_NAMESPACE__(_AttribAux)
 //IMPROVE：引入机制避免屡次切换当前活动的VAO
 //要是OGL 4.5就好了
 
-//TODO：_VertexAttribSize和_VertexAttribType
+template<typename AttribType>
+GLint _VertexAttribSize(void);
+
+template<> GLint _VertexAttribSize<GLfloat>(void)
+{
+    return 1;
+}
+
+template<> GLint _VertexAttribSize<glm::vec2>(void)
+{
+    return 2;
+}
+
+template<> GLint _VertexAttribSize<glm::vec3>(void)
+{
+    return 3;
+}
+
+template<> GLint _VertexAttribSize<glm::vec4>(void)
+{
+    return 4;
+}
+
+template<> GLint _VertexAttribSize<GLint>(void)
+{
+    return 1;
+}
+
+template<> GLint _VertexAttribSize<glm::ivec2>(void)
+{
+    return 2;
+}
+
+template<> GLint _VertexAttribSize<glm::ivec3>(void)
+{
+    return 3;
+}
+
+template<> GLint _VertexAttribSize<glm::ivec4>(void)
+{
+    return 4;
+}
+
+template<typename AttribType>
+GLenum _VertexAttribType(void);
+
+template<> GLenum _VertexAttribType<GLfloat>(void)
+{
+    return GL_FLOAT;
+}
+
+template<> GLenum _VertexAttribType<glm::vec2>(void)
+{
+    return GL_FLOAT;
+}
+
+template<> GLenum _VertexAttribType<glm::vec3>(void)
+{
+    return GL_FLOAT;
+}
+
+template<> GLenum _VertexAttribType<glm::vec4>(void)
+{
+    return GL_FLOAT;
+}
+
+template<> GLenum _VertexAttribType<GLint>(void)
+{
+    return GL_INT;
+}
+
+template<> GLenum _VertexAttribType<glm::ivec2>(void)
+{
+    return GL_INT;
+}
+
+template<> GLenum _VertexAttribType<glm::ivec3>(void)
+{
+    return GL_INT;
+}
+
+template<> GLenum _VertexAttribType<glm::ivec4>(void)
+{
+    return GL_INT;
+}
 
 template<typename _AttribType>
 class _AttribVariable
@@ -82,8 +169,81 @@ public:
     struct _AttribInfo
     {
         GLint location;
+        GLint size;
         GLenum type;
+        GLint idx;
     };
+
+    struct AttribTypeError { std::string name; GLint size;  GLenum type; };
+    struct AttribNotFoundError { std::string name; };
+
+    _AttribVariableManager(GLint prog)
+    {
+        assert(glIsProgram(prog));
+
+        glGenVertexArrays(1, &vao_);
+
+        GLint activeCnt;
+        glGetProgramiv(prog, GL_ACTIVE_ATTRIBUTES, &activeCnt);
+
+        GLint maxLen;
+        glGetProgramiv(prog, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
+        std::vector<GLchar> nameBuf(maxLen + 1);
+        for(GLint i = 0; i != activeCnt; ++i)
+        {
+            GLenum type;
+            GLsizei nameLen, size;
+            glGetActiveAttrib(prog, i, maxLen, &nameLen, &size, &type, nameBuf.data());
+            GLint location = glGetAttribLocation(prog, nameBuf.data());
+            if(location == -1)
+                continue;
+
+            Add(nameBuf.data(), { location, size, type, attribs_.size() });
+        }
+    }
+
+    ~_AttribVariableManager(void)
+    {
+        glDeleteVertexArrays(1, &vao_);
+    }
+
+    void Add(const std::string &name, const _AttribInfo &info)
+    {
+        attribs_[name] = info;
+    }
+
+    bool FindAttrib(const std::string &name) const
+    {
+        return attribs_.find(name) != attribs_.end();
+    }
+
+    template<typename AttribType>
+    _AttribVariable<AttribType> GetAttrib(const std::string &name) const
+    {
+        auto it = attribs_.find(name);
+        if(it == attribs_.end())
+            throw AttribNotFoundError{ name };
+        const _AttribInfo &info = it->second;
+        if(_VertexAttribSize<AttribType>() != info.size) ||
+           _VertexAttribType<AttribType>() != info.type))
+            throw AttribTypeError{ name, info.size, info.type };
+        return _AttribVariable<AttribType>(vao_, info.location, info.idx);
+    }
+
+    void Bind(void) const
+    {
+        glBindVertexArray(vao_);
+    }
+
+    void Unbind(void) const
+    {
+        glBindVertexArray(0);
+    }
+
+    const std::map<std::string, _AttribInfo> &_GetAllAttribs(void) const
+    {
+        return attribs_;
+    }
 
 private:
 

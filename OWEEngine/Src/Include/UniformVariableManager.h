@@ -121,14 +121,14 @@ public:
         //取得active uniform variable数量
         GLint activeCnt = 0;
         glGetProgramiv(prog, GL_ACTIVE_UNIFORMS, &activeCnt);
-        using namespace std;
+
         //查询每个variable信息
+        GLint maxLen;
+        glGetProgramiv(prog, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
+        std::vector<GLchar> nameBuf(maxLen + 1);
         for(GLint i = 0; i != activeCnt; ++i)
         {
             GLenum type;
-            GLint maxLen;
-            glGetProgramiv(prog, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
-            std::vector<GLchar> nameBuf(maxLen + 1, 'a');
             GLsizei nameLen, size;
             glGetActiveUniform(prog, i, maxLen, &nameLen, &size, &type, nameBuf.data());
             //glGetUniformLocation失败说明是个数组或者结构，不被uniform variable支持
