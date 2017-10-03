@@ -54,6 +54,11 @@ UniformVariableManager Shader::CreateUniformMgr(void) const
     return UniformVariableManager(program_);
 }
 
+AttribVariableManager Shader::CreateAttribMgr(void) const
+{
+    return AttribVariableManager(program_);
+}
+
 GLuint Shader::_Unsafe_GetProgramName(void) const
 {
     return program_;

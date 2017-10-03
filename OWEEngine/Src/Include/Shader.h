@@ -8,6 +8,8 @@ By AirGuanZ
 
 #include <cassert>
 #include <memory>
+
+#include "AttribVariableManager.h"
 #include "Common.h"
 #include "GLHeaders.h"
 #include "ShaderAux.h"
@@ -40,11 +42,11 @@ public:
     bool IsAvailable(void) const;
 
     void Bind(void) const;
-    //这函数没啥用，没事儿别调
     void Unbind(void) const;
     bool IsBound(void) const;
 
     UniformVariableManager CreateUniformMgr(void) const;
+    AttribVariableManager CreateAttribMgr(void) const;
 
     GLuint _Unsafe_GetProgramName(void) const;
 

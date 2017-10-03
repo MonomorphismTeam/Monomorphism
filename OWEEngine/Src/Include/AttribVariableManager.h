@@ -23,90 +23,99 @@ __OWE_BEGIN_NAMESPACE__(_AttribAux)
 //IMPROVE：引入机制避免屡次切换当前活动的VAO
 //要是OGL 4.5就好了
 
-template<typename AttribType>
-GLint _VertexAttribSize(void);
+//IMPROVE：改进_VertexAttribSize和_VertexAttribType的写法
+//这样扩展起来太不方便
 
-template<> GLint _VertexAttribSize<GLfloat>(void)
+template<typename AttribType>
+inline GLint _VertexAttribSize(void);
+
+template<> inline GLint _VertexAttribSize<GLfloat>(void)
 {
     return 1;
 }
 
-template<> GLint _VertexAttribSize<glm::vec2>(void)
+template<> inline GLint _VertexAttribSize<glm::vec2>(void)
 {
     return 2;
 }
 
-template<> GLint _VertexAttribSize<glm::vec3>(void)
+template<> inline GLint _VertexAttribSize<glm::vec3>(void)
 {
     return 3;
 }
 
-template<> GLint _VertexAttribSize<glm::vec4>(void)
+template<> inline GLint _VertexAttribSize<glm::vec4>(void)
 {
     return 4;
 }
 
-template<> GLint _VertexAttribSize<GLint>(void)
+template<> inline GLint _VertexAttribSize<GLint>(void)
 {
     return 1;
 }
 
-template<> GLint _VertexAttribSize<glm::ivec2>(void)
+template<> inline GLint _VertexAttribSize<glm::ivec2>(void)
 {
     return 2;
 }
 
-template<> GLint _VertexAttribSize<glm::ivec3>(void)
+template<> inline GLint _VertexAttribSize<glm::ivec3>(void)
 {
     return 3;
 }
 
-template<> GLint _VertexAttribSize<glm::ivec4>(void)
+template<> inline GLint _VertexAttribSize<glm::ivec4>(void)
 {
     return 4;
 }
 
 template<typename AttribType>
-GLenum _VertexAttribType(void);
+inline GLenum _VertexAttribType(void);
 
-template<> GLenum _VertexAttribType<GLfloat>(void)
+template<> inline GLenum _VertexAttribType<GLfloat>(void)
 {
     return GL_FLOAT;
 }
 
-template<> GLenum _VertexAttribType<glm::vec2>(void)
+template<> inline GLenum _VertexAttribType<glm::vec2>(void)
 {
     return GL_FLOAT;
 }
 
-template<> GLenum _VertexAttribType<glm::vec3>(void)
+template<> inline GLenum _VertexAttribType<glm::vec3>(void)
 {
     return GL_FLOAT;
 }
 
-template<> GLenum _VertexAttribType<glm::vec4>(void)
+template<> inline GLenum _VertexAttribType<glm::vec4>(void)
 {
     return GL_FLOAT;
 }
 
-template<> GLenum _VertexAttribType<GLint>(void)
+template<> inline GLenum _VertexAttribType<GLint>(void)
 {
     return GL_INT;
 }
 
-template<> GLenum _VertexAttribType<glm::ivec2>(void)
+template<> inline GLenum _VertexAttribType<glm::ivec2>(void)
 {
     return GL_INT;
 }
 
-template<> GLenum _VertexAttribType<glm::ivec3>(void)
+template<> inline GLenum _VertexAttribType<glm::ivec3>(void)
 {
     return GL_INT;
 }
 
-template<> GLenum _VertexAttribType<glm::ivec4>(void)
+template<> inline GLenum _VertexAttribType<glm::ivec4>(void)
 {
     return GL_INT;
+}
+
+template<typename ClassType, typename MemberType>
+GLintptr _MemOffset(const MemberType ClassType::* pMem)
+{
+    return reinterpret_cast<GLintptr>(&((reinterpret_cast<ClassType*>(0)).*pMem));
 }
 
 template<typename _AttribType>
@@ -143,7 +152,7 @@ public:
         glBindVertexArray(vao_);
 
         //把attribute location用作vertex buffer的binding point
-        glBindVertexBuffer(idx_, vtxBuf._Unsafe_GetID(), (GLintptr)(&(((VBElem*)0).*pMem)), sizeof(VBElem));
+        glBindVertexBuffer(idx_, vtxBuf._Unsafe_GetID(), _MemOffset(pMem), sizeof(VBElem));
         glVertexAttribFormat(loc_, _VertexAttribSize<_AttribType>(), _VertexAttribType<_AttribType>(), GL_FALSE, sizeof(VBElem));
         glVertexAttribBinding(loc_, idx_);
         glEnableVertexAttribArray(loc_);
@@ -174,7 +183,7 @@ public:
         GLint idx;
     };
 
-    struct AttribTypeError { std::string name; GLint size;  GLenum type; };
+    struct AttribTypeError { std::string name; GLint size; GLenum type; };
     struct AttribNotFoundError { std::string name; };
 
     _AttribVariableManager(GLint prog)
@@ -198,7 +207,7 @@ public:
             if(location == -1)
                 continue;
 
-            Add(nameBuf.data(), { location, size, type, attribs_.size() });
+            Add(nameBuf.data(), { location, static_cast<GLint>(size), type, static_cast<GLint>(attribs_.size()) });
         }
     }
 
@@ -224,8 +233,8 @@ public:
         if(it == attribs_.end())
             throw AttribNotFoundError{ name };
         const _AttribInfo &info = it->second;
-        if(_VertexAttribSize<AttribType>() != info.size) ||
-           _VertexAttribType<AttribType>() != info.type))
+        if(_VertexAttribSize<AttribType>() != info.size ||
+           _VertexAttribType<AttribType>() != info.type)
             throw AttribTypeError{ name, info.size, info.type };
         return _AttribVariable<AttribType>(vao_, info.location, info.idx);
     }
@@ -252,6 +261,12 @@ private:
 };
 
 __OWE_END_NAMESPACE__(_AttribAux)
+
+template<typename AttribType>
+using AttribVariable = _AttribAux::_AttribVariable<AttribType>;
+
+using AttribVariableManager = _AttribAux::_AttribVariableManager;
+
 __OWE_END_NAMESPACE__(OWE)
 
 #endif //__OWE_ATTRIB_VARIABLE_MANAGER_H__
