@@ -69,8 +69,8 @@ public:
     {
         assert(IsAvailable() == false && initData != nullptr && elemCnt > 0);
         glGenBuffers(1, &vbo_);
-        glBindBuffer(GL_VERTEX_ARRAY, vbo_);
-        glBufferData(GL_VERTEX_ARRAY, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<false, _Copy>());
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+        glBufferData(GL_ARRAY_BUFFER, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<false, _Copy>());
         elemCnt_ = elemCnt;
         return true;
     }
@@ -84,8 +84,8 @@ public:
     {
         assert(IsAvailable() == false && initData != nullptr && elemCnt > 0);
         glGenBuffers(1, &vbo_);
-        glBindBuffer(GL_VERTEX_ARRAY, vbo_);
-        glBufferData(GL_VERTEX_ARRAY, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<true, _Copy>());
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+        glBufferData(GL_ARRAY_BUFFER, elemCnt * sizeof(_ElemType), initData, _VertexBufferUsage<true, _Copy>());
         elemCnt_ = elemCnt;
         return true;
     }
@@ -94,8 +94,8 @@ public:
     {
         assert(IsAvailable() == false && elemCnt > 0);
         glGenBuffers(1, &vbo_);
-        glBindBuffer(GL_VERTEX_ARRAY, vbo_);
-        glBufferData(GL_VERTEX_ARRAY, elemCnt * sizeof(_ElemType), nullptr, _VertexBufferUsage<true, _Copy>());
+        glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+        glBufferData(GL_ARRAY_BUFFER, elemCnt * sizeof(_ElemType), nullptr, _VertexBufferUsage<true, _Copy>());
         elemCnt_ = elemCnt;
         return true;
     }

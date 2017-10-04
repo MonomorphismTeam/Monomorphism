@@ -11,6 +11,7 @@
 
 using namespace std;
 using namespace OWE;
+using Utility::ASCIIFile;
 
 class App : public WindowListener
 {
@@ -36,37 +37,51 @@ public:
         //加载shader文件
         Shader shader;
         string vtx, frag, err;
-        Utility::ASCIIFile::Read("test.vs", vtx);
-        Utility::ASCIIFile::Read("test.fs", frag);
+        ASCIIFile::Read("test.vs", vtx);
+        ASCIIFile::Read("test.fs", frag);
         if(shader.Initialize(err, VSSrc(vtx), FSSrc(frag)) != Shader::InitState::Success)
         {
             cout << err << endl;
             return -1;
         }
 
-        auto mgr = shader.CreateUniformMgr();
-        auto offset = mgr.GetUniform<glm::vec3>("offset");
-        offset.SetVals(glm::vec3{ 0.0f, 2.0f, 3.0f });
-
-        VertexBuffer<glm::vec2> vec2Buf;
-        const glm::vec2 vec2BufData[] =
+        //准备vertex buffer
+        VertexBuffer<glm::vec4> vec4Buf;
+        const glm::vec4 vec4BufData[] =
         {
-            { -1.0f, -1.0f },
-            { 0.0f, 1.0f },
-            { 1.0f, -1.0f }
+            { -0.5f, -0.5f, 0.0f, 1.0f },
+            { 0.0f, 0.5f, 0.0f, 1.0f },
+            { 0.5f, -0.5f, 0.0f, 1.0f }
         };
-        vec2Buf.Initialize(3, vec2BufData);
+        vec4Buf.Initialize(3, vec4BufData);
+
+        //准备uniform variable
+        auto uniformMgr = shader.CreateUniformMgr();
+        auto color = uniformMgr.GetUniform<glm::vec4>("color_");
+        color.SetVals(glm::vec4{ 1.0f, 0.5f, 0.2f, 1.0f });
+
+        //准备顶点属性
+        auto attribMgr = shader.CreateAttribMgr();
+        auto pos = attribMgr.GetAttrib<glm::vec4>("position");
+        pos.SetBuffer(vec4Buf);
 
         //主循环
         while(!closed_)
         {
-            //glViewport(0, 0, rc.ClientWidth(), rc.ClientHeight());
-            glClearColor((abs(glm::sin(t_ += 0.08f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
+            glClearColor((abs(glm::sin(t_ += 0.04f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            //场景更新
+            color.SetVals(glm::vec4{ 1.0f, (1.0f - abs(glm::sin(3.14159 * t_)) + 1.0f) / 2.0f, 0.4f, 1.0f });
+
+            //场景绘制
             shader.Bind();
-            mgr.Bind();
-            //Draw something
+            uniformMgr.Bind();
+            attribMgr.Bind();
+
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            attribMgr.Unbind();
             shader.Unbind();
 
             rc.DoEvents();
@@ -76,8 +91,6 @@ public:
                 closed_ = true;
         }
 
-        vec2Buf.Destroy();
-        shader.Destroy();
         return 0;
     }
 

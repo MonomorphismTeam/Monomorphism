@@ -112,6 +112,49 @@ template<> inline GLenum _VertexAttribType<glm::ivec4>(void)
     return GL_INT;
 }
 
+template<typename Type>
+inline GLenum _VertexAttribTypeChecker(void);
+
+template<> inline GLenum _VertexAttribTypeChecker<GLfloat>(void)
+{
+    return GL_FLOAT;
+}
+
+template<> inline GLenum _VertexAttribTypeChecker<glm::vec2>(void)
+{
+    return GL_FLOAT_VEC2;
+}
+
+template<> inline GLenum _VertexAttribTypeChecker<glm::vec3>(void)
+{
+    return GL_FLOAT_VEC3;
+}
+
+template<> inline GLenum _VertexAttribTypeChecker<glm::vec4>(void)
+{
+    return GL_FLOAT_VEC4;
+}
+
+template<> inline GLenum _VertexAttribTypeChecker<GLint>(void)
+{
+    return GL_INT;
+}
+
+template<> inline GLenum _VertexAttribTypeChecker<glm::ivec2>(void)
+{
+    return GL_INT_VEC2;
+}
+
+template<> inline GLenum _VertexAttribTypeChecker<glm::ivec3>(void)
+{
+    return GL_INT_VEC3;
+}
+
+template<> inline GLenum _VertexAttribTypeChecker<glm::ivec4>(void)
+{
+    return GL_INT_VEC4;
+}
+
 template<typename ClassType, typename MemberType>
 GLintptr _MemOffset(const MemberType ClassType::* pMem)
 {
@@ -134,11 +177,11 @@ public:
         glBindVertexArray(vao_);
         glBindBuffer(GL_ARRAY_BUFFER, vtxBuf._Unsafe_GetID());
 
+        glEnableVertexAttribArray(loc_);
         glVertexAttribPointer(loc_,
             _VertexAttribSize<_AttribType>(),
             _VertexAttribType<_AttribType>(),
-            GL_FALSE, 0, nullptr);
-        glEnableVertexAttribArray(loc_);
+            GL_FALSE, sizeof(_AttribType), nullptr);
 
         glBindVertexArray(curVAO);
         glBindBuffer(GL_ARRAY_BUFFER, curBuf);
@@ -178,12 +221,11 @@ public:
     struct _AttribInfo
     {
         GLint location;
-        GLint size;
         GLenum type;
         GLint idx;
     };
 
-    struct AttribTypeError { std::string name; GLint size; GLenum type; };
+    struct AttribTypeError { std::string name; GLenum type; };
     struct AttribNotFoundError { std::string name; };
 
     _AttribVariableManager(GLint prog)
@@ -196,18 +238,18 @@ public:
         glGetProgramiv(prog, GL_ACTIVE_ATTRIBUTES, &activeCnt);
 
         GLint maxLen;
-        glGetProgramiv(prog, GL_ACTIVE_UNIFORM_MAX_LENGTH, &maxLen);
+        glGetProgramiv(prog, GL_ACTIVE_ATTRIBUTE_MAX_LENGTH, &maxLen);
         std::vector<GLchar> nameBuf(maxLen + 1);
         for(GLint i = 0; i != activeCnt; ++i)
         {
             GLenum type;
             GLsizei nameLen, size;
-            glGetActiveAttrib(prog, i, maxLen, &nameLen, &size, &type, nameBuf.data());
+            glGetActiveAttrib(prog, i, maxLen + 1, &nameLen, &size, &type, nameBuf.data());
             GLint location = glGetAttribLocation(prog, nameBuf.data());
             if(location == -1)
                 continue;
 
-            Add(nameBuf.data(), { location, static_cast<GLint>(size), type, static_cast<GLint>(attribs_.size()) });
+            Add(nameBuf.data(), { location, type, static_cast<GLint>(attribs_.size()) });
         }
     }
 
@@ -233,9 +275,8 @@ public:
         if(it == attribs_.end())
             throw AttribNotFoundError{ name };
         const _AttribInfo &info = it->second;
-        if(_VertexAttribSize<AttribType>() != info.size ||
-           _VertexAttribType<AttribType>() != info.type)
-            throw AttribTypeError{ name, info.size, info.type };
+        if(_VertexAttribTypeChecker<AttribType>() != info.type)
+            throw AttribTypeError{ name, info.type };
         return _AttribVariable<AttribType>(vao_, info.location, info.idx);
     }
 
