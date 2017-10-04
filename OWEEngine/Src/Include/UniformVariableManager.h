@@ -163,7 +163,7 @@ public:
 
     //取得特定uniform variable的box class用于设置它
     template<typename...VarTypes>
-    _UniformVariable<VarTypes...> &GetUniform(const std::string &name)
+    _UniformVariable<VarTypes...> GetUniform(const std::string &name)
     {
         auto it = vars_.find(name);
         if(it == vars_.end())
@@ -172,8 +172,8 @@ public:
         if(!_UniformTypeChecker<VarTypes...>(info.type))
             throw UniformTypeError{ name, info.type };
         if(!info._var)
-            info._var = new _UniformVariable<VarTypes...>(info.location);
-        return *dynamic_cast<_UniformVariable<VarTypes...>*>(info._var);
+            info._var = new _UniformVariableImpl<VarTypes...>(info.location);
+        return _UniformVariable<VarTypes...>(*dynamic_cast<_UniformVariableImpl<VarTypes...>*>(info._var));
     }
 
     template<typename...VarTypes>

@@ -86,7 +86,7 @@ public:
 };
 
 template<typename...VarTypes>
-class _UniformVariable : public _UniformVariableBase
+class _UniformVariableImpl : public _UniformVariableBase
 {
 public:
     friend class _UniformVariableManager;
@@ -94,7 +94,7 @@ public:
     template<int I>
     using _VarType = typename std::tuple_element<I, std::tuple<VarTypes...>>::type;
 
-    ~_UniformVariable(void)
+    ~_UniformVariableImpl(void)
     {
         //do nothing
     }
@@ -151,7 +151,7 @@ public:
     }
 
 private:
-    _UniformVariable(GLint loc)
+    _UniformVariableImpl(GLint loc)
         :loc_(loc)
     {
 
@@ -165,6 +165,80 @@ private:
 
     GLint loc_;
     std::tuple<VarTypes...> var_;
+};
+
+template<typename...VarTypes>
+class _UniformVariable
+{
+public:
+    friend class _UniformVariableManager;
+
+    template<int I>
+    using _VarType = typename std::tuple_element<I, std::tuple<VarTypes...>>::type;
+
+    ~_UniformVariable(void)
+    {
+        //do nothing
+    }
+
+    //设置整个Uniform variable的值
+    void SetVals(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... var)
+    {
+        impl_.SetVals(var...);
+    }
+
+    //设置某个分量的值
+    template<int I>
+    void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<_VarType<I>>> v)
+    {
+        impl_.SetVal<I>(v);
+    }
+
+    //使用该变量值
+    void Bind(void) const
+    {
+        impl_.Bind();
+    }
+
+    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... var)
+    {
+        impl_.SetAndBind(var...);
+    }
+
+    //取得整个Uniform variable的值
+    std::tuple<VarTypes...> &GetVals(void)
+    {
+        return impl_.GetVals();
+    }
+
+    //取得整个Uniform variable的值
+    const std::tuple<VarTypes...> &GetVals(void) const
+    {
+        return const_cast<const _UniformVariableImpl*>(&impl_)->GetVals();
+    }
+
+    //取得某个分量的值
+    template<int I>
+    _VarType<I> &GetVal(void)
+    {
+        return impl_.GetVal<I>();
+    }
+
+    //取得某个分量的值
+    template<int I>
+    std::add_const_t<Utility::RefIfNotNumeric_t<_VarType<I>>> GetVal(void) const
+    {
+        return const_cast<_UniformVariableImpl*>(&impl_)->GetVal<I>();
+    }
+
+private:
+    _UniformVariable(_UniformVariableImpl<VarTypes...> &impl)
+        :impl_(impl)
+    {
+
+    }
+
+    _UniformVariableImpl<VarTypes...> &impl_;
 };
 
 template<typename...VarTypes>
