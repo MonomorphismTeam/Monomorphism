@@ -39,7 +39,7 @@ public:
         }
 
         //准备vertex buffer
-        VertexBuffer<glm::vec4, true> vec4Buf;
+        VertexBuffer<glm::vec4> vec4Buf;
         const glm::vec4 vec4BufData[] =
         {
             { -0.5f, -0.5f, 0.0f, 1.0f },
@@ -48,24 +48,53 @@ public:
         };
         vec4Buf.Initialize(3, vec4BufData);
 
+        VertexBuffer<glm::vec2> uvBuf;
+        const glm::vec2 uvBufData[] =
+        {
+            { 0.0, 0.0 },
+            { 0.5, 1.0 },
+            { 1.0, 0.0 }
+        };
+        uvBuf.Initialize(3, uvBufData);
+
+        Texture2D tex;
+        Texture2D::Desc texDesc =
+        {
+            6, 6,
+            GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA,
+            GL_NEAREST, GL_NEAREST,
+            GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE
+        };
+        constexpr uint32_t M = numeric_limits<uint32_t>::max();
+        uint32_t texData[] =
+        {
+            1, M, 1, M, 1, M,
+            M, 1, M, 1, M, 1,
+            1, M, 1, M, 1, M,
+            M, 1, M, 1, M, 1,
+            1, M, 1, M, 1, M,
+            M, 1, M, 1, M, 1,
+        };
+        tex.Initialize(texDesc, texData);
+        tex.Bind(0);
+
         //准备uniform variable
         auto uniformMgr = shader.CreateUniformMgr();
-        auto color = uniformMgr.GetUniform<glm::vec4>("color_");
-        color.SetVals(glm::vec4{ 1.0f, 0.5f, 0.2f, 1.0f });
+        auto texSam = uniformMgr.GetUniform<GLint>("tex");
+        texSam.SetVals(0);
 
         //准备顶点属性
         auto attribMgr = shader.CreateAttribMgr();
         auto pos = attribMgr.GetAttrib<glm::vec4>("position");
+        auto uv = attribMgr.GetAttrib<glm::vec2>("uv_in");
         pos.SetBuffer(vec4Buf);
+        uv.SetBuffer(uvBuf);
 
         //主循环
         while(!closed_)
         {
             glClearColor((abs(glm::sin(t_ += 0.04f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-            //场景更新
-            color.SetVals(glm::vec4{ 1.0f, (1.0f - abs(glm::sin(3.14159 * t_)) + 1.0f) / 2.0f, 0.4f, 1.0f });
 
             //场景绘制
             shader.Bind();

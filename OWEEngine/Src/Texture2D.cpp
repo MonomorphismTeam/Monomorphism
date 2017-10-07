@@ -68,5 +68,11 @@ void _Texture2D::Bind(int slot) const
 	glBindTexture(GL_TEXTURE_2D, tex_);
 }
 
+bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc &desc, _Texture2D &tex)
+{
+    //TODO
+    return false;
+}
+
 __OWE_END_NAMESPACE__(_Texture2DAux)
 __OWE_END_NAMESPACE__(OWE)

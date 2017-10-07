@@ -6,6 +6,8 @@ By AirGuanZ
 #ifndef __OWE_TEXTURE_2D_H__
 #define __OWE_TEXTURE_2D_H__
 
+#include <string>
+
 #include "Common.h"
 #include "GLHeaders.h"
 
@@ -48,7 +50,12 @@ private:
 	GLuint tex_;
 };
 
+bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc &desc, _Texture2D &tex);
+
 __OWE_END_NAMESPACE__(_Texture2DAux)
+
+using Texture2D = _Texture2DAux::_Texture2D;
+
 __OWE_END_NAMESPACE__(OWE)
 
 #endif //__OWE_TEXTURE_2D_H__

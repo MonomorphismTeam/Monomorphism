@@ -1,9 +1,10 @@
 #version 430 core
 
-uniform vec4 color_;
-out vec4 color;
+uniform sampler2D tex;
+
+varying vec2 uv;
 
 void main(void)
 {
-    color = color_;
+    gl_FragColor = texture2D(tex, uv);
 }

@@ -47,7 +47,13 @@ template<> struct _UniformTypeCheckerAux<GLfloat, GLfloat, GLfloat, GLfloat>
 
 template<> struct _UniformTypeCheckerAux<GLint>
 {
-    static bool _Check(GLenum type) { return type == GL_INT; }
+    static bool _Check(GLenum type)
+    {
+        return type == GL_INT ||
+               type == GL_SAMPLER_1D ||
+               type == GL_SAMPLER_2D ||
+               type == GL_SAMPLER_3D;
+    }
 };
 
 template<> struct _UniformTypeCheckerAux<GLint, GLint>
