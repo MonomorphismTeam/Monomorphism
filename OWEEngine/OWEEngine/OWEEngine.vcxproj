@@ -23,6 +23,7 @@
     <ClCompile Include="..\Src\RenderContext.cpp" />
     <ClCompile Include="..\Src\Shader.cpp" />
     <ClCompile Include="..\src\Test.cpp" />
+    <ClCompile Include="..\Src\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Include\ASCIIFile.h" />
@@ -30,10 +31,12 @@
     <ClInclude Include="..\Src\Include\Common.h" />
     <ClInclude Include="..\Src\Include\GLHeaders.h" />
     <ClInclude Include="..\Src\Include\InputManager.h" />
+    <ClInclude Include="..\Src\Include\OWE.h" />
     <ClInclude Include="..\Src\Include\RenderContext.h" />
     <ClInclude Include="..\Src\Include\Shader.h" />
     <ClInclude Include="..\Src\Include\ShaderAux.h" />
     <ClInclude Include="..\Src\Include\Singleton.h" />
+    <ClInclude Include="..\Src\Include\Texture2D.h" />
     <ClInclude Include="..\Src\Include\TypeOpr.h" />
     <ClInclude Include="..\Src\Include\UniformVariable.h" />
     <ClInclude Include="..\Src\Include\UniformVariableManager.h" />
@@ -117,6 +120,7 @@
       <SubSystem>Console</SubSystem>
       <AdditionalLibraryDirectories>$(OPENGL_PATH)\;$(GLFW_LIB_VS2017)\Debug\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;glew32.lib;opengl32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>DebugFastLink</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -148,6 +152,7 @@
       <AdditionalLibraryDirectories>$(OPENGL_PATH)\;$(GLFW_LIB_VS2017)\Release\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>glfw3.lib;opengl32.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <AdditionalOptions>/SAFESEH:NO %(AdditionalOptions)</AdditionalOptions>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

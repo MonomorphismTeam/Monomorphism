@@ -1,13 +1,6 @@
 #include <iostream>
 
-#include "Include\ASCIIFile.h"
-#include "Include\GLHeaders.h"
-#include "Include\InputManager.h"
-#include "Include\RenderContext.h"
-#include "Include\Shader.h"
-
-#include "Include\UniformVariable.h"
-#include "Include\VertexBuffer.h"
+#include "Include\OWE.h"
 
 using namespace std;
 using namespace OWE;
@@ -46,7 +39,7 @@ public:
         }
 
         //×¼±¸vertex buffer
-        VertexBuffer<glm::vec4> vec4Buf;
+        VertexBuffer<glm::vec4, true> vec4Buf;
         const glm::vec4 vec4BufData[] =
         {
             { -0.5f, -0.5f, 0.0f, 1.0f },

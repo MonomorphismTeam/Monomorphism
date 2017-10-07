@@ -20,6 +20,9 @@
     <Filter Include="GLBuffer">
       <UniqueIdentifier>{6b10e359-fbe6-4843-86c4-5e153a3c29a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{53e616a5-4393-4457-97d8-68b64d7ccaa7}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Test.cpp" />
@@ -31,6 +34,9 @@
     </ClCompile>
     <ClCompile Include="..\Src\Shader.cpp">
       <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Src\Texture2D.cpp">
+      <Filter>Texture</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -72,6 +78,10 @@
     </ClInclude>
     <ClInclude Include="..\Src\Include\AttribVariableManager.h">
       <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\Include\OWE.h" />
+    <ClInclude Include="..\Src\Include\Texture2D.h">
+      <Filter>Texture</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
