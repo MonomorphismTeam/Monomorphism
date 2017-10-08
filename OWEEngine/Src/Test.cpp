@@ -81,7 +81,6 @@ public:
         //准备uniform variable
         auto uniformMgr = shader.CreateUniformMgr();
         auto texSam = uniformMgr.GetUniform<GLint>("tex");
-        texSam.SetVals(0);
 
         //准备顶点属性
         auto attribMgr = shader.CreateAttribMgr();
@@ -93,7 +92,7 @@ public:
         //主循环
         while(!closed_)
         {
-            glClearColor((abs(glm::sin(t_ += 0.04f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
+            glClearColor((abs(glm::sin(t_ += 0.08f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
             //场景绘制

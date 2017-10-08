@@ -24,33 +24,9 @@ inline void _SetUniform(GLint loc, GLfloat fv0)
 {
     glUniform1f(loc, fv0);
 }
-inline void _SetUniform(GLint loc, GLfloat fv0, GLfloat fv1)
-{
-    glUniform2f(loc, fv0, fv1);
-}
-inline void _SetUniform(GLint loc, GLfloat fv0, GLfloat fv1, GLfloat fv2)
-{
-    glUniform3f(loc, fv0, fv1, fv2);
-}
-inline void _SetUniform(GLint loc, GLfloat fv0, GLfloat fv1, GLfloat fv2, GLfloat fv3)
-{
-    glUniform4f(loc, fv0, fv1, fv2, fv3);
-}
 inline void _SetUniform(GLint loc, GLint v0)
 {
     glUniform1d(loc, v0);
-}
-inline void _SetUniform(GLint loc, GLint v0, GLint v1)
-{
-    glUniform2d(loc, v0, v1);
-}
-inline void _SetUniform(GLint loc, GLint v0, GLint v1, GLint v2)
-{
-    glUniform3d(loc, v0, v1, v2);
-}
-inline void _SetUniform(GLint loc, GLint v0, GLint v1, GLint v2, GLint v3)
-{
-    glUniform4d(loc, v0, v1, v2, v3);
 }
 inline void _SetUniform(GLint loc, const glm::vec2 &v)
 {
@@ -85,69 +61,47 @@ public:
     virtual ~_UniformVariableBase(void) { };
 };
 
-template<typename...VarTypes>
+template<typename _VarType>
 class _UniformVariableImpl : public _UniformVariableBase
 {
 public:
     friend class _UniformVariableManager;
 
-    template<int I>
-    using _VarType = typename std::tuple_element<I, std::tuple<VarTypes...>>::type;
+    using VarType = _VarType;
 
     ~_UniformVariableImpl(void)
     {
         //do nothing
     }
 
-    //设置整个Uniform variable的值
-    void SetVals(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... var)
-    {
-        var_ = std::tuple<VarTypes...>(var...);
-    }
-
     //设置某个分量的值
-    template<int I>
-    void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<_VarType<I>>> v)
+    void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
     {
-        std::get<I>(var_) = v;
+        var_ = v;
     }
 
     //使用该变量值
     void Bind(void) const
     {
-        _BindAux(std::make_index_sequence<std::tuple_size<decltype(var_)>::value>());
+        _SetUniform(loc_, var_);
     }
 
-    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... var)
+    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
     {
-        var_ = std::tuple<VarTypes...>(var...);
-        _BindAux(std::make_index_sequence<std::tuple_size<decltype(var_)>::value>());
+        SetVal(v);
+        Bind();
     }
 
     //取得整个Uniform variable的值
-    std::tuple<VarTypes...> &GetVals(void)
+    Utility::RefIfNotNumeric_t<VarType> GetVal(void)
     {
         return var_;
     }
 
     //取得整个Uniform variable的值
-    const std::tuple<VarTypes...> &GetVals(void) const
+    std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> GetVal(void) const
     {
         return var_;
-    }
-
-    //取得某个分量的值
-    template<int I>
-    _VarType<I> &GetVal(void)
-    {
-        return std::get<I>(var_);
-    }
-
-    //取得某个分量的值
-    template<int I>
-    std::add_const_t<Utility::RefIfNotNumeric_t<_VarType<I>>> GetVal(void) const
-    {
-        return std::get<I>(var_);
     }
 
 private:
@@ -157,24 +111,16 @@ private:
 
     }
 
-    template<std::size_t...I>
-    void _BindAux(std::index_sequence<I...>) const
-    {
-        _SetUniform(loc_, std::get<I>(var_)...);
-    }
-
     GLint loc_;
-    std::tuple<VarTypes...> var_;
+    VarType var_;
 };
 
-template<typename...VarTypes>
+template<typename _VarType>
 class _UniformVariable
 {
 public:
     friend class _UniformVariableManager;
-
-    template<int I>
-    using _VarType = typename std::tuple_element<I, std::tuple<VarTypes...>>::type;
+    using VarType = _VarType;
 
     ~_UniformVariable(void)
     {
@@ -182,16 +128,9 @@ public:
     }
 
     //设置整个Uniform variable的值
-    void SetVals(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... var)
+    void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var)
     {
-        impl_.SetVals(var...);
-    }
-
-    //设置某个分量的值
-    template<int I>
-    void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<_VarType<I>>> v)
-    {
-        impl_.SetVal<I>(v);
+        impl_.SetVal(var);
     }
 
     //使用该变量值
@@ -200,56 +139,42 @@ public:
         impl_.Bind();
     }
 
-    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... var)
+    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var)
     {
-        impl_.SetAndBind(var...);
+        impl_.SetAndBind(var);
     }
 
     //取得整个Uniform variable的值
-    std::tuple<VarTypes...> &GetVals(void)
+    Utility::RefIfNotNumeric_t<VarType> GetVal(void)
     {
-        return impl_.GetVals();
+        return impl_.GetVal();
     }
 
     //取得整个Uniform variable的值
-    const std::tuple<VarTypes...> &GetVals(void) const
+    std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> GetVal(void) const
     {
-        return const_cast<const _UniformVariableImpl*>(&impl_)->GetVals();
-    }
-
-    //取得某个分量的值
-    template<int I>
-    _VarType<I> &GetVal(void)
-    {
-        return impl_.GetVal<I>();
-    }
-
-    //取得某个分量的值
-    template<int I>
-    std::add_const_t<Utility::RefIfNotNumeric_t<_VarType<I>>> GetVal(void) const
-    {
-        return const_cast<_UniformVariableImpl*>(&impl_)->GetVal<I>();
+        return impl_.GetVal();
     }
 
 private:
-    _UniformVariable(_UniformVariableImpl<VarTypes...> &impl)
+    _UniformVariable(_UniformVariableImpl<VarType> &impl)
         :impl_(impl)
     {
 
     }
 
-    _UniformVariableImpl<VarTypes...> &impl_;
+    _UniformVariableImpl<VarType> &impl_;
 };
 
-template<typename...VarTypes>
+template<typename VarType>
 class _ImmediateUniformVariable
 {
 public:
     friend class _UniformVariableManager;
 
-    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarTypes>>... vars) const
+    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var) const
     {
-        _SetUniform(loc_, vars...);
+        _SetUniform(loc_, var);
     }
 
 private:
@@ -264,11 +189,11 @@ private:
 
 __OWE_END_NAMESPACE__(_UniformAux)
 
-template<typename...VarTypes>
-using UniformVariable = _UniformAux::_UniformVariable<VarTypes...>;
+template<typename VarType>
+using UniformVariable = _UniformAux::_UniformVariable<VarType>;
 
-template<typename...VarTypes>
-using ImmediateUniformVariable = _UniformAux::_ImmediateUniformVariable<VarTypes...>;
+template<typename VarType>
+using ImmediateUniformVariable = _UniformAux::_ImmediateUniformVariable<VarType>;
 
 __OWE_END_NAMESPACE__(OWE)
 

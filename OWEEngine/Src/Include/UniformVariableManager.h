@@ -30,21 +30,6 @@ template<> struct _UniformTypeCheckerAux<GLfloat>
     static bool _Check(GLenum type) { return type == GL_FLOAT; }
 };
 
-template<> struct _UniformTypeCheckerAux<GLfloat, GLfloat>
-{
-    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC2; }
-};
-
-template<> struct _UniformTypeCheckerAux<GLfloat, GLfloat, GLfloat>
-{
-    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC3; }
-};
-
-template<> struct _UniformTypeCheckerAux<GLfloat, GLfloat, GLfloat, GLfloat>
-{
-    static bool _Check(GLenum type) { return type == GL_FLOAT_VEC4; }
-};
-
 template<> struct _UniformTypeCheckerAux<GLint>
 {
     static bool _Check(GLenum type)
@@ -54,21 +39,6 @@ template<> struct _UniformTypeCheckerAux<GLint>
                type == GL_SAMPLER_2D ||
                type == GL_SAMPLER_3D;
     }
-};
-
-template<> struct _UniformTypeCheckerAux<GLint, GLint>
-{
-    static bool _Check(GLenum type) { return type == GL_INT_VEC2; }
-};
-
-template<> struct _UniformTypeCheckerAux<GLint, GLint, GLint>
-{
-    static bool _Check(GLenum type) { return type == GL_INT_VEC3; }
-};
-
-template<> struct _UniformTypeCheckerAux<GLint, GLint, GLint, GLint>
-{
-    static bool _Check(GLenum type) { return type == GL_INT_VEC4; }
 };
 
 template<> struct _UniformTypeCheckerAux<glm::vec2>
@@ -168,30 +138,30 @@ public:
     }
 
     //取得特定uniform variable的box class用于设置它
-    template<typename...VarTypes>
-    _UniformVariable<VarTypes...> GetUniform(const std::string &name)
+    template<typename VarType>
+    _UniformVariable<VarType> GetUniform(const std::string &name)
     {
         auto it = vars_.find(name);
         if(it == vars_.end())
             throw UniformNotFoundError{ name };
         VarInfo &info = it->second;
-        if(!_UniformTypeChecker<VarTypes...>(info.type))
+        if(!_UniformTypeChecker<VarType>(info.type))
             throw UniformTypeError{ name, info.type };
         if(!info._var)
-            info._var = new _UniformVariableImpl<VarTypes...>(info.location);
-        return _UniformVariable<VarTypes...>(*dynamic_cast<_UniformVariableImpl<VarTypes...>*>(info._var));
+            info._var = new _UniformVariableImpl<VarType>(info.location);
+        return _UniformVariable<VarType>(*dynamic_cast<_UniformVariableImpl<VarType>*>(info._var));
     }
 
-    template<typename...VarTypes>
-    _ImmediateUniformVariable<VarTypes...> GetImmediateUniform(const std::string &name)
+    template<typename VarType>
+    _ImmediateUniformVariable<VarType> GetImmediateUniform(const std::string &name)
     {
         auto it = vars_.find(name);
         if(it == vars_.end())
             throw UniformNotFoundError{ name };
         VarInfo &info = it->second;
-        if(!_UniformTypeChecker<VarTypes...>(info.type))
+        if(!_UniformTypeChecker<VarType>(info.type))
             throw UniformTypeError{ name, info.type };
-        return _ImmediateUniformVariable<VarTypes...>(info.location);
+        return _ImmediateUniformVariable<VarType>(info.location);
     }
 
     void Bind(void) const
