@@ -75,7 +75,12 @@ public:
             1, M, 1, M, 1, M,
             M, 1, M, 1, M, 1,
         };
-        tex.Initialize(texDesc, texData);
+        //tex.Initialize(texDesc, texData);
+        if(!_Texture2DAux::_LoadTexture2DFromFile("testTex.png", texDesc, tex))
+        {
+            cout << "Failed to load testTex.png" << endl;
+            return -1;
+        }
         tex.Bind(0);
 
         //×¼±¸uniform variable
