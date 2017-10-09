@@ -19,6 +19,16 @@ OWE_SINGLETON_INSTANCE_PTR(RenderContext);
 
 namespace
 {
+    GLint GLMaxColorAttachments = -1;
+
+    void InitGLConsts(void)
+    {
+        glGetIntegerv(GL_MAX_COLOR_ATTACHMENTS, &GLMaxColorAttachments);
+    }
+}
+
+namespace
+{
     bool glewInited = false;
     GLFWwindow *glfwWindow = nullptr;
 
@@ -54,6 +64,7 @@ namespace
                 goto FAILED;
             glewInited = true;
         }
+        InitGLConsts();
 
         return true;
 
@@ -186,6 +197,11 @@ void RenderContext::CancelWindowClosing(void)
 {
     assert(glfwWindow);
     glfwSetWindowShouldClose(glfwWindow, GLFW_FALSE);
+}
+
+GLint RenderContext::GetGLMaxColorAttachments(void)
+{
+    return GLMaxColorAttachments;
 }
 
 void *RenderContext::_GetWindowHandle(void)

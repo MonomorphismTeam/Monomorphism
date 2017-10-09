@@ -9,6 +9,7 @@ By AirGuanZ
 #include <string>
 #include <tuple>
 #include "Common.h"
+#include "GLHeaders.h"
 #include "Singleton.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
@@ -74,6 +75,8 @@ public:
     void ClearWindowListener(void);
 
     void CancelWindowClosing(void);
+
+    GLint GetGLMaxColorAttachments(void);
 
     void *_GetWindowHandle(void);
 private:

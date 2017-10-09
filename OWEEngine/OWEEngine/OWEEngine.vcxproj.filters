@@ -38,6 +38,9 @@
     <ClCompile Include="..\Src\Texture2D.cpp">
       <Filter>Texture</Filter>
     </ClCompile>
+    <ClCompile Include="..\Src\FrameBuffer.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Include\RenderContext.h">
@@ -81,6 +84,9 @@
     </ClInclude>
     <ClInclude Include="..\Src\Include\OWE.h" />
     <ClInclude Include="..\Src\Include\Texture2D.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\Include\FrameBuffer.h">
       <Filter>Texture</Filter>
     </ClInclude>
   </ItemGroup>

@@ -164,12 +164,12 @@ public:
         return _ImmediateUniformVariable<VarType>(info.location);
     }
 
-    void Bind(void) const
+    void Apply(void) const
     {
         for(auto it : vars_)
         {
             if(it.second._var)
-                it.second._var->Bind();
+                it.second._var->Apply();
         }
     }
 

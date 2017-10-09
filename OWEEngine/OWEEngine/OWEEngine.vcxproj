@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Src\FrameBuffer.cpp" />
     <ClCompile Include="..\Src\InputManager.cpp" />
     <ClCompile Include="..\Src\RenderContext.cpp" />
     <ClCompile Include="..\Src\Shader.cpp" />
@@ -29,6 +30,7 @@
     <ClInclude Include="..\Src\Include\ASCIIFile.h" />
     <ClInclude Include="..\Src\Include\AttribVariableManager.h" />
     <ClInclude Include="..\Src\Include\Common.h" />
+    <ClInclude Include="..\Src\Include\FrameBuffer.h" />
     <ClInclude Include="..\Src\Include\GLHeaders.h" />
     <ClInclude Include="..\Src\Include\InputManager.h" />
     <ClInclude Include="..\Src\Include\OWE.h" />

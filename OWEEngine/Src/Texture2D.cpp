@@ -1,4 +1,4 @@
-/*================================================================
+﻿/*================================================================
 Filename: Texture.cpp
 Date: 2017.10.5
 By AirGuanZ
@@ -15,26 +15,26 @@ __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_Texture2DAux)
 
 _Texture2D::_Texture2D(void)
-	:tex_(0)
+    :tex_(0)
 {
 
 }
 
 _Texture2D::~_Texture2D(void)
 {
-	Destroy();
+    Destroy();
 }
 
 void _Texture2D::Initialize(const Desc &desc, void *data)
 {
-	assert(desc.width > 0 && desc.height > 0);
-	Destroy();
+    assert(desc.width > 0 && desc.height > 0);
+    Destroy();
 
-	GLint curTex;
-	glGetIntegerv(GL_TEXTURE_BINDING_2D, &curTex);
+    GLint curTex;
+    glGetIntegerv(GL_TEXTURE_BINDING_2D, &curTex);
 
-	glGenTextures(1, &tex_);
-	glBindTexture(GL_TEXTURE_2D, tex_);
+    glGenTextures(1, &tex_);
+    glBindTexture(GL_TEXTURE_2D, tex_);
 
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, desc.magFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, desc.minFilter);
@@ -48,28 +48,33 @@ void _Texture2D::Initialize(const Desc &desc, void *data)
     width_ = desc.width;
     height_ = desc.height;
 
-	glBindTexture(GL_TEXTURE_2D, curTex);
+    glBindTexture(GL_TEXTURE_2D, curTex);
 }
 
 bool _Texture2D::IsAvailable(void) const
 {
-	return tex_ != 0;
+    return tex_ != 0;
 }
 
 void _Texture2D::Destroy(void)
 {
-	if (IsAvailable())
-	{
-		glDeleteTextures(1, &tex_);
-		tex_ = 0;
-	}
+    if (IsAvailable())
+    {
+        glDeleteTextures(1, &tex_);
+        tex_ = 0;
+    }
 }
 
-void _Texture2D::Bind(int slot) const
+void _Texture2D::Bind(GLint slot) const
 {
-	assert(IsAvailable());
-	glActiveTexture(GL_TEXTURE0 + slot);
-	glBindTexture(GL_TEXTURE_2D, tex_);
+    assert(IsAvailable());
+    glActiveTexture(GL_TEXTURE0 + slot);
+    glBindTexture(GL_TEXTURE_2D, tex_);
+}
+
+GLuint _Texture2D::_Unsafe_GetID(void) const
+{
+    return tex_;
 }
 
 bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc &desc, _Texture2D &tex)
@@ -83,8 +88,9 @@ bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc 
         return false;
 
     //图像基本信息
-    unsigned int bpp = FreeImage_GetBPP(bmp) >> 3; //bytes per pixel
-    unsigned int width = FreeImage_GetWidth(bmp);
+    //IMPROVE：FreeImage应该提供了更好的确定像素格式的方法
+    unsigned int bpp    = FreeImage_GetBPP(bmp) >> 3; //bytes per pixel
+    unsigned int width  = FreeImage_GetWidth(bmp);
     unsigned int height = FreeImage_GetHeight(bmp);
 
     //输入分量数量

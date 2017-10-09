@@ -58,25 +58,7 @@ public:
         uvBuf.Initialize(3, uvBufData);
 
         Texture2D tex;
-        Texture2D::Desc texDesc =
-        {
-            6, 6,
-            GL_RGBA, GL_UNSIGNED_BYTE, GL_RGBA,
-            GL_NEAREST, GL_NEAREST,
-            GL_CLAMP_TO_EDGE, GL_CLAMP_TO_EDGE
-        };
-        constexpr uint32_t M = numeric_limits<uint32_t>::max();
-        uint32_t texData[] =
-        {
-            1, M, 1, M, 1, M,
-            M, 1, M, 1, M, 1,
-            1, M, 1, M, 1, M,
-            M, 1, M, 1, M, 1,
-            1, M, 1, M, 1, M,
-            M, 1, M, 1, M, 1,
-        };
-        //tex.Initialize(texDesc, texData);
-        if(!_Texture2DAux::_LoadTexture2DFromFile("testTex.png", texDesc, tex))
+        if(!LoadTexture2DFromFile("testTex.png", Texture2D::Desc(), tex))
         {
             cout << "Failed to load testTex.png" << endl;
             return -1;
@@ -102,9 +84,9 @@ public:
 
             //³¡¾°»æÖÆ
             shader.Bind();
-            uniformMgr.Bind();
             attribMgr.Bind();
 
+            uniformMgr.Apply();
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             attribMgr.Unbind();

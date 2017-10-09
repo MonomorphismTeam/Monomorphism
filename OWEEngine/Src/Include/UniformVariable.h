@@ -53,11 +53,11 @@ inline void _SetUniform(GLint loc, const glm::mat4x4 &m)
     glUniformMatrix4fv(loc, 1, GL_FALSE, &m[0][0]);
 }
 
-//提供给uniform variable的容器，用于统一bind操作
+//提供给uniform variable的容器，用于统一apply操作
 class _UniformVariableBase
 {
 public:
-    virtual void Bind(void) const = 0;
+    virtual void Apply(void) const = 0;
     virtual ~_UniformVariableBase(void) { };
 };
 
@@ -81,15 +81,15 @@ public:
     }
 
     //使用该变量值
-    void Bind(void) const
+    void Apply(void) const
     {
         _SetUniform(loc_, var_);
     }
 
-    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
+    void SetAndApply(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
     {
         SetVal(v);
-        Bind();
+        Apply();
     }
 
     //取得整个Uniform variable的值
@@ -134,14 +134,14 @@ public:
     }
 
     //使用该变量值
-    void Bind(void) const
+    void Apply(void) const
     {
-        impl_.Bind();
+        impl_.Apply();
     }
 
-    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var)
+    void SetAndApply(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var)
     {
-        impl_.SetAndBind(var);
+        impl_.SetAndApply(var);
     }
 
     //取得整个Uniform variable的值
@@ -172,7 +172,7 @@ class _ImmediateUniformVariable
 public:
     friend class _UniformVariableManager;
 
-    void SetAndBind(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var) const
+    void SetAndApply(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var) const
     {
         _SetUniform(loc_, var);
     }
