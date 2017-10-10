@@ -1,7 +1,7 @@
 /*================================================================
 Filename: OWE.h
 Date: 2017.10.4
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_H__
 #define __OWE_H__
@@ -13,6 +13,8 @@ By AirGuanZ
 
 #include "Shader.h"
 #include "Texture2D.h"
+
+#include "FrameBuffer.h"
 #include "VertexBuffer.h"
 
 #endif //__OWE_H__

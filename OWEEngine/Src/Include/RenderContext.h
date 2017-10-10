@@ -1,7 +1,7 @@
 /*================================================================
 Filename: RenderContext.h
 Date: 2017.9.11
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_RENDER_CONTEXT_H__
 #define __OWE_RENDER_CONTEXT_H__

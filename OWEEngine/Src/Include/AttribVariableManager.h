@@ -1,7 +1,7 @@
 /*================================================================
 Filename: AttribVariableManager.h
 Date: 2017.10.2
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_ATTRIB_VARIABLE_MANAGER_H__
 #define __OWE_ATTRIB_VARIABLE_MANAGER_H__

@@ -1,7 +1,7 @@
 /*================================================================
 Filename: FrameBuffer.cpp
 Date: 2017.10.9
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #include "Include\GLHeaders.h"
 

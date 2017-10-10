@@ -1,7 +1,7 @@
 /*================================================================
 Filename: RenderContext.cpp
 Date: 2017.9.11
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #include <cstdio>
 #include <exception>

@@ -1,7 +1,7 @@
 /*================================================================
 Filename: VertexBuffer.h
 Date: 2017.10.1
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_VERTEX_BUFFER_H__
 #define __OWE_VERTEX_BUFFER_H__

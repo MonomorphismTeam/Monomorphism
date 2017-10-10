@@ -1,7 +1,7 @@
 /*================================================================
 Filename: Texture2D.h
 Date: 2017.10.4
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_TEXTURE_2D_H__
 #define __OWE_TEXTURE_2D_H__

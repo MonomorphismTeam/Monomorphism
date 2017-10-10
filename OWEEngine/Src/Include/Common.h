@@ -1,7 +1,7 @@
 /*================================================================
 Filename: Common.h
 Date: 2017.9.11
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_COMMON_H__
 #define __OWE_COMMON_H__

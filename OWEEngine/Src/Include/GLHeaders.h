@@ -1,7 +1,7 @@
 /*================================================================
 Filename: GLHeaders.h
 Date: 2017.9.12
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_GL_HEADERS_H__
 #define __OWE_GL_HEADERS_H__

@@ -1,7 +1,7 @@
 /*================================================================
 Filename: Shader.h
 Date: 2017.9.21
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_SHADER_H__
 #define __OWE_SHADER_H__

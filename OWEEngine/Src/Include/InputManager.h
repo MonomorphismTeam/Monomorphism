@@ -1,7 +1,7 @@
 /*================================================================
 Filename: InputManager.h
 Date: 2017.9.12
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_INPUT_MANAGER_H__
 #define __OWE_INPUT_MANAGER_H__

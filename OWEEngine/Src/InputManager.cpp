@@ -1,7 +1,7 @@
 /*================================================================
 Filename: InputManager.cpp
 Date: 2017.9.12
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #include <cassert>
 #include <cstring>

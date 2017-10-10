@@ -1,7 +1,7 @@
 /*================================================================
 Filename: TypeOpr.h
 Date: 2017.9.19
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_TYPE_OPR_H__
 #define __OWE_TYPE_OPR_H__

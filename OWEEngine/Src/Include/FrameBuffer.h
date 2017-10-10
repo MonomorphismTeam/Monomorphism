@@ -1,7 +1,7 @@
 /*================================================================
 Filename: FrameBuffer.h
 Date: 2017.10.9
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_FRAME_BUFFER_H__
 #define __OWE_FRAME_BUFFER_H__
@@ -43,7 +43,7 @@ public:
     void BindTex(GLint attachPnt, GLint slot) const;
 
     //Framebuffer的begin、end对不允许嵌套
-    //IMPROVE：改善这一点
+    //IMPROVE：去掉这个限制
     void Begin(void) const;
     void End(void) const;
 

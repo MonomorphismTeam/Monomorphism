@@ -1,7 +1,7 @@
 /*================================================================
 Filename: ShaderAux.h
 Date: 2017.9.21
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_SHADER_AUX_H__
 #define __OWE_SHADER_AUX_H__

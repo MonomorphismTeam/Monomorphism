@@ -1,7 +1,7 @@
 /*================================================================
 Filename: UniformVariableManager.h
 Date: 2017.9.28
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __UNIFORM_VARIABLE_MANAGER_H__
 #define __UNIFORM_VARIABLE_MANAGER_H__

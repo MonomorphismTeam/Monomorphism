@@ -1,7 +1,7 @@
 ﻿/*================================================================
 Filename: UniformVariable.h
 Date: 2017.9.24
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_UNIFORM_VARIABLE_H__
 #define __OWE_UNIFORM_VARIABLE_H__

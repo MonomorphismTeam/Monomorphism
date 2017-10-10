@@ -1,7 +1,7 @@
 /*================================================================
 Filename: ASCIIFile.h
 Date: 2017.9.14
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #ifndef __OWE_ASCII_FILE_H__
 #define __OWE_ASCII_FILE_H__

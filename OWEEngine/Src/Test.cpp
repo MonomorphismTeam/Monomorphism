@@ -1,7 +1,6 @@
 #include <iostream>
 
 #include "Include\OWE.h"
-#include "Include\FrameBuffer.h"
 
 using namespace std;
 using namespace OWE;

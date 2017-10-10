@@ -1,7 +1,7 @@
 ﻿/*================================================================
 Filename: Texture.cpp
 Date: 2017.10.5
-By AirGuanZ
+Created by AirGuanZ
 ================================================================*/
 #include <cassert>
 #include <cstdint>
