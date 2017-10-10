@@ -34,10 +34,10 @@ public:
     bool HasStencil(void) const;
 
     //TODO：添加depth + stencil共用一块buffer的功能
-    bool AddTex(GLint attachPnt, const Texture2D::Desc &desc);
-    bool AddTex(GLint attachPnt, const Texture2D &tex);
-    bool AddDepth(void);
-    bool AddStencil(void);
+    void AddTex(GLint attachPnt, const Texture2D::Desc &desc);
+    void AddTex(GLint attachPnt, const Texture2D &tex);
+    void AddDepth(void);
+    void AddStencil(void);
 
     GLint GetTexID(GLint attachPnt) const;
     void BindTex(GLint attachPnt, GLint slot) const;

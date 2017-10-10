@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Include\OWE.h"
+#include "Include\FrameBuffer.h"
 
 using namespace std;
 using namespace OWE;
@@ -63,7 +64,6 @@ public:
             cout << "Failed to load testTex.png" << endl;
             return -1;
         }
-        tex.Bind(0);
 
         //准备uniform variable
         auto uniformMgr = shader.CreateUniformMgr();
@@ -76,13 +76,43 @@ public:
         pos.SetBuffer(vec4Buf);
         uv.SetBuffer(uvBuf);
 
+        FrameBuffer fb;
+        fb.Initialize(640, 480, 1);
+        fb.AddTex(0, Texture2D::Desc());
+        fb.AddDepth();
+        if(!fb.IsAvailable())
+        {
+            cout << "Failed to initialize framebuffer" << endl;
+            return -1;
+        }
+
         //主循环
         while(!closed_)
         {
             glClearColor((abs(glm::sin(t_ += 0.08f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            //场景绘制
+            fb.Begin();
+            {
+                glClearColor((abs(glm::sin(t_)) + 1.0f) / 2.0f, 1.0f, 0.0f, 1.0f);
+                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+                tex.Bind(0);
+
+                //场景绘制
+                shader.Bind();
+                attribMgr.Bind();
+
+                uniformMgr.Apply();
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+
+                attribMgr.Unbind();
+                shader.Unbind();
+            }
+            fb.End();
+
+            fb.BindTex(0, 0);
+
             shader.Bind();
             attribMgr.Bind();
 

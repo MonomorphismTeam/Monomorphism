@@ -78,10 +78,10 @@ bool _FrameBuffer::IsAvailable(void) const
     glGetIntegerv(GL_FRAMEBUFFER_BINDING, &curFB);
 
     glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
-    bool rt = glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE;
+    GLenum rt = glCheckFramebufferStatus(GL_FRAMEBUFFER);
 
     glBindFramebuffer(GL_FRAMEBUFFER, curFB);
-    return rt;
+    return rt == GL_FRAMEBUFFER_COMPLETE;
 }
 
 int _FrameBuffer::Width(void) const
@@ -104,9 +104,9 @@ bool _FrameBuffer::HasStencil(void) const
     return stencil_ != 0;
 }
 
-bool _FrameBuffer::AddTex(GLint attachPnt, const Texture2D::Desc &desc)
+void _FrameBuffer::AddTex(GLint attachPnt, const Texture2D::Desc &desc)
 {
-    assert(fbo_ != 0 && 0 <= attachPnt && attachPnt < attachRecs_.size());
+    assert(fbo_ && 0 <= attachPnt && attachPnt < static_cast<GLint>(attachRecs_.size()));
 
     GLuint texID; GLint curID, curFB;
     glGetIntegerv(GL_TEXTURE_BINDING_2D, &curID);
@@ -119,7 +119,7 @@ bool _FrameBuffer::AddTex(GLint attachPnt, const Texture2D::Desc &desc)
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, desc.minFilter);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, desc.wrapS);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, desc.wrapT);
-    glTexStorage2D(GL_TEXTURE_2D, 0, desc.internalFormat, width_, height_);
+    glTexImage2D(GL_TEXTURE_2D, 0, desc.internalFormat, width_, height_, 0, GL_RGBA, GL_UNSIGNED_BYTE, nullptr);
 
     AttachTexRecord &rec = attachRecs_[attachPnt];
     if(rec.ID && rec.owned)
@@ -132,19 +132,11 @@ bool _FrameBuffer::AddTex(GLint attachPnt, const Texture2D::Desc &desc)
 
     glBindTexture(GL_TEXTURE_2D, curID);
     glBindFramebuffer(GL_FRAMEBUFFER, curFB);
-    return true;
-
-FAILED:
-    glBindTexture(GL_TEXTURE_2D, curID);
-    glBindFramebuffer(GL_FRAMEBUFFER, curFB);
-    if(texID)
-        glDeleteTextures(1, &texID);
-    return false;
 }
 
-bool _FrameBuffer::AddTex(GLint attachPnt, const Texture2D &tex)
+void _FrameBuffer::AddTex(GLint attachPnt, const Texture2D &tex)
 {
-    assert(fbo_ != 0 && 0 <= attachPnt && attachPnt < attachRecs_.size());
+    assert(fbo_ && 0 <= attachPnt && attachPnt < static_cast<GLint>(attachRecs_.size()));
     assert(tex.IsAvailable());
 
     AttachTexRecord &rec = attachRecs_[attachPnt];
@@ -163,12 +155,11 @@ bool _FrameBuffer::AddTex(GLint attachPnt, const Texture2D &tex)
 
     glBindTexture(GL_TEXTURE_2D, curID);
     glBindFramebuffer(GL_FRAMEBUFFER, curFB);
-    return true;
 }
 
-bool _FrameBuffer::AddDepth(void)
+void _FrameBuffer::AddDepth(void)
 {
-    assert(!fbo_ && !depth_);
+    assert(fbo_ && !depth_);
 
     GLint curRB, curFB;
     glGetIntegerv(GL_RENDERBUFFER_BINDING, &curRB);
@@ -181,10 +172,9 @@ bool _FrameBuffer::AddDepth(void)
 
     glBindRenderbuffer(GL_RENDERBUFFER, curRB);
     glBindFramebuffer(GL_FRAMEBUFFER, curFB);
-    return true;
 }
 
-bool _FrameBuffer::AddStencil(void)
+void _FrameBuffer::AddStencil(void)
 {
     assert(!fbo_ && !depth_);
 
@@ -199,12 +189,11 @@ bool _FrameBuffer::AddStencil(void)
 
     glBindRenderbuffer(GL_RENDERBUFFER, curRB);
     glBindFramebuffer(GL_FRAMEBUFFER, curFB);
-    return true;
 }
 
 GLint _FrameBuffer::GetTexID(GLint attachPnt) const
 {
-    assert(0 <= attachPnt && attachPnt < attachRecs_.size());
+    assert(0 <= attachPnt && attachPnt < static_cast<GLint>(attachRecs_.size()));
     return attachRecs_[attachPnt].ID;
 }
 

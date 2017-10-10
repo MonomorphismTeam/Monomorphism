@@ -39,7 +39,7 @@
       <Filter>Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\FrameBuffer.cpp">
-      <Filter>Texture</Filter>
+      <Filter>GLBuffer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -87,7 +87,7 @@
       <Filter>Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\FrameBuffer.h">
-      <Filter>Texture</Filter>
+      <Filter>GLBuffer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
