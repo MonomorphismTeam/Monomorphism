@@ -228,7 +228,7 @@ public:
     struct AttribTypeError { std::string name; GLenum type; };
     struct AttribNotFoundError { std::string name; };
 
-    _AttribVariableManager(GLint prog)
+    explicit _AttribVariableManager(GLint prog)
     {
         assert(glIsProgram(prog));
 

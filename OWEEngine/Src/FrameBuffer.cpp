@@ -201,6 +201,7 @@ void _FrameBuffer::Begin(void) const
 {
     if(IsAvailable())
     {
+        //glPushAttrib不可用，故手动备份该属性
         RenderContext::GetInstance().PushViewport();
         glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
         glViewport(0, 0, width_, height_);

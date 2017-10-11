@@ -91,7 +91,7 @@ public:
     struct UniformTypeError { std::string name; GLenum actType; };
     struct UniformNotFoundError { std::string name; };
 
-    _UniformVariableManager(GLuint prog)
+    explicit _UniformVariableManager(GLuint prog)
     {
         assert(glIsProgram(prog));
         //取得active uniform variable数量

@@ -105,7 +105,7 @@ public:
     }
 
 private:
-    _UniformVariableImpl(GLint loc)
+    explicit _UniformVariableImpl(GLint loc)
         :loc_(loc)
     {
 
@@ -157,7 +157,7 @@ public:
     }
 
 private:
-    _UniformVariable(_UniformVariableImpl<VarType> &impl)
+    explicit _UniformVariable(_UniformVariableImpl<VarType> &impl)
         :impl_(impl)
     {
 
@@ -178,7 +178,7 @@ public:
     }
 
 private:
-    _ImmediateUniformVariable(GLuint loc)
+    explicit _ImmediateUniformVariable(GLuint loc)
         :loc_(loc)
     {
 

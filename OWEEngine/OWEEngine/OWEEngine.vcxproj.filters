@@ -23,6 +23,9 @@
     <Filter Include="Texture">
       <UniqueIdentifier>{53e616a5-4393-4457-97d8-68b64d7ccaa7}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{b4bc9e10-70fe-4d95-a4cc-98649bcd319d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Test.cpp" />
@@ -94,6 +97,9 @@
     </ClInclude>
     <ClInclude Include="..\Src\Include\Texture2DBase.h">
       <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\Include\BoundingArea.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -65,13 +65,13 @@ public:
         }
 
         //准备uniform variable
-        auto uniformMgr = shader.CreateUniformMgr();
-        auto texSam = uniformMgr.GetUniform<GLint>("tex");
+        UniformVariableManager uniformMgr = shader.CreateUniformMgr();
+        UniformVariable<GLint> texSam = uniformMgr.GetUniform<GLint>("tex");
 
         //准备顶点属性
-        auto attribMgr = shader.CreateAttribMgr();
-        auto pos = attribMgr.GetAttrib<glm::vec4>("position");
-        auto uv = attribMgr.GetAttrib<glm::vec2>("uv_in");
+        AttribVariableManager attribMgr = shader.CreateAttribMgr();
+        AttribVariable<glm::vec4> pos = attribMgr.GetAttrib<glm::vec4>("position");
+        AttribVariable<glm::vec2> uv = attribMgr.GetAttrib<glm::vec2>("uv_in");
         pos.SetBuffer(vec4Buf);
         uv.SetBuffer(uvBuf);
 
@@ -91,6 +91,7 @@ public:
             glClearColor((abs(glm::sin(t_ += 0.08f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+            //渲染到纹理
             fb.Begin();
             {
                 glClearColor((abs(glm::sin(t_)) + 1.0f) / 2.0f, 1.0f, 0.0f, 1.0f);
@@ -98,7 +99,6 @@ public:
 
                 tex.Bind(0);
 
-                //场景绘制
                 shader.Bind();
                 attribMgr.Bind();
 
@@ -110,6 +110,7 @@ public:
             }
             fb.End();
 
+            //渲染主场景
             fb.GetTex(0).Bind(0);
 
             shader.Bind();
