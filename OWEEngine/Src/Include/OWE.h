@@ -12,7 +12,9 @@ Created by AirGuanZ
 #include "InputManager.h"
 
 #include "Shader.h"
+
 #include "Texture2D.h"
+#include "Texture2DView.h"
 
 #include "FrameBuffer.h"
 #include "VertexBuffer.h"

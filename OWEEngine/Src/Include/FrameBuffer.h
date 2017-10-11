@@ -11,6 +11,8 @@ Created by AirGuanZ
 #include "Common.h"
 #include "GLHeaders.h"
 #include "Texture2D.h"
+#include "Texture2DBase.h"
+#include "Texture2DView.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_FrameBufferAux)
@@ -35,12 +37,11 @@ public:
 
     //TODO：添加depth + stencil共用一块buffer的功能
     void AddTex(GLint attachPnt, const Texture2D::Desc &desc);
-    void AddTex(GLint attachPnt, const Texture2D &tex);
+    void AddTex(GLint attachPnt, const Texture2DBase &tex);
     void AddDepth(void);
     void AddStencil(void);
 
-    GLint GetTexID(GLint attachPnt) const;
-    void BindTex(GLint attachPnt, GLint slot) const;
+    Texture2DView GetTex(GLint attachPnt) const;
 
     //Framebuffer的begin、end对不允许嵌套
     //IMPROVE：去掉这个限制

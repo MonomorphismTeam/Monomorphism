@@ -6,6 +6,7 @@ Created by AirGuanZ
 #include <cstdio>
 #include <exception>
 #include <set>
+#include <stack>
 
 #include "Include\GLHeaders.h"
 #include <GLFW\glfw3.h>
@@ -16,6 +17,12 @@ Created by AirGuanZ
 __OWE_BEGIN_NAMESPACE__(OWE)
 
 OWE_SINGLETON_INSTANCE_PTR(RenderContext);
+
+namespace
+{
+    struct ViewportRecord { GLint data[4]; };
+    std::stack<ViewportRecord> vpStack;
+}
 
 namespace
 {
@@ -197,6 +204,20 @@ void RenderContext::CancelWindowClosing(void)
 {
     assert(glfwWindow);
     glfwSetWindowShouldClose(glfwWindow, GLFW_FALSE);
+}
+
+void RenderContext::PushViewport(void)
+{
+    ViewportRecord vp;
+    glGetIntegerv(GL_VIEWPORT, vp.data);
+    vpStack.push(vp);
+}
+
+void RenderContext::PopViewport(void)
+{
+    ViewportRecord vp = vpStack.top();
+    vpStack.pop();
+    glViewport(vp.data[0], vp.data[1], vp.data[2], vp.data[3]);
 }
 
 GLint RenderContext::GetGLMaxColorAttachments(void)

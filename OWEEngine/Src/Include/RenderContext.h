@@ -76,6 +76,9 @@ public:
 
     void CancelWindowClosing(void);
 
+    void PushViewport(void);
+    void PopViewport(void);
+
     GLint GetGLMaxColorAttachments(void);
 
     void *_GetWindowHandle(void);

@@ -134,7 +134,7 @@ void _FrameBuffer::AddTex(GLint attachPnt, const Texture2D::Desc &desc)
     glBindFramebuffer(GL_FRAMEBUFFER, curFB);
 }
 
-void _FrameBuffer::AddTex(GLint attachPnt, const Texture2D &tex)
+void _FrameBuffer::AddTex(GLint attachPnt, const Texture2DBase &tex)
 {
     assert(fbo_ && 0 <= attachPnt && attachPnt < static_cast<GLint>(attachRecs_.size()));
     assert(tex.IsAvailable());
@@ -191,24 +191,18 @@ void _FrameBuffer::AddStencil(void)
     glBindFramebuffer(GL_FRAMEBUFFER, curFB);
 }
 
-GLint _FrameBuffer::GetTexID(GLint attachPnt) const
+Texture2DView _FrameBuffer::GetTex(GLint attachPnt) const
 {
     assert(0 <= attachPnt && attachPnt < static_cast<GLint>(attachRecs_.size()));
-    return attachRecs_[attachPnt].ID;
-}
-
-void _FrameBuffer::BindTex(GLint attachPnt, GLint slot) const
-{
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, GetTexID(attachPnt));
+    return Texture2DView(attachRecs_[attachPnt].ID);
 }
 
 void _FrameBuffer::Begin(void) const
 {
     if(IsAvailable())
     {
+        RenderContext::GetInstance().PushViewport();
         glBindFramebuffer(GL_FRAMEBUFFER, fbo_);
-        glPushAttrib(GL_VIEWPORT_BIT);
         glViewport(0, 0, width_, height_);
     }
 }
@@ -216,7 +210,7 @@ void _FrameBuffer::Begin(void) const
 void _FrameBuffer::End(void) const
 {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glPopAttrib();
+    RenderContext::GetInstance().PopViewport();
 }
 
 __OWE_END_NAMESPACE__(_FrameBufferAux)

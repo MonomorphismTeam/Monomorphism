@@ -10,6 +10,7 @@ Created by AirGuanZ
 
 #include "Common.h"
 #include "GLHeaders.h"
+#include "Texture2DBase.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_Texture2DAux)
@@ -54,7 +55,7 @@ struct Desc
     GLint wrapT;
 };
 
-class _Texture2D
+class _Texture2D : public Texture2DBase
 {
 public:
     using Desc = ::OWE::_Texture2DAux::Desc;
@@ -65,17 +66,11 @@ public:
     ~_Texture2D(void);
 
     void Initialize(const Desc &desc, void *data);
-    bool IsAvailable(void) const;
     void Destroy(void);
-
-    void Bind(GLint slot) const;
-
-    GLuint _Unsafe_GetID(void) const;
 
 private:
     int width_;
     int height_;
-    GLuint tex_;
 };
 
 bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc &desc, _Texture2D &tex);

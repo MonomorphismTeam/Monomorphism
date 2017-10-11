@@ -89,5 +89,11 @@
     <ClInclude Include="..\Src\Include\FrameBuffer.h">
       <Filter>GLBuffer</Filter>
     </ClInclude>
+    <ClInclude Include="..\Src\Include\Texture2DView.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Src\Include\Texture2DBase.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

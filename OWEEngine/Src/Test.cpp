@@ -110,7 +110,7 @@ public:
             }
             fb.End();
 
-            fb.BindTex(0, 0);
+            fb.GetTex(0).Bind(0);
 
             shader.Bind();
             attribMgr.Bind();

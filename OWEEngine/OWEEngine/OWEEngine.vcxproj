@@ -39,6 +39,8 @@
     <ClInclude Include="..\Src\Include\ShaderAux.h" />
     <ClInclude Include="..\Src\Include\Singleton.h" />
     <ClInclude Include="..\Src\Include\Texture2D.h" />
+    <ClInclude Include="..\Src\Include\Texture2DBase.h" />
+    <ClInclude Include="..\Src\Include\Texture2DView.h" />
     <ClInclude Include="..\Src\Include\TypeOpr.h" />
     <ClInclude Include="..\Src\Include\UniformVariable.h" />
     <ClInclude Include="..\Src\Include\UniformVariableManager.h" />

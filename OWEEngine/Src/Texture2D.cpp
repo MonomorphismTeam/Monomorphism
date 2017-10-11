@@ -15,7 +15,7 @@ __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_Texture2DAux)
 
 _Texture2D::_Texture2D(void)
-    :tex_(0)
+    :Texture2DBase(0)
 {
 
 }
@@ -51,11 +51,6 @@ void _Texture2D::Initialize(const Desc &desc, void *data)
     glBindTexture(GL_TEXTURE_2D, curTex);
 }
 
-bool _Texture2D::IsAvailable(void) const
-{
-    return tex_ != 0;
-}
-
 void _Texture2D::Destroy(void)
 {
     if (IsAvailable())
@@ -63,18 +58,6 @@ void _Texture2D::Destroy(void)
         glDeleteTextures(1, &tex_);
         tex_ = 0;
     }
-}
-
-void _Texture2D::Bind(GLint slot) const
-{
-    assert(IsAvailable());
-    glActiveTexture(GL_TEXTURE0 + slot);
-    glBindTexture(GL_TEXTURE_2D, tex_);
-}
-
-GLuint _Texture2D::_Unsafe_GetID(void) const
-{
-    return tex_;
 }
 
 bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc &desc, _Texture2D &tex)
