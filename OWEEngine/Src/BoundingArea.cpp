@@ -37,7 +37,7 @@ namespace
                            const _BoundingArea::Circle &cir)
     {
         glm::vec2 u = glm::abs(cir.cen - 0.5f * (box.LB + box.RT));
-        glm::vec2 v = u - 0.5f * (box.RT - box.LB);
+        glm::vec2 v = glm::max(u - 0.5f * (box.RT - box.LB), glm::vec2{ 0.0f, 0.0f });
         return v.x * v.x + v.y * v.y < cir.radius;
     }
 
@@ -65,8 +65,8 @@ _BoundingArea::Type _BoundingArea::GetType(void) const
     return type_;
 }
 
-//IMPROVE：可以优化
-bool _BoundingArea::Interscet(const _BoundingArea &other) const
+//IMPROVE：优化do real work的函数的选择流程
+bool _BoundingArea::Intersect(const _BoundingArea &other) const
 {
     switch(type_)
     {

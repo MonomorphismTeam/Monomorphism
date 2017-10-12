@@ -23,7 +23,6 @@ using ShaderStage = _ShaderAux::_ShaderStage<ShaderStageName>;
 class Shader : public _ShaderAux::_ShaderStageName
 {
 public:
-    using Ptr = std::shared_ptr<Shader>;
     using InitState = _ShaderAux::ShaderInitState;
 
     Shader(void) = default;
@@ -37,7 +36,6 @@ public:
         assert(!IsAvailable());
         return _ShaderAux::Initialize(program_, err, args...);
     }
-
     void Destroy(void);
     bool IsAvailable(void) const;
 

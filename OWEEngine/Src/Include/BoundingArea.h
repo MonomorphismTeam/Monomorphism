@@ -60,7 +60,7 @@ public:
     Type GetType(void) const;
 
     //测试与另一个包围盒是否相交
-    bool Interscet(const _BoundingArea &other) const;
+    bool Intersect(const _BoundingArea &other) const;
 
 private:
     Type type_;
