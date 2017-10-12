@@ -5,44 +5,47 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="RenderContext">
-      <UniqueIdentifier>{9abd1c44-a5cf-4b7f-8c68-de9664631b97}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Utility">
       <UniqueIdentifier>{4572470c-7f95-45d1-8696-58adbbab682c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="InputManager">
-      <UniqueIdentifier>{ac2d0658-a007-40bc-823b-457ec0c6a8ba}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Shader">
-      <UniqueIdentifier>{ac9a0c2c-976a-4d1a-90a1-59cc9c3f3128}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="GLBuffer">
-      <UniqueIdentifier>{6b10e359-fbe6-4843-86c4-5e153a3c29a2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Texture">
-      <UniqueIdentifier>{53e616a5-4393-4457-97d8-68b64d7ccaa7}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{b4bc9e10-70fe-4d95-a4cc-98649bcd319d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLContext">
+      <UniqueIdentifier>{81730eae-beba-4e57-a7eb-12df1b28b383}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLContext\RenderContext">
+      <UniqueIdentifier>{9abd1c44-a5cf-4b7f-8c68-de9664631b97}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLContext\Shader">
+      <UniqueIdentifier>{ac9a0c2c-976a-4d1a-90a1-59cc9c3f3128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLContext\Texture">
+      <UniqueIdentifier>{53e616a5-4393-4457-97d8-68b64d7ccaa7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLContext\GLBuffer">
+      <UniqueIdentifier>{6b10e359-fbe6-4843-86c4-5e153a3c29a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GLContext\InputManager">
+      <UniqueIdentifier>{ac2d0658-a007-40bc-823b-457ec0c6a8ba}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\Test.cpp" />
     <ClCompile Include="..\Src\RenderContext.cpp">
-      <Filter>RenderContext</Filter>
+      <Filter>GLContext\RenderContext</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\InputManager.cpp">
-      <Filter>InputManager</Filter>
+      <Filter>GLContext\InputManager</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\Shader.cpp">
-      <Filter>Shader</Filter>
+      <Filter>GLContext\Shader</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\Texture2D.cpp">
-      <Filter>Texture</Filter>
+      <Filter>GLContext\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\FrameBuffer.cpp">
-      <Filter>GLBuffer</Filter>
+      <Filter>GLContext\GLBuffer</Filter>
     </ClCompile>
     <ClCompile Include="..\Src\BoundingArea.cpp">
       <Filter>Scene</Filter>
@@ -50,7 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Include\RenderContext.h">
-      <Filter>RenderContext</Filter>
+      <Filter>GLContext\RenderContext</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\Common.h">
       <Filter>Utility</Filter>
@@ -59,7 +62,7 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\InputManager.h">
-      <Filter>InputManager</Filter>
+      <Filter>GLContext\InputManager</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\GLHeaders.h">
       <Filter>Utility</Filter>
@@ -68,38 +71,38 @@
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\Shader.h">
-      <Filter>Shader</Filter>
+      <Filter>GLContext\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\ShaderAux.h">
-      <Filter>Shader</Filter>
+      <Filter>GLContext\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\TypeOpr.h">
       <Filter>Utility</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\UniformVariable.h">
-      <Filter>Shader</Filter>
+      <Filter>GLContext\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\UniformVariableManager.h">
-      <Filter>Shader</Filter>
+      <Filter>GLContext\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\VertexBuffer.h">
-      <Filter>GLBuffer</Filter>
+      <Filter>GLContext\GLBuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\AttribVariableManager.h">
-      <Filter>Shader</Filter>
+      <Filter>GLContext\Shader</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\OWE.h" />
     <ClInclude Include="..\Src\Include\Texture2D.h">
-      <Filter>Texture</Filter>
+      <Filter>GLContext\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\FrameBuffer.h">
-      <Filter>GLBuffer</Filter>
+      <Filter>GLContext\GLBuffer</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\Texture2DView.h">
-      <Filter>Texture</Filter>
+      <Filter>GLContext\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\Texture2DBase.h">
-      <Filter>Texture</Filter>
+      <Filter>GLContext\Texture</Filter>
     </ClInclude>
     <ClInclude Include="..\Src\Include\BoundingArea.h">
       <Filter>Scene</Filter>
