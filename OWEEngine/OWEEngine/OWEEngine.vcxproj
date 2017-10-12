@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\Src\BoundingArea.cpp" />
     <ClCompile Include="..\Src\FrameBuffer.cpp" />
     <ClCompile Include="..\Src\InputManager.cpp" />
     <ClCompile Include="..\Src\RenderContext.cpp" />

@@ -44,6 +44,9 @@
     <ClCompile Include="..\Src\FrameBuffer.cpp">
       <Filter>GLBuffer</Filter>
     </ClCompile>
+    <ClCompile Include="..\Src\BoundingArea.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\Src\Include\RenderContext.h">
