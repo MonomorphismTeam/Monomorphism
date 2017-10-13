@@ -107,5 +107,8 @@
     <ClInclude Include="..\Src\Include\BoundingArea.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Src\Include\Entity.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

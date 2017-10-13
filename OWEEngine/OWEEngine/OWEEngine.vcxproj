@@ -32,6 +32,7 @@
     <ClInclude Include="..\Src\Include\AttribVariableManager.h" />
     <ClInclude Include="..\Src\Include\Common.h" />
     <ClInclude Include="..\Src\Include\BoundingArea.h" />
+    <ClInclude Include="..\Src\Include\Entity.h" />
     <ClInclude Include="..\Src\Include\FrameBuffer.h" />
     <ClInclude Include="..\Src\Include\GLHeaders.h" />
     <ClInclude Include="..\Src\Include\InputManager.h" />

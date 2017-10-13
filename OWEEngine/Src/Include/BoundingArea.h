@@ -62,6 +62,10 @@ public:
     //测试与另一个包围盒是否相交
     bool Intersect(const _BoundingArea &other) const;
 
+    //若存在t >= 0使得p + t * d与自身相交，则返回最小的这样的t
+    //否则返回-1
+    float Intersect(const glm::vec2 &p, const glm::vec2 &d) const;
+
 private:
     Type type_;
     union
@@ -73,7 +77,7 @@ private:
 
 __OWE_END_NAMESPACE__(_BoundingAreaAux)
 
-using BoundArea = _BoundingAreaAux::_BoundingArea;
+using BoundingArea = _BoundingAreaAux::_BoundingArea;
 
 __OWE_END_NAMESPACE__(OWE)
 
