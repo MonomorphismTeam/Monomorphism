@@ -71,11 +71,12 @@ template<> struct _UniformTypeCheckerAux<glm::mat4x4>
     static bool _Check(GLenum type) { return type == GL_FLOAT_MAT4; }
 };
 
-template<typename...VarTypes>
+template<typename VarType>
 bool _UniformTypeChecker(GLenum type)
 {
-    return _UniformTypeCheckerAux<VarTypes...>::_Check(type);
+    return _UniformTypeCheckerAux<VarType>::_Check(type);
 }
+
 class _UniformVariableManager
 {
 public:

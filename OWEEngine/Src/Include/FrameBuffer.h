@@ -36,6 +36,7 @@ public:
     bool HasStencil(void) const;
 
     //TODO：添加depth + stencil共用一块buffer的功能
+
     void AddTex(GLint attachPnt, const Texture2D::Desc &desc);
     void AddTex(GLint attachPnt, const Texture2DBase &tex);
     void AddDepth(void);
@@ -45,6 +46,7 @@ public:
 
     //Framebuffer的begin、end对不允许嵌套
     //IMPROVE：去掉这个限制
+
     void Begin(void) const;
     void End(void) const;
 

@@ -8,7 +8,6 @@ Created by AirGuanZ
 
 #include <vector>
 
-#include "Common.h"
 #include "BoundingArea.h"
 #include "TypeOpr.h"
 
@@ -25,7 +24,7 @@ class CollisionManagerBase
 {
 public:
     static_assert(Utility::IsBaseOf<CollidableObject, T>(),
-        "CollisionManager: T must be derived from CollisionObject");
+        "CollisionManager: T must be derived from CollidableObject");
 
     void AddObject(T *obj)
     {
