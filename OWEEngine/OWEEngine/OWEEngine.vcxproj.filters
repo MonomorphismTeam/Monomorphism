@@ -110,5 +110,8 @@
     <ClInclude Include="..\Src\Include\CollisionManagerBase.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="..\Src\Include\SimpleCollisionManager.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

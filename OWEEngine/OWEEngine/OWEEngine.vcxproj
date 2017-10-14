@@ -40,6 +40,7 @@
     <ClInclude Include="..\Src\Include\CollisionManagerBase.h" />
     <ClInclude Include="..\Src\Include\Shader.h" />
     <ClInclude Include="..\Src\Include\ShaderAux.h" />
+    <ClInclude Include="..\Src\Include\SimpleCollisionManager.h" />
     <ClInclude Include="..\Src\Include\Singleton.h" />
     <ClInclude Include="..\Src\Include\Texture2D.h" />
     <ClInclude Include="..\Src\Include\Texture2DBase.h" />

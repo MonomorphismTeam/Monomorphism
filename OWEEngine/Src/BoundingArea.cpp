@@ -42,7 +42,7 @@ namespace
     {
         glm::vec2 u = glm::abs(cir.cen - 0.5f * (box.LB + box.RT));
         glm::vec2 v = glm::max(u - 0.5f * (box.RT - box.LB), glm::vec2{ 0.0f, 0.0f });
-        return v.x * v.x + v.y * v.y < cir.radius;
+        return v.x * v.x + v.y * v.y < cir.radius * cir.radius;
     }
 
     inline bool _Intersect(const _BoundingArea::Circle &cir,

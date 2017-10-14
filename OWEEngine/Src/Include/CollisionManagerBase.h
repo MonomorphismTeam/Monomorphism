@@ -6,25 +6,42 @@ Created by AirGuanZ
 #ifndef __OWE_COLLISION_BASE_H__
 #define __OWE_COLLISION_BASE_H__
 
+#include <cstdint>
 #include <vector>
 
 #include "BoundingArea.h"
 #include "TypeOpr.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
+__OWE_BEGIN_NAMESPACE__(_CollisionManagerAux)
 
-class CollidableObject
+template<typename T>
+struct _HasMemberAux_GetBoundingArea
 {
-public:
-    virtual std::vector<BoundingArea> GetBoundingArea(void) = 0;
+    template<typename U>
+    static char _Helper(decltype(&T::GetBoundingArea));
+    template<typename U>
+    static std::uint32_t _Helper(...);
+
+    enum { value = ((sizeof(_Helper<T>(nullptr)) == 1) ? 1 : 0) };
 };
+
+template<typename T>
+inline constexpr bool _HasMember_GetBoundingArea(void)
+{
+    return static_cast<int>(_HasMemberAux_GetBoundingArea<T>::value) == 1;
+}
+
+__OWE_END_NAMESPACE__(_CollisionManagerAux)
 
 template<typename T>
 class CollisionManagerBase
 {
 public:
-    static_assert(Utility::IsBaseOf<CollidableObject, T>(),
-        "CollisionManager: T must be derived from CollidableObject");
+    using ObjectType = T;
+
+    static_assert(_CollisionManagerAux::_HasMember_GetBoundingArea<ObjectType>(),
+        "CollisionManager: T must have member function 'GetBoundingArea`");
 
     void AddObject(T *obj)
     {
@@ -50,7 +67,7 @@ public:
 template<typename T>
 inline bool IsCollisionManager(void)
 {
-    return Utility::IsBaseOf<CollisionManagerBase, T>();
+    return Utility::IsBaseOf<CollisionManagerBase<typename T::ObjectType>, T>();
 }
 
 __OWE_END_NAMESPACE__(OWE)
