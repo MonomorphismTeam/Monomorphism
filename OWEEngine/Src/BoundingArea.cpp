@@ -53,6 +53,7 @@ namespace
 }
 
 //辅助函数：线段与包围区域的相交测试
+//估计编译器会不给内联...
 namespace
 {
     inline float _Intersect(const _BoundingArea::AABB &aabb,

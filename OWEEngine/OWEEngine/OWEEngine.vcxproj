@@ -32,12 +32,12 @@
     <ClInclude Include="..\Src\Include\AttribVariableManager.h" />
     <ClInclude Include="..\Src\Include\Common.h" />
     <ClInclude Include="..\Src\Include\BoundingArea.h" />
-    <ClInclude Include="..\Src\Include\Entity.h" />
     <ClInclude Include="..\Src\Include\FrameBuffer.h" />
     <ClInclude Include="..\Src\Include\GLHeaders.h" />
     <ClInclude Include="..\Src\Include\InputManager.h" />
     <ClInclude Include="..\Src\Include\OWE.h" />
     <ClInclude Include="..\Src\Include\RenderContext.h" />
+    <ClInclude Include="..\Src\Include\CollisionManagerBase.h" />
     <ClInclude Include="..\Src\Include\Shader.h" />
     <ClInclude Include="..\Src\Include\ShaderAux.h" />
     <ClInclude Include="..\Src\Include\Singleton.h" />

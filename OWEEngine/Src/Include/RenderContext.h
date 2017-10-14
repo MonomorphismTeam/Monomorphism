@@ -29,7 +29,7 @@ namespace _RCAux
         int winHeight         = 480;
         //Context Attributes
         std::string glVersion = "4.3";
-        bool vsync            = true;
+        int vsync            = 1;
     };
 }
 
@@ -65,7 +65,7 @@ public:
 
     void SetTitle(const char *title);
 
-    void SetVsync(bool vsync);
+    void SetVsync(int vsync);
 
     void DoEvents(void);
     void Present(void);

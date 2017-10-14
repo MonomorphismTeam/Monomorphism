@@ -42,6 +42,7 @@ namespace
     bool InitGLContext(const RenderContext::Desc &desc)
     {
         assert(!glewInited && !glfwWindow);
+        assert(desc.vsync >= 0);
         if(!glfwInit())
             goto FAILED;
 
@@ -62,7 +63,7 @@ namespace
         glfwMakeContextCurrent(glfwWindow);
         if(desc.winLeft >= 0 && desc.winTop >= 0)
             glfwSetWindowPos(glfwWindow, desc.winLeft, desc.winTop);
-        glfwSwapInterval(desc.vsync ? 1 : 0);
+        glfwSwapInterval(desc.vsync);
 
         glewExperimental = GL_TRUE;
         if(!glewInited)
@@ -160,10 +161,10 @@ void RenderContext::SetTitle(const char *title)
     glfwSetWindowTitle(glfwWindow, title);
 }
 
-void RenderContext::SetVsync(bool vsync)
+void RenderContext::SetVsync(int vsync)
 {
-    assert(glfwWindow);
-    glfwSwapInterval(vsync ? 1 : 0);
+    assert(glfwWindow && vsync >= 0);
+    glfwSwapInterval(vsync);
 }
 
 void RenderContext::DoEvents(void)
