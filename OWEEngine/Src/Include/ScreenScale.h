@@ -4,7 +4,7 @@ Date: 2017.10.15
 Created by AirGuanZ
 ================================================================*/
 
-//窗口尺寸和OpenGL屏幕坐标是割裂的
+//窗口尺寸和OpenGL屏幕坐标是割裂的，直接用两者中的任何一个都太僵硬
 //Scale系统用于建立一个新的坐标系统将二者联系起来
 
 #ifndef __OWE_SCREEN_SCALE_H__
@@ -30,6 +30,7 @@ public:
     //窗口大小改变后需重新初始化该系统
 
     void Reinit(float xpp, float ypp);
+
     float GetXPerPixel(void) const;
     float GetYPerPixel(void) const;
 
