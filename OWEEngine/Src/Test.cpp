@@ -15,8 +15,8 @@ public:
         desc.bordered   = true;
         desc.resizable  = false;
         desc.fullscreen = false;
-        desc.winWidth   = 800;
-        desc.winHeight  = 600;
+        desc.winWidth   = 1440;
+        desc.winHeight  = 768;
         desc.title      = "Monomorphism";
         desc.glVersion  = "4.3";
 
@@ -76,7 +76,7 @@ public:
         uv.SetBuffer(uvBuf);
 
         FrameBuffer fb;
-        fb.Initialize(640, 480, 1);
+        fb.Initialize(100, 100, 1);
         fb.AddTex(0, Texture2D::Desc());
         fb.AddDepth();
         if(!fb.IsAvailable())

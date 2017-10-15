@@ -62,7 +62,7 @@ namespace
         assert(glm::length(d) > 1e-8f);
         constexpr float epsilon = 1e-5f;
 
-        //解6个方程得到3个slab区间
+        //解4个方程得到2个slab区间
         float tx1, tx2, ty1, ty2;
         if(glm::abs(d.x) < epsilon)
         {
