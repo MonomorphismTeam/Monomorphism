@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.16
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OWEEngine", "OWEEngine\OWEEngine.vcxproj", "{78693AEA-9E37-4182-AB1C-869B7767B43D}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "OWEEngine", "Proj\OWEEngine\OWEEngine.vcxproj", "{78693AEA-9E37-4182-AB1C-869B7767B43D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,5 +24,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {044DBAA7-3CDD-4873-B0FA-B2CE225A30D0}
 	EndGlobalSection
 EndGlobal

@@ -19,38 +19,38 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\Src\BoundingArea.cpp" />
-    <ClCompile Include="..\Src\FrameBuffer.cpp" />
-    <ClCompile Include="..\Src\InputManager.cpp" />
-    <ClCompile Include="..\Src\RenderContext.cpp" />
-    <ClCompile Include="..\Src\ScreenScale.cpp" />
-    <ClCompile Include="..\Src\Shader.cpp" />
-    <ClCompile Include="..\src\Test.cpp" />
-    <ClCompile Include="..\Src\Texture2D.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\BoundingArea.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\FrameBuffer.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\InputManager.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\RenderContext.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\ScreenScale.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\Shader.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\Test.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\Texture2D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\Src\Include\ASCIIFile.h" />
-    <ClInclude Include="..\Src\Include\AttribVariableManager.h" />
-    <ClInclude Include="..\Src\Include\Common.h" />
-    <ClInclude Include="..\Src\Include\BoundingArea.h" />
-    <ClInclude Include="..\Src\Include\FrameBuffer.h" />
-    <ClInclude Include="..\Src\Include\GLHeaders.h" />
-    <ClInclude Include="..\Src\Include\InputManager.h" />
-    <ClInclude Include="..\Src\Include\OWE.h" />
-    <ClInclude Include="..\Src\Include\RenderContext.h" />
-    <ClInclude Include="..\Src\Include\CollisionManagerBase.h" />
-    <ClInclude Include="..\Src\Include\ScreenScale.h" />
-    <ClInclude Include="..\Src\Include\Shader.h" />
-    <ClInclude Include="..\Src\Include\ShaderAux.h" />
-    <ClInclude Include="..\Src\Include\SimpleCollisionManager.h" />
-    <ClInclude Include="..\Src\Include\Singleton.h" />
-    <ClInclude Include="..\Src\Include\Texture2D.h" />
-    <ClInclude Include="..\Src\Include\Texture2DBase.h" />
-    <ClInclude Include="..\Src\Include\Texture2DView.h" />
-    <ClInclude Include="..\Src\Include\TypeOpr.h" />
-    <ClInclude Include="..\Src\Include\UniformVariable.h" />
-    <ClInclude Include="..\Src\Include\UniformVariableManager.h" />
-    <ClInclude Include="..\Src\Include\VertexBuffer.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\ASCIIFile.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\AttribVariableManager.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\BoundingArea.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\CollisionManagerBase.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Common.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\FrameBuffer.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\GLHeaders.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\InputManager.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\OWE.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\RenderContext.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\ScreenScale.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Shader.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\ShaderAux.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\SimpleCollisionManager.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Singleton.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2D.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DBase.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DView.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\TypeOpr.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariable.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariableManager.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\VertexBuffer.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
