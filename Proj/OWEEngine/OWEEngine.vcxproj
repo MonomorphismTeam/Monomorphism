@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\OWEEngine\BoundingArea.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\Clock.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\FrameBuffer.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\InputManager.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\RenderContext.cpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\ASCIIFile.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\AttribVariableManager.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\BoundingArea.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Clock.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\CollisionManagerBase.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Common.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\FrameBuffer.h" />
