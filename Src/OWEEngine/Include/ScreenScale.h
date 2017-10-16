@@ -10,6 +10,7 @@ Created by AirGuanZ
 #ifndef __OWE_SCREEN_SCALE_H__
 #define __OWE_SCREEN_SCALE_H__
 
+#include <cassert>
 #include <glm\glm.hpp>
 
 #include "Common.h"
@@ -55,6 +56,8 @@ public:
     glm::vec2 GLToScreen(const glm::vec2 &GLCoord) const;
     glm::vec2 ClientToScreen(const glm::vec2 &clientCoord) const;
 
+    glm::mat3 ProjMatrix(void) const;
+
 private:
     float xpp_;
     float ypp_;
@@ -66,5 +69,7 @@ private:
 };
 
 __OWE_END_NAMESPACE__(OWE)
+
+#include "ScreenScale.inl"
 
 #endif //__OWE_SCREEN_SCALE_H__

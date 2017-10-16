@@ -20,7 +20,11 @@ Clock::Clock(void)
 
 void Clock::Restart(void)
 {
-    Tick();
+    LARGE_INTEGER tick;
+    QueryPerformanceCounter(&tick);
+
+    startTime_ = ratio_ * tick.QuadPart;
+    lastTick_ = startTime_;
     elapsedTime_ = 0.0;
 }
 
@@ -30,13 +34,18 @@ void Clock::Tick(void)
     QueryPerformanceCounter(&tick);
 
     InternalFormat thisTick = ratio_ * tick.QuadPart;
-    elapsedTime_ = thisTick = lastTick_;
+    elapsedTime_ = thisTick - lastTick_;
     lastTick_ = thisTick;
 }
 
 double Clock::ElapsedTime(void) const
 {
     return elapsedTime_;
+}
+
+double Clock::TotalTime(void) const
+{
+    return lastTick_ - startTime_;
 }
 
 __OWE_END_NAMESPACE__(OWE)

@@ -5,8 +5,19 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Test">
+      <UniqueIdentifier>{a9390728-4ca7-4458-ba5e-4c4c955e6bad}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Monomorphism\Test.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp2.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

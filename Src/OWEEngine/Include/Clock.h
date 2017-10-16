@@ -21,9 +21,12 @@ public:
 
     double ElapsedTime(void) const;
 
+    double TotalTime(void) const;
+
 private:
     using InternalFormat = double;
 
+    InternalFormat startTime_;
     InternalFormat lastTick_;
     InternalFormat elapsedTime_;
     InternalFormat ratio_;

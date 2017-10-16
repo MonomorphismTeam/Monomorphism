@@ -158,7 +158,7 @@ template<> inline GLenum _VertexAttribTypeChecker<glm::ivec4>(void)
 template<typename ClassType, typename MemberType>
 GLintptr _MemOffset(const MemberType ClassType::* pMem)
 {
-    return reinterpret_cast<GLintptr>(&((reinterpret_cast<ClassType*>(0)).*pMem));
+    return reinterpret_cast<GLintptr>(&((reinterpret_cast<ClassType*>(0))->*pMem));
 }
 
 template<typename _AttribType>
@@ -188,17 +188,17 @@ public:
     }
 
     template<typename VBElem, bool _Dynamic, bool _Copy>
-    void SetBuffer(const VertexBuffer<VBElem, _Dynamic, _Copy> &&vtxBuf, _AttribType VBElem::* pMem)
+    void SetBuffer(const VertexBuffer<VBElem, _Dynamic, _Copy> &vtxBuf, _AttribType VBElem::* pMem)
     {
         GLint curVAO;
         glGetIntegerv(GL_VERTEX_ARRAY_BINDING, &curVAO);
         glBindVertexArray(vao_);
 
         //把attribute location用作vertex buffer的binding point
+        glEnableVertexAttribArray(loc_);
         glBindVertexBuffer(idx_, vtxBuf._Unsafe_GetID(), _MemOffset(pMem), sizeof(VBElem));
         glVertexAttribFormat(loc_, _VertexAttribSize<_AttribType>(), _VertexAttribType<_AttribType>(), GL_FALSE, sizeof(VBElem));
         glVertexAttribBinding(loc_, idx_);
-        glEnableVertexAttribArray(loc_);
 
         glBindVertexArray(curVAO);
     }

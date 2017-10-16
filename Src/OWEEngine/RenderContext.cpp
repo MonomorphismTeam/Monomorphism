@@ -280,13 +280,13 @@ namespace
 
 RenderContext::RenderContext(const RenderContext::Desc &desc)
 {
-    assert(!InputManager::IsInstanceAvailable());
     if(!InitGLContext(desc))
         throw std::runtime_error("Failed to initialize GL render context");
 
     glfwSetWindowCloseCallback(glfwWindow, WindowClosedCallback);
 
-    InputManager::InitInstance();
+    if(!InputManager::IsInstanceAvailable())
+        InputManager::InitInstance();
     glfwSetKeyCallback(glfwWindow, KeyCallback);
     glfwSetCursorPosCallback(glfwWindow, MouseMoveCallback);
     glfwSetMouseButtonCallback(glfwWindow, MouseButtonCallback);

@@ -24,7 +24,6 @@
     <ClCompile Include="..\..\Src\OWEEngine\FrameBuffer.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\InputManager.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\RenderContext.cpp" />
-    <ClCompile Include="..\..\Src\OWEEngine\ScreenScale.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Shader.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Texture2D.cpp" />
   </ItemGroup>
@@ -48,10 +47,14 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DBase.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DView.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Transform2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\TypeOpr.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariable.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariableManager.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\VertexBuffer.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -7,6 +7,7 @@ Created by AirGuanZ
 #define __OWE_H__
 
 #include "ASCIIFile.h"
+#include "Clock.h"
 
 #include "RenderContext.h"
 #include "InputManager.h"
@@ -18,5 +19,8 @@ Created by AirGuanZ
 
 #include "FrameBuffer.h"
 #include "VertexBuffer.h"
+
+#include "ScreenScale.h"
+#include "Transform2D.h"
 
 #endif //__OWE_H__

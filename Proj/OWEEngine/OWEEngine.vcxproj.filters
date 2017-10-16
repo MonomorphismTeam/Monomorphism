@@ -55,9 +55,6 @@
     <ClCompile Include="..\..\Src\OWEEngine\Texture2D.cpp">
       <Filter>GLContext\Texture</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\OWEEngine\ScreenScale.cpp">
-      <Filter>Scale</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\OWEEngine\Clock.cpp">
       <Filter>Clock</Filter>
     </ClCompile>
@@ -130,5 +127,13 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\Clock.h">
       <Filter>Clock</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Transform2D.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl">
+      <Filter>Scale</Filter>
+    </None>
   </ItemGroup>
 </Project>
