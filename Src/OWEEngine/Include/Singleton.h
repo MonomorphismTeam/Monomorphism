@@ -51,8 +51,8 @@ public:
 
     static void DelInstance(void)
     {
-        assert(GetInstancePtr());
-        _singleton_instance.reset();
+        if(GetInstancePtr())
+            _singleton_instance.reset();
     }
 
     static bool IsInstanceAvailable(void)
@@ -61,7 +61,6 @@ public:
     }
 
 private:
-
     static SingletonPtr _singleton_instance;
 };
 

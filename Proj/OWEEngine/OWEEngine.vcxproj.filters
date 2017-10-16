@@ -55,7 +55,6 @@
     <ClCompile Include="..\..\Src\OWEEngine\ScreenScale.cpp">
       <Filter>Scale</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\OWEEngine\Test.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\OWEEngine\Include\BoundingArea.h">

@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include "Include\OWE.h"
+#include <OWE.h>
 
 using namespace std;
 using namespace OWE;

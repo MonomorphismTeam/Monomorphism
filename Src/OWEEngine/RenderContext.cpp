@@ -295,7 +295,6 @@ RenderContext::RenderContext(const RenderContext::Desc &desc)
 RenderContext::~RenderContext(void)
 {
     DestroyGLContext();
-    InputManager::DelInstance();
 }
 
 __OWE_END_NAMESPACE__(OWE)

@@ -134,8 +134,7 @@ InputManager::InputManager(void)
 
 InputManager::~InputManager(void)
 {
-    kbListeners.clear();
-    mListeners.clear();
+
 }
 
 void InputManager::_KeyDown(KEY_CODE kc)
