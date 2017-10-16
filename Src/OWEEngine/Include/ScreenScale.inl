@@ -3,8 +3,6 @@ Filename: ScreenScale.inl
 Date: 2017.10.15
 Created by AirGuanZ
 ================================================================*/
-#include "RenderContext.h"
-
 __OWE_BEGIN_NAMESPACE__(OWE)
 
 inline ScreenScale::ScreenScale(void)
@@ -118,12 +116,9 @@ inline glm::vec2 ScreenScale::ClientToScreen(const glm::vec2 &coord) const
 
 inline glm::mat3 ScreenScale::ProjMatrix(void) const
 {
-    return glm::mat3(1.0f, 0.0f, 0.0f,
-                     0.0f, 1.0f, 0.0f,
-                     -1.0f, -1.0f, 1.0f) *
-           glm::mat3(2.0f / screenWidth_, 0.0f, 0.0f,
+    return glm::mat3(2.0f / screenWidth_, 0.0f, 0.0f,
                      0.0f, 2.0f / screenHeight_, 0.0f,
-                     0.0f, 0.0f, 1.0f);
+                     -1.0f, -1.0f, 1.0f);
 }
 
 __OWE_END_NAMESPACE__(OWE)

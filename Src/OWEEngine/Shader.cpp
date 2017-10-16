@@ -49,14 +49,14 @@ bool Shader::IsBound(void) const
     return cur == program_;
 }
 
-UniformVariableManager Shader::CreateUniformMgr(void) const
+Shader::UniformMgrPtr Shader::GetUniformMgrPtr(void) const
 {
-    return UniformVariableManager(program_);
+    return std::make_shared<UniformVariableManager>(program_);
 }
 
-AttribVariableManager Shader::CreateAttribMgr(void) const
+Shader::AttribMgrPtr Shader::GetAttribMgrPtr(void) const
 {
-    return AttribVariableManager(program_);
+    return std::make_shared<AttribVariableManager>(program_);
 }
 
 GLuint Shader::_Unsafe_GetProgramName(void) const

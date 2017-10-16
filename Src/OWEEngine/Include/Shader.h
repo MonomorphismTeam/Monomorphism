@@ -24,6 +24,8 @@ class Shader : public _ShaderAux::_ShaderStageName
 {
 public:
     using InitState = _ShaderAux::ShaderInitState;
+    using UniformMgrPtr = std::shared_ptr<UniformVariableManager>;
+    using AttribMgrPtr = std::shared_ptr<AttribVariableManager>;
 
     Shader(void) = default;
     Shader(const Shader&) = delete;
@@ -43,8 +45,8 @@ public:
     void Unbind(void) const;
     bool IsBound(void) const;
 
-    UniformVariableManager CreateUniformMgr(void) const;
-    AttribVariableManager CreateAttribMgr(void) const;
+    UniformMgrPtr GetUniformMgrPtr(void) const;
+    AttribMgrPtr GetAttribMgrPtr(void) const;
 
     GLuint _Unsafe_GetProgramName(void) const;
 

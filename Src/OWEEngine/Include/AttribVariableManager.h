@@ -187,6 +187,7 @@ public:
         glBindBuffer(GL_ARRAY_BUFFER, curBuf);
     }
 
+    //FIX ME：数据对齐有问题
     template<typename VBElem, bool _Dynamic, bool _Copy>
     void SetBuffer(const VertexBuffer<VBElem, _Dynamic, _Copy> &vtxBuf, _AttribType VBElem::* pMem)
     {

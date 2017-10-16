@@ -14,6 +14,7 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 
 #include "Common.h"
+#include "RenderContext.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 
