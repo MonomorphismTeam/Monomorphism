@@ -16,9 +16,9 @@ Created by AirGuanZ
 
 namespace Test
 {
-    using namespace OWE;
-    using namespace glm;
     using namespace std;
+    using namespace glm;
+    using namespace OWE;
 
     class TestApp2 : public WindowListener
     {
@@ -34,8 +34,8 @@ namespace Test
             desc.bordered = true;
             desc.resizable = false;
             desc.fullscreen = false;
-            desc.winWidth = 1440;
-            desc.winHeight = 768;
+            desc.winWidth = 800;
+            desc.winHeight = 600;
             desc.title = "Monomorphism";
             desc.glVersion = "4.3";
 
@@ -59,6 +59,7 @@ namespace Test
                 { +1.0f, +1.0f },
                 { +1.0f, -1.0f }
             };
+            vtxPos_.Initialize(6, vtxPosData);
 
             const vec3 vtxColorData[] =
             {
@@ -70,8 +71,6 @@ namespace Test
                 { 0.0f, 0.0f, 1.0f },
                 { 0.0f, 1.0f, 1.0f }
             };
-
-            vtxPos_.Initialize(6, vtxPosData);
             vtxColor_.Initialize(6, vtxColorData);
         }
 
@@ -88,6 +87,9 @@ namespace Test
             }
             uniforms_ = shader_.GetUniformMgrPtr();
             attribs_ = shader_.GetAttribMgrPtr();
+
+            attribs_->GetAttrib<vec2>("pos").SetBuffer(vtxPos_);
+            attribs_->GetAttrib<vec3>("color").SetBuffer(vtxColor_);
         }
 
         void Run(void)
@@ -97,15 +99,24 @@ namespace Test
             InitVertices();
             InitShader();
 
-            attribs_->GetAttrib<vec2>("pos").SetBuffer(vtxPos_);
-            attribs_->GetAttrib<vec3>("color").SetBuffer(vtxColor_);
-
             pos_ = vec2(0.5f * scale_.ScreenWidth(), 0.5f * scale_.ScreenHeight());
             done_ = false;
             clock_.Restart();
 
             while(!done_)
             {
+                clock_.Tick();
+
+                constexpr float SPEED = 5.0f / 1000.0f;
+                if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_W))
+                    pos_ += vec2(0.0f, SPEED * clock_.ElapsedTime());
+                if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_A))
+                    pos_ += vec2(-SPEED * clock_.ElapsedTime(), 0.0f);
+                if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_S))
+                    pos_ += vec2(0.0f, -SPEED * clock_.ElapsedTime());
+                if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_D))
+                    pos_ += vec2(SPEED * clock_.ElapsedTime(), 0.0f);
+
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
                 uniforms_->GetUniform<glm::mat3>("transMat").SetVal(scale_.ProjMatrix() * Transform::Translate(pos_));
