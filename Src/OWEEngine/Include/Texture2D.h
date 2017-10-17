@@ -11,6 +11,7 @@ Created by AirGuanZ
 #include "Common.h"
 #include "GLHeaders.h"
 #include "Texture2DBase.h"
+#include "Texture2DView.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_Texture2DAux)
@@ -67,6 +68,8 @@ public:
 
     void Initialize(const Desc &desc, void *data);
     void Destroy(void);
+
+    Texture2DView GetTextureView(void) const;
 
 private:
     int width_;

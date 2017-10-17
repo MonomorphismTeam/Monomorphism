@@ -32,8 +32,11 @@
     <Filter Include="Scale">
       <UniqueIdentifier>{4b7bf70d-e0f5-477d-8822-73ccc1a0534f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Clock">
+    <Filter Include="Utility\Clock">
       <UniqueIdentifier>{b53a7de7-3ea2-40a8-a531-7711d2b9ce0c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TiledTexture">
+      <UniqueIdentifier>{62cb1b1c-49a8-4774-a3a0-0dd08914ceee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -56,7 +59,7 @@
       <Filter>GLContext\Texture</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\OWEEngine\Clock.cpp">
-      <Filter>Clock</Filter>
+      <Filter>Utility\Clock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -125,10 +128,13 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\OWEEngine\Include\OWE.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Clock.h">
-      <Filter>Clock</Filter>
+      <Filter>Utility\Clock</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\OWEEngine\Include\Transform2D.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\OWEEngine\Include\TiledTexture.h">
+      <Filter>TiledTexture</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

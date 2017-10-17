@@ -47,6 +47,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DBase.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DView.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\TiledTexture.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Transform2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\TypeOpr.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariable.h" />

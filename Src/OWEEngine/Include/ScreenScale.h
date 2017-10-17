@@ -67,6 +67,8 @@ private:
     int clientHeight_;
     float screenWidth_;
     float screenHeight_;
+
+    glm::mat3 projMat_;
 };
 
 __OWE_END_NAMESPACE__(OWE)

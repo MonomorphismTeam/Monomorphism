@@ -10,7 +10,7 @@ inline ScreenScale::ScreenScale(void)
       clientWidth_(0), clientHeight_(0),
       screenWidth_(0.0f), screenHeight_(0.0f)
 {
-
+    projMat_ = glm::mat3(1.0f);
 }
 
 inline ScreenScale::ScreenScale(float xpp, float ypp)
@@ -32,6 +32,9 @@ inline void ScreenScale::Reinit(float xpp, float ypp)
     clientHeight_ = RenderContext::GetInstance().ClientHeight();
     screenWidth_ = clientWidth_ / xpp;
     screenHeight_ = clientHeight_ / ypp;
+    projMat_ = glm::mat3(2.0f / screenWidth_, 0.0f, 0.0f,
+                         0.0f, 2.0f / screenHeight_, 0.0f,
+                         -1.0f, -1.0f, 1.0f);
 }
 
 inline float ScreenScale::GetXPerPixel(void) const
@@ -116,9 +119,7 @@ inline glm::vec2 ScreenScale::ClientToScreen(const glm::vec2 &coord) const
 
 inline glm::mat3 ScreenScale::ProjMatrix(void) const
 {
-    return glm::mat3(2.0f / screenWidth_, 0.0f, 0.0f,
-                     0.0f, 2.0f / screenHeight_, 0.0f,
-                     -1.0f, -1.0f, 1.0f);
+    return projMat_;
 }
 
 __OWE_END_NAMESPACE__(OWE)

@@ -60,6 +60,11 @@ void _Texture2D::Destroy(void)
     }
 }
 
+Texture2DView _Texture2D::GetTextureView(void) const
+{
+    return Texture2DView(tex_);
+}
+
 bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc &desc, _Texture2D &tex)
 {
     //取得文件格式，加载位图
