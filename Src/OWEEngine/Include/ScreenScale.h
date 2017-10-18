@@ -1,11 +1,11 @@
-/*================================================================
+﻿/*================================================================
 Filename: ScreenScale.h
 Date: 2017.10.15
 Created by AirGuanZ
 ================================================================*/
 
-//���ڳߴ��OpenGL��Ļ�����Ǹ��ѵģ�ֱ���������е��κ�һ����̫��Ӳ
-//Scaleϵͳ���ڽ���һ���µ�����ϵͳ��������ϵ����
+//窗口尺寸和OpenGL屏幕坐标是割裂的，直接用两者中的任何一个都太僵硬
+//Scale系统用于建立一个新的坐标系统将二者联系起来
 
 #ifndef __OWE_SCREEN_SCALE_H__
 #define __OWE_SCREEN_SCALE_H__
@@ -18,9 +18,9 @@ Created by AirGuanZ
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 
-//Screen����ϵ�����½�Ϊ(0, 0)���̶���user�ṩ��xpp��yppָ��
-//GL����ϵ��OpenGL��Ļ����ϵ�����½�Ϊ(-1, -1)�����Ͻ�Ϊ(1, 1)
-//Client����ϵ����������ϵ�����Ͻ�Ϊ(0, 0)��y�����������£��̶�Ϊ����
+//Screen坐标系：左下角为(0, 0)，刻度由user提供的xpp和ypp指定
+//GL坐标系：OpenGL屏幕坐标系，左下角为(-1, -1)，右上角为(1, 1)
+//Client坐标系：窗口坐标系，左上角为(0, 0)，y轴正方向向下，刻度为像素
 
 class ScreenScale
 {
@@ -29,7 +29,7 @@ public:
     ScreenScale(float xpp, float ypp);
     ~ScreenScale(void);
 
-    //���ڴ�С�ı�������³�ʼ����ϵͳ
+    //窗口大小改变后需重新初始化该系统
 
     void Reinit(float xpp, float ypp);
 

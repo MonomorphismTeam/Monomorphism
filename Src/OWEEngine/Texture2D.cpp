@@ -65,6 +65,16 @@ Texture2DView _Texture2D::GetTextureView(void) const
     return Texture2DView(tex_);
 }
 
+int _Texture2D::Width(void) const
+{
+    return width_;
+}
+
+int _Texture2D::Height(void) const
+{
+    return height_;
+}
+
 bool _LoadTexture2DFromFile(const std::string &filename, const _Texture2D::Desc &desc, _Texture2D &tex)
 {
     //取得文件格式，加载位图

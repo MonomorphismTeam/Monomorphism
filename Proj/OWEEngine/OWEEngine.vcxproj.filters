@@ -61,6 +61,9 @@
     <ClCompile Include="..\..\Src\OWEEngine\Clock.cpp">
       <Filter>Utility\Clock</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\OWEEngine\TiledTexture.cpp">
+      <Filter>TiledTexture</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\OWEEngine\Include\BoundingArea.h">
@@ -140,6 +143,9 @@
   <ItemGroup>
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl">
       <Filter>Scale</Filter>
+    </None>
+    <None Include="..\..\Src\OWEEngine\Include\TiledTextureShaderSource.inl">
+      <Filter>TiledTexture</Filter>
     </None>
   </ItemGroup>
 </Project>

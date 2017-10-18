@@ -71,6 +71,9 @@ public:
 
     Texture2DView GetTextureView(void) const;
 
+    int Width(void) const;
+    int Height(void) const;
+
 private:
     int width_;
     int height_;

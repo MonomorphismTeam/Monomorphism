@@ -6,6 +6,8 @@ Created by AirGuanZ
 #ifndef __OWE_TILED_TEXTURE_H__
 #define __OWE_TILED_TEXTURE_H__
 
+#include <vector>
+
 #include "Common.h"
 #include "ScreenScale.h"
 #include "Texture2DView.h"
@@ -19,7 +21,7 @@ public:
     _TiledTexture(void);
     ~_TiledTexture(void);
 
-    bool Initialize(int width, int height, float tileWidth, float tileHeight);
+    void Initialize(int width, int height, float tileWidth, float tileHeight);
     bool IsAvailable(void) const;
     void Destroy(void);
 
@@ -33,7 +35,21 @@ public:
     float TileWidth(void) const;
     float TileHeight(void) const;
 
-    void Draw(const glm::vec2 &centre, ScreenScale &scale) const;
+    void Draw(const glm::vec2 &LB, const ScreenScale &scale) const;
+
+private:
+    struct Tile
+    {
+        glm::vec2 uvLB;
+        glm::vec2 uvRT;
+        Texture2DView tex;
+    };
+
+    int width_;
+    int height_;
+    float tileWidth_;
+    float tileHeight_;
+    std::vector<Tile> tiles_;
 };
 
 __OWE_END_NAMESPACE__(_TiledTextureAux)
