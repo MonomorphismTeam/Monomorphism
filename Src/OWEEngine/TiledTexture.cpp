@@ -121,10 +121,12 @@ void _TiledTexture::Draw(const glm::vec2 &LB, const ScreenScale &scale) const
 
     for(int y = tileYBegin; y < tileYEnd; ++y)
     {
+        float yLB = y * tileHeight_;
+        int yIdxBase = y * height_;
         for(int x = tileXBegin; x < tileXEnd; ++x)
-            _DrawTile(x * tileWidth_, y * tileHeight_,
+            _DrawTile(x * tileWidth_, yLB,
                       tileWidth_, tileHeight_,
-                      tiles_[_TileIndex(height_, x, y)]);
+                      tiles_[yIdxBase + x]);
     }
 }
 
