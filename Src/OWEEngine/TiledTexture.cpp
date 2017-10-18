@@ -9,30 +9,74 @@ Created by AirGuanZ
 
 #include "Include\Shader.h"
 #include "Include\TiledTexture.h"
+#include "Include\Transform2D.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_TiledTextureAux)
 
 namespace
 {
-    Shader tiledTexShader_Basic;
+    Shader shaderBasic;
+
+    Shader::UniformMgrPtr uniformsBasic;
+    Shader::AttribMgrPtr attribsBasic;
+
+    UniformVariable<glm::mat3> vtxTransMat_Basic;
+    UniformVariable<glm::mat3> texTransMat_Basic;
+    UniformVariable<Texture2DBase> tex_Basic;
+
+    VertexBuffer<glm::vec2> vtxPos;
 
 #include "Include\TiledTextureShaderSource.inl"
 
     inline void _InitTiledTexture(void)
     {
-        if(tiledTexShader_Basic.IsAvailable())
+        if(shaderBasic.IsAvailable())
             return;
+
+        const glm::vec2 vtxPosData[] =
+        {
+            { 0.0f, 0.0f },
+            { 0.0f, 1.0f },
+            { 1.0f, 1.0f },
+            { 0.0f, 0.0f },
+            { 1.0f, 1.0f },
+            { 1.0f, 0.0f }
+        };
+        vtxPos.Initialize(6, vtxPosData);
+
         std::string err;
-        if(tiledTexShader_Basic.Initialize(
+        if(shaderBasic.Initialize(
                 err, VSSrc(tiledTexVtxShaderSrc_Basic), FSSrc(tiledTexFragShaderSrc_Basic))
             != Shader::InitState::Success)
             throw std::runtime_error("Failed to initialize shader for tiled texture");
+
+        uniformsBasic = shaderBasic.GetUniformMgrPtr();
+        attribsBasic = shaderBasic.GetAttribMgrPtr();
+
+        attribsBasic->GetAttrib<glm::vec2>("inPos").SetBuffer(vtxPos);
+        vtxTransMat_Basic = uniformsBasic->GetUniform<glm::mat3>("vtxTransMat");
+        texTransMat_Basic = uniformsBasic->GetUniform<glm::mat3>("vtxTransMat");
+        tex_Basic = uniformsBasic->GetUniform<Texture2DBase>("tex");
     }
 
     inline void _DrawTile(float xLB, float yLB, float width, float height, const _Tile &tile)
     {
+        glm::mat3 vtxTransMat = Transform::Translate(glm::vec2(xLB, yLB)) *
+                                Transform::Scale(glm::vec2(width, height));
+        glm::mat3 texTransMat = Transform::Translate(tile.uvLB) *
+                                Transform::Scale(tile.uvRT - tile.uvLB);
 
+        shaderBasic.Bind();
+        attribsBasic->Bind();
+
+        vtxTransMat_Basic.SetAndApply(vtxTransMat);
+        texTransMat_Basic.SetAndApply(texTransMat);
+        tex_Basic.SetAndApply(tile.tex);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
+        attribsBasic->Unbind();
+        shaderBasic.Unbind();
     }
 }
 

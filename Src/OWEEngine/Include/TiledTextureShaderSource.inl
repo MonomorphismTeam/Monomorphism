@@ -9,16 +9,16 @@ R"___(
 #version 430 core
 
 in vec2 inPos;
-in vec2 inTexCoord;
 
-uniform mat3 transMat;
+uniform mat3 vtxTransMat;
+uniform mat3 texTransMat;
 
 varying vec2 texCoord;
 
 void main(void)
 {
     gl_Position = vec4((transMat * vec3(inPos, 1.0)).xy, 0.0, 1.0);
-	texCoord = inTexCoord;
+	texCoord = (texTransMat * vec3(inPos, 1.0)).xy;
 }
 )___";
 

@@ -72,7 +72,7 @@ public:
         //do nothing
     }
 
-    void SetUniformValue(GLint loc, _VarType v) const
+    void SetUniformValue(GLint loc, const _VarType &v) const
     {
         _SetUniform(loc, v);
     }
@@ -113,7 +113,7 @@ public:
     }
 
     //设置值
-    void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
+    void SetVal(const VarType &v)
     {
         var_ = v;
     }
@@ -124,7 +124,7 @@ public:
         SetUniformValue(loc_, var_);
     }
 
-    void SetAndApply(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
+    void SetAndApply(const VarType &v)
     {
         SetVal(v);
         Apply();
@@ -160,48 +160,54 @@ public:
     friend class _UniformVariableManager;
     using VarType = _VarType;
 
+    explicit _UniformVariable(void)
+        : impl_(nullptr)
+    {
+
+    }
+
     ~_UniformVariable(void)
     {
         //do nothing
     }
 
     //设置整个Uniform variable的值
-    void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var)
+    void SetVal(const VarType &var)
     {
-        impl_.SetVal(var);
+        impl_->SetVal(var);
     }
 
     //使用该变量值
     void Apply(void) const
     {
-        impl_.Apply();
+        impl_->Apply();
     }
 
-    void SetAndApply(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var)
+    void SetAndApply(const VarType &var)
     {
-        impl_.SetAndApply(var);
+        impl_->SetAndApply(var);
     }
 
     //取得整个Uniform variable的值
     Utility::RefIfNotNumeric_t<VarType> GetVal(void)
     {
-        return impl_.GetVal();
+        return impl_->GetVal();
     }
 
     //取得整个Uniform variable的值
     std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> GetVal(void) const
     {
-        return impl_.GetVal();
+        return impl_->GetVal();
     }
 
 private:
     explicit _UniformVariable(_UniformVariableImpl<VarType> &impl)
-        :impl_(impl)
+        : impl_(&impl)
     {
 
     }
 
-    _UniformVariableImpl<VarType> &impl_;
+    _UniformVariableImpl<VarType> *impl_;
 };
 
 __OWE_END_NAMESPACE__(_UniformAux)

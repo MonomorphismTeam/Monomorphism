@@ -25,6 +25,13 @@ inline glm::mat3 Translate(const glm::vec2 &p)
     return Translate(p.x, p.y);
 }
 
+inline glm::mat3 Scale(const glm::vec2 &s)
+{
+    return glm::mat3(s.x, 0.0f, 0.0f,
+                     0.0f, s.y, 0.0f,
+                     0.0f, 0.0f, 1.0f);
+}
+
 __OWE_END_NAMESPACE__(Transform)
 __OWE_END_NAMESPACE__(OWE)
 
