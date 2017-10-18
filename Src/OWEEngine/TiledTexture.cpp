@@ -16,6 +16,8 @@ __OWE_BEGIN_NAMESPACE__(_TiledTextureAux)
 
 namespace
 {
+#include "Include\TiledTextureShaderSource.inl"
+
     Shader shaderBasic;
 
     Shader::UniformMgrPtr uniformsBasic;
@@ -26,8 +28,6 @@ namespace
     UniformVariable<Texture2DBase> tex_Basic;
 
     VertexBuffer<glm::vec2> vtxPos;
-
-#include "Include\TiledTextureShaderSource.inl"
 
     inline void _InitTiledTexture(void)
     {
@@ -119,14 +119,13 @@ void _TiledTexture::Draw(const glm::vec2 &LB, const ScreenScale &scale) const
     tileXEnd   = glm::min(tileXEnd, width_);
     tileYEnd   = glm::min(tileYEnd, height_);
 
-    for(int y = tileYBegin; y < tileYEnd; ++y)
+    float yLB = tileYBegin * tileHeight_ - LB.y;
+    for(int y = tileYBegin; y < tileYEnd; ++y, yLB += tileHeight_)
     {
-        float yLB = y * tileHeight_;
+        float xLB = tileXBegin * tileWidth_ - LB.x;
         int yIdxBase = y * height_;
-        for(int x = tileXBegin; x < tileXEnd; ++x)
-            _DrawTile(x * tileWidth_, yLB,
-                      tileWidth_, tileHeight_,
-                      tiles_[yIdxBase + x]);
+        for(int x = tileXBegin; x < tileXEnd; ++x, xLB += tileWidth_)
+            _DrawTile(xLB, yLB, tileWidth_, tileHeight_, tiles_[yIdxBase + x]);
     }
 }
 
