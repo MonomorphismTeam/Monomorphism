@@ -16,7 +16,7 @@ __OWE_BEGIN_NAMESPACE__(OWE)
 class Texture2DBase
 {
 public:
-    explicit Texture2DBase(GLuint tex)
+    explicit Texture2DBase(GLuint tex = 0)
         :tex_(tex)
     {
 

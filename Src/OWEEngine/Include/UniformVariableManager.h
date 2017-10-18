@@ -32,13 +32,7 @@ template<> struct _UniformTypeCheckerAux<GLfloat>
 
 template<> struct _UniformTypeCheckerAux<GLint>
 {
-    static bool _Check(GLenum type)
-    {
-        return type == GL_INT ||
-               type == GL_SAMPLER_1D ||
-               type == GL_SAMPLER_2D ||
-               type == GL_SAMPLER_3D;
-    }
+    static bool _Check(GLenum type) { return type == GL_INT; }
 };
 
 template<> struct _UniformTypeCheckerAux<glm::vec2>
@@ -71,6 +65,11 @@ template<> struct _UniformTypeCheckerAux<glm::mat4x4>
     static bool _Check(GLenum type) { return type == GL_FLOAT_MAT4; }
 };
 
+template<> struct _UniformTypeCheckerAux<Texture2DBase>
+{
+    static bool _Check(GLenum type) { return type == GL_SAMPLER_2D; }
+};
+
 template<typename VarType>
 bool _UniformTypeChecker(GLenum type)
 {
@@ -83,6 +82,7 @@ public:
     struct VarInfo
     {
         GLint location;
+        GLint tex2DSlot;
         GLenum type;
 
         _UniformAux::_UniformVariableBase *_var;
@@ -93,6 +93,7 @@ public:
     struct UniformNotFoundError { std::string name; };
 
     explicit _UniformVariableManager(GLuint prog)
+        : sampler2DCnt_(0)
     {
         assert(glIsProgram(prog));
         //取得active uniform variable数量
@@ -113,7 +114,11 @@ public:
             if(location == -1)
                 continue;
 
-            Add(nameBuf.data(), { location, type, nullptr });
+            GLint tex2DSlot = 0;
+            if(type == GL_SAMPLER_2D)
+                tex2DSlot = sampler2DCnt_++;
+
+            Add(nameBuf.data(), { location, tex2DSlot, type, nullptr });
         }
     }
 
@@ -149,20 +154,8 @@ public:
         if(!_UniformTypeChecker<VarType>(info.type))
             throw UniformTypeError{ name, info.type };
         if(!info._var)
-            info._var = new _UniformVariableImpl<VarType>(info.location);
+            info._var = new _UniformVariableImpl<VarType>(info.location, info.tex2DSlot);
         return _UniformVariable<VarType>(*dynamic_cast<_UniformVariableImpl<VarType>*>(info._var));
-    }
-
-    template<typename VarType>
-    _ImmediateUniformVariable<VarType> GetImmediateUniform(const std::string &name)
-    {
-        auto it = vars_.find(name);
-        if(it == vars_.end())
-            throw UniformNotFoundError{ name };
-        VarInfo &info = it->second;
-        if(!_UniformTypeChecker<VarType>(info.type))
-            throw UniformTypeError{ name, info.type };
-        return _ImmediateUniformVariable<VarType>(info.location);
     }
 
     void Apply(void) const
@@ -181,6 +174,7 @@ public:
 
 private:
     std::map<std::string, VarInfo> vars_;
+    int sampler2DCnt_;
 };
 
 __OWE_END_NAMESPACE__(_UniformAux)

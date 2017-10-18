@@ -81,7 +81,7 @@ namespace Test
 
             //准备uniform variable
             Shader::UniformMgrPtr uniformMgr = shader.GetUniformMgrPtr();
-            UniformVariable<GLint> texSam = uniformMgr->GetUniform<GLint>("tex");
+            UniformVariable<Texture2DBase> texSam = uniformMgr->GetUniform<Texture2DBase>("tex");
             UniformVariable<glm::vec2> offset = uniformMgr->GetUniform<glm::vec2>("offset");
 
             glm::vec2 offsetVal(0.0f, 0.0f);
@@ -127,7 +127,7 @@ namespace Test
                     glClearColor((abs(glm::sin(t_)) + 1.0f) / 2.0f, 1.0f, 0.0f, 1.0f);
                     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                    tex.Bind(0);
+                    texSam.SetVal(tex);
 
                     shader.Bind();
                     attribMgr->Bind();
@@ -141,7 +141,7 @@ namespace Test
                 fb.End();
 
                 //渲染主场景
-                fb.GetTex(0).Bind(0);
+                texSam.SetVal(fb.GetTex(0));
 
                 shader.Bind();
                 attribMgr->Bind();

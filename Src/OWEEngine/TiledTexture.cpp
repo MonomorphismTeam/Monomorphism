@@ -19,11 +19,10 @@ namespace
 
 #include "Include\TiledTextureShaderSource.inl"
 
-    inline void _InitTiledTextureShader(void)
+    inline void _InitTiledTexture(void)
     {
         if(tiledTexShader_Basic.IsAvailable())
             return;
-
         std::string err;
         if(tiledTexShader_Basic.Initialize(
                 err, VSSrc(tiledTexVtxShaderSrc_Basic), FSSrc(tiledTexFragShaderSrc_Basic))
@@ -31,41 +30,26 @@ namespace
             throw std::runtime_error("Failed to initialize shader for tiled texture");
     }
 
-    inline int _TileIndex(int height, int tileX, int tileY)
+    inline void _DrawTile(float xLB, float yLB, float width, float height, const _Tile &tile)
     {
-        return tileY * height + tileX;
+
     }
-}
-
-_TiledTexture::_TiledTexture(void)
-    : width_(0), height_(0),
-      tileWidth_(0.0f), tileHeight_(0.0f)
-{
-
-}
-
-_TiledTexture::~_TiledTexture(void)
-{
-
 }
 
 void _TiledTexture::Initialize(int width, int height, float tileWidth, float tileHeight)
 {
     assert(width > 0 && height > 0 && tileWidth > 0.0f && tileHeight > 0.0f);
 
-    _InitTiledTextureShader();
+    _InitTiledTexture();
     Destroy();
 
-    width_      = width;
-    height_     = height;
-    tileWidth_  = tileWidth;
-    tileHeight_ = tileHeight;
-    tiles_.resize(width * height, Tile{ { 0.0f, 0.0f }, { 0.0f, 0.0f }, Texture2DView(0) });
-}
-
-bool _TiledTexture::IsAvailable(void) const
-{
-    return width_ != 0;
+    width_        = width;
+    height_       = height;
+    tileWidth_    = tileWidth;
+    tileHeight_   = tileHeight;
+    reTileWidth_  = 1.0f / tileWidth;
+    reTileHeight_ = 1.0f / tileHeight;
+    tiles_.resize(width * height, _Tile{ { 0.0f, 0.0f }, { 0.0f, 0.0f }, Texture2DView(0) });
 }
 
 void _TiledTexture::Destroy(void)
@@ -78,66 +62,26 @@ void _TiledTexture::Destroy(void)
     }
 }
 
-void _TiledTexture::SetTile(int tileX, int tileY, const glm::vec2 &uvLB, const glm::vec2 &uvRT, Texture2DView tex)
-{
-    assert(IsAvailable());
-    assert(0 <= tileX && tileX < width_);
-    assert(0 <= tileY && tileY < height_);
-    tiles_[_TileIndex(height_, tileX, tileY)] = Tile{ uvLB, uvRT, tex };
-}
-
-Texture2DView _TiledTexture::GetTileTex(int tileX, int tileY) const
-{
-    assert(IsAvailable());
-    assert(0 <= tileX && tileX < width_);
-    assert(0 <= tileY && tileY < height_);
-    return tiles_[_TileIndex(height_, tileX, tileY)].tex;
-}
-
-glm::vec2 _TiledTexture::GetTileTexCoordLB(int tileX, int tileY) const
-{
-    assert(IsAvailable());
-    assert(0 <= tileX && tileX < width_);
-    assert(0 <= tileY && tileY < height_);
-    return tiles_[_TileIndex(height_, tileX, tileY)].uvLB;
-}
-
-glm::vec2 _TiledTexture::GetTileTexCoordRT(int tileX, int tileY) const
-{
-    assert(IsAvailable());
-    assert(0 <= tileX && tileX < width_);
-    assert(0 <= tileY && tileY < height_);
-    return tiles_[_TileIndex(height_, tileX, tileY)].uvRT;
-}
-
-int _TiledTexture::Width(void) const
-{
-    assert(IsAvailable());
-    return width_;
-}
-
-int _TiledTexture::Height(void) const
-{
-    assert(IsAvailable());
-    return height_;
-}
-
-float _TiledTexture::TileWidth(void) const
-{
-    assert(IsAvailable());
-    return tileWidth_;
-}
-
-float _TiledTexture::TileHeight(void) const
-{
-    assert(IsAvailable());
-    return tileHeight_;
-}
-
 void _TiledTexture::Draw(const glm::vec2 &LB, const ScreenScale &scale) const
 {
     assert(IsAvailable());
+    int tileXBegin = static_cast<int>(glm::floor(LB.x * reTileWidth_));
+    int tileYBegin = static_cast<int>(glm::floor(LB.y * reTileHeight_));
+    int tileXEnd   = static_cast<int>(glm::ceil((LB.x + scale.ScreenWidth()) * reTileWidth_));
+    int tileYEnd   = static_cast<int>(glm::ceil((LB.y + scale.ScreenHeight()) * reTileHeight_));
 
+    tileXBegin = glm::max(tileXBegin, 0);
+    tileYBegin = glm::max(tileYBegin, 0);
+    tileXEnd   = glm::min(tileXEnd, width_);
+    tileYEnd   = glm::min(tileYEnd, height_);
+
+    for(int y = tileYBegin; y < tileYEnd; ++y)
+    {
+        for(int x = tileXBegin; x < tileXEnd; ++x)
+            _DrawTile(x * tileWidth_, y * tileHeight_,
+                      tileWidth_, tileHeight_,
+                      tiles_[_TileIndex(height_, x, y)]);
+    }
 }
 
 __OWE_END_NAMESPACE__(_TiledTextureAux)

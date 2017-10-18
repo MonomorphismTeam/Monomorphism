@@ -8,6 +8,6 @@ Created by AirGuanZ
 
 int main(void)
 {
-    Test::TestApp2 app;
+    Test::TestApp1 app;
     app.Run();
 }

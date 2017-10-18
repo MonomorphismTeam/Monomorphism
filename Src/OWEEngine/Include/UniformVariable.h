@@ -6,6 +6,7 @@ Created by AirGuanZ
 #ifndef __OWE_UNIFORM_VARIABLE_H__
 #define __OWE_UNIFORM_VARIABLE_H__
 
+#include <cassert>
 #include <map>
 #include <string>
 #include <tuple>
@@ -13,6 +14,7 @@ Created by AirGuanZ
 
 #include "Common.h"
 #include "GLHeaders.h"
+#include "Texture2DBase.h"
 #include "TypeOpr.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
@@ -62,7 +64,43 @@ public:
 };
 
 template<typename _VarType>
-class _UniformVariableImpl : public _UniformVariableBase
+class _UniformVariableTexture2DBinder
+{
+public:
+    _UniformVariableTexture2DBinder(GLint texSlot)
+    {
+        //do nothing
+    }
+
+    void SetUniformValue(GLint loc, _VarType v) const
+    {
+        _SetUniform(loc, v);
+    }
+};
+
+template<>
+class _UniformVariableTexture2DBinder<Texture2DBase>
+{
+public:
+    _UniformVariableTexture2DBinder(GLint texSlot)
+        : uniformTexSlot_(texSlot)
+    {
+
+    }
+
+    void SetUniformValue(GLint loc, Texture2DBase tex) const
+    {
+        assert(tex.IsAvailable());
+        tex.Bind(uniformTexSlot_);
+        _SetUniform(loc, uniformTexSlot_);
+    }
+
+private:
+    GLint uniformTexSlot_;
+};
+
+template<typename _VarType>
+class _UniformVariableImpl : public _UniformVariableBase, public _UniformVariableTexture2DBinder<_VarType>
 {
 public:
     friend class _UniformVariableManager;
@@ -74,7 +112,7 @@ public:
         //do nothing
     }
 
-    //设置某个分量的值
+    //设置值
     void SetVal(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
     {
         var_ = v;
@@ -83,7 +121,7 @@ public:
     //使用该变量值
     void Apply(void) const
     {
-        _SetUniform(loc_, var_);
+        SetUniformValue(loc_, var_);
     }
 
     void SetAndApply(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> v)
@@ -105,8 +143,8 @@ public:
     }
 
 private:
-    explicit _UniformVariableImpl(GLint loc)
-        :loc_(loc)
+    _UniformVariableImpl(GLint loc, GLint texSlot)
+        : loc_(loc), _UniformVariableTexture2DBinder(texSlot)
     {
 
     }
@@ -166,34 +204,12 @@ private:
     _UniformVariableImpl<VarType> &impl_;
 };
 
-template<typename VarType>
-class _ImmediateUniformVariable
-{
-public:
-    friend class _UniformVariableManager;
-
-    void SetAndApply(std::add_const_t<Utility::RefIfNotNumeric_t<VarType>> var) const
-    {
-        _SetUniform(loc_, var);
-    }
-
-private:
-    explicit _ImmediateUniformVariable(GLuint loc)
-        :loc_(loc)
-    {
-
-    }
-
-    GLuint loc_;
-};
-
 __OWE_END_NAMESPACE__(_UniformAux)
 
 template<typename VarType>
 using UniformVariable = _UniformAux::_UniformVariable<VarType>;
 
-template<typename VarType>
-using ImmediateUniformVariable = _UniformAux::_ImmediateUniformVariable<VarType>;
+using UniformTexture2D = Texture2DBase;
 
 __OWE_END_NAMESPACE__(OWE)
 

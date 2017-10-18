@@ -6,6 +6,7 @@ Created by AirGuanZ
 #ifndef __OWE_TILED_TEXTURE_H__
 #define __OWE_TILED_TEXTURE_H__
 
+#include <cassert>
 #include <vector>
 
 #include "Common.h"
@@ -15,11 +16,17 @@ Created by AirGuanZ
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_TiledTextureAux)
 
+struct _Tile
+{
+    glm::vec2 uvLB;
+    glm::vec2 uvRT;
+    Texture2DView tex;
+};
+
 class _TiledTexture
 {
 public:
     _TiledTexture(void);
-    ~_TiledTexture(void);
 
     void Initialize(int width, int height, float tileWidth, float tileHeight);
     bool IsAvailable(void) const;
@@ -38,21 +45,18 @@ public:
     void Draw(const glm::vec2 &LB, const ScreenScale &scale) const;
 
 private:
-    struct Tile
-    {
-        glm::vec2 uvLB;
-        glm::vec2 uvRT;
-        Texture2DView tex;
-    };
-
     int width_;
     int height_;
     float tileWidth_;
     float tileHeight_;
-    std::vector<Tile> tiles_;
+    float reTileWidth_;
+    float reTileHeight_;
+    std::vector<_Tile> tiles_;
 };
 
 __OWE_END_NAMESPACE__(_TiledTextureAux)
 __OWE_END_NAMESPACE__(OWE)
+
+#include "TiledTexture.inl"
 
 #endif //__OWE_TILED_TEXTURE_H__

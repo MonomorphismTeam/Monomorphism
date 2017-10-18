@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl" />
+    <None Include="..\..\Src\OWEEngine\Include\TiledTexture.inl" />
     <None Include="..\..\Src\OWEEngine\Include\TiledTextureShaderSource.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
