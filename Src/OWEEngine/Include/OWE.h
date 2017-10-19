@@ -15,6 +15,7 @@ Created by AirGuanZ
 #include "Shader.h"
 
 #include "Texture2D.h"
+#include "Texture2DBase.h"
 #include "Texture2DView.h"
 
 #include "FrameBuffer.h"
@@ -22,5 +23,7 @@ Created by AirGuanZ
 
 #include "ScreenScale.h"
 #include "Transform2D.h"
+
+#include "TiledTexture.h"
 
 #endif //__OWE_H__

@@ -17,7 +17,7 @@ varying vec2 texCoord;
 
 void main(void)
 {
-    gl_Position = vec4((transMat * vec3(inPos, 1.0)).xy, 0.0, 1.0);
+    gl_Position = vec4((vtxTransMat * vec3(inPos, 1.0)).xy, 0.0, 1.0);
 	texCoord = (texTransMat * vec3(inPos, 1.0)).xy;
 }
 )___";

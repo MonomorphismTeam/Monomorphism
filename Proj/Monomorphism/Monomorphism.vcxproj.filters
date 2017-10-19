@@ -19,5 +19,8 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp2.h">
       <Filter>Test</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp3.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

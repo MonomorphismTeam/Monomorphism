@@ -6,9 +6,9 @@ Created by AirGuanZ
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_TiledTextureAux)
 
-inline int _TileIndex(int height, int tileX, int tileY)
+inline int _TileIndex(int width, int tileX, int tileY)
 {
-    return tileY * height + tileX;
+    return tileY * width + tileX;
 }
 
 inline _TiledTexture::_TiledTexture(void)
@@ -28,7 +28,7 @@ inline void _TiledTexture::SetTile(int tileX, int tileY, const glm::vec2 &uvLB, 
     assert(IsAvailable());
     assert(0 <= tileX && tileX < width_);
     assert(0 <= tileY && tileY < height_);
-    tiles_[_TileIndex(height_, tileX, tileY)] = _Tile{ uvLB, uvRT, tex };
+    tiles_[_TileIndex(width_, tileX, tileY)] = _Tile{ uvLB, uvRT, tex };
 }
 
 inline Texture2DView _TiledTexture::GetTileTex(int tileX, int tileY) const
@@ -36,7 +36,7 @@ inline Texture2DView _TiledTexture::GetTileTex(int tileX, int tileY) const
     assert(IsAvailable());
     assert(0 <= tileX && tileX < width_);
     assert(0 <= tileY && tileY < height_);
-    return tiles_[_TileIndex(height_, tileX, tileY)].tex;
+    return tiles_[_TileIndex(width_, tileX, tileY)].tex;
 }
 
 inline glm::vec2 _TiledTexture::GetTileTexCoordLB(int tileX, int tileY) const
@@ -44,7 +44,7 @@ inline glm::vec2 _TiledTexture::GetTileTexCoordLB(int tileX, int tileY) const
     assert(IsAvailable());
     assert(0 <= tileX && tileX < width_);
     assert(0 <= tileY && tileY < height_);
-    return tiles_[_TileIndex(height_, tileX, tileY)].uvLB;
+    return tiles_[_TileIndex(width_, tileX, tileY)].uvLB;
 }
 
 inline glm::vec2 _TiledTexture::GetTileTexCoordRT(int tileX, int tileY) const
@@ -52,7 +52,7 @@ inline glm::vec2 _TiledTexture::GetTileTexCoordRT(int tileX, int tileY) const
     assert(IsAvailable());
     assert(0 <= tileX && tileX < width_);
     assert(0 <= tileY && tileY < height_);
-    return tiles_[_TileIndex(height_, tileX, tileY)].uvRT;
+    return tiles_[_TileIndex(width_, tileX, tileY)].uvRT;
 }
 
 inline int _TiledTexture::Width(void) const

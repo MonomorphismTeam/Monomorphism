@@ -5,7 +5,7 @@ Created by AirGuanZ
 ================================================================*/
 
 /*
-    关于Scale System和Clock
+    关于Scale System和Clock的测试
 */
 
 #ifndef __TEST_APP_2_H__

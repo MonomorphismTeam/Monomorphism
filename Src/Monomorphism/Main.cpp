@@ -5,9 +5,10 @@ Created by AirGuanZ
 ================================================================*/
 #include "Include\TestApp1.h"
 #include "Include\TestApp2.h"
+#include "Include\TestApp3.h"
 
 int main(void)
 {
-    Test::TestApp1 app;
+    Test::TestApp3 app;
     app.Run();
 }

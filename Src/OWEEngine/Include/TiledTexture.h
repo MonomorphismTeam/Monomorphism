@@ -55,6 +55,9 @@ private:
 };
 
 __OWE_END_NAMESPACE__(_TiledTextureAux)
+
+using TiledTexture = _TiledTextureAux::_TiledTexture;
+
 __OWE_END_NAMESPACE__(OWE)
 
 #include "TiledTexture.inl"

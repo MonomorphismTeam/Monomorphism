@@ -56,13 +56,14 @@ namespace
 
         attribsBasic->GetAttrib<glm::vec2>("inPos").SetBuffer(vtxPos);
         vtxTransMat_Basic = uniformsBasic->GetUniform<glm::mat3>("vtxTransMat");
-        texTransMat_Basic = uniformsBasic->GetUniform<glm::mat3>("vtxTransMat");
+        texTransMat_Basic = uniformsBasic->GetUniform<glm::mat3>("texTransMat");
         tex_Basic = uniformsBasic->GetUniform<Texture2DBase>("tex");
     }
 
-    inline void _DrawTile(float xLB, float yLB, float width, float height, const _Tile &tile)
+    inline void _DrawTile(float xLB, float yLB, float width, float height, const _Tile &tile, const ScreenScale &scale)
     {
-        glm::mat3 vtxTransMat = Transform::Translate(glm::vec2(xLB, yLB)) *
+        glm::mat3 vtxTransMat = scale.ProjMatrix() *
+                                Transform::Translate(glm::vec2(xLB, yLB)) *
                                 Transform::Scale(glm::vec2(width, height));
         glm::mat3 texTransMat = Transform::Translate(tile.uvLB) *
                                 Transform::Scale(tile.uvRT - tile.uvLB);
@@ -72,6 +73,7 @@ namespace
 
         vtxTransMat_Basic.SetAndApply(vtxTransMat);
         texTransMat_Basic.SetAndApply(texTransMat);
+
         tex_Basic.SetAndApply(tile.tex);
         glDrawArrays(GL_TRIANGLES, 0, 6);
 
@@ -120,12 +122,12 @@ void _TiledTexture::Draw(const glm::vec2 &LB, const ScreenScale &scale) const
     tileYEnd   = glm::min(tileYEnd, height_);
 
     float yLB = tileYBegin * tileHeight_ - LB.y;
-    for(int y = tileYBegin; y < tileYEnd; ++y, yLB += tileHeight_)
+    int yIdxBase = tileYBegin * width_;;
+    for(int y = tileYBegin; y < tileYEnd; ++y, yLB += tileHeight_, yIdxBase += width_)
     {
         float xLB = tileXBegin * tileWidth_ - LB.x;
-        int yIdxBase = y * height_;
         for(int x = tileXBegin; x < tileXEnd; ++x, xLB += tileWidth_)
-            _DrawTile(xLB, yLB, tileWidth_, tileHeight_, tiles_[yIdxBase + x]);
+            _DrawTile(xLB, yLB, tileWidth_, tileHeight_, tiles_[yIdxBase + x], scale);
     }
 }
 
