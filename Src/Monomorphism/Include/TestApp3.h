@@ -62,17 +62,23 @@ namespace Test
                 }
             }
 
+            //使用带有alpha test的绘制模式
+            //丢弃alpha分量小于0.5f的像素
+            bkgd_.SetRenderMode(TiledTexture::RenderMode::AlphaTest);
+            bkgd_.SetAlphaThreshold(0.5f);
+
             scale_.Reinit(10.0f, 10.0f);
             pos_ = vec2(0.0f, 0.0f);
 
             done_ = false;
             clock_.Restart();
+            glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
             while(!done_)
             {
                 clock_.Tick();
                 glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-                constexpr float SPEED = 10.0f / 1000.0f;
+                constexpr float SPEED = 50.0f / 1000.0f;
                 if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_W))
                     pos_ += vec2(0.0f, SPEED * clock_.ElapsedTime());
                 if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_A))

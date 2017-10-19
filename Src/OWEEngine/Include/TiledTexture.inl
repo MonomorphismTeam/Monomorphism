@@ -13,7 +13,15 @@ inline int _TileIndex(int width, int tileX, int tileY)
 
 inline _TiledTexture::_TiledTexture(void)
     : width_(0), height_(0),
-    tileWidth_(0.0f), tileHeight_(0.0f)
+      tileWidth_(0.0f), tileHeight_(0.0f),
+      reTileWidth_(0.0f), reTileHeight_(0.0f),
+      renderMode_(RenderMode::Basic),
+      alphaThreshold_(1.0f)
+{
+
+}
+
+inline _TiledTexture::~_TiledTexture(void)
 {
 
 }
@@ -21,6 +29,16 @@ inline _TiledTexture::_TiledTexture(void)
 inline bool _TiledTexture::IsAvailable(void) const
 {
     return width_ != 0;
+}
+
+inline void _TiledTexture::SetRenderMode(RenderMode mode)
+{
+    renderMode_ = mode;
+}
+
+inline void _TiledTexture::SetAlphaThreshold(float alpha)
+{
+    alphaThreshold_ = alpha;
 }
 
 inline void _TiledTexture::SetTile(int tileX, int tileY, const glm::vec2 &uvLB, const glm::vec2 &uvRT, Texture2DView tex)

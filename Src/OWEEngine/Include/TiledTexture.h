@@ -16,6 +16,12 @@ Created by AirGuanZ
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_TiledTextureAux)
 
+enum class _TiledTextureRenderMode
+{
+    Basic = 0,
+    AlphaTest = 1
+};
+
 struct _Tile
 {
     glm::vec2 uvLB;
@@ -26,11 +32,19 @@ struct _Tile
 class _TiledTexture
 {
 public:
+    using RenderMode = _TiledTextureRenderMode;
+
     _TiledTexture(void);
+    ~_TiledTexture(void);
 
     void Initialize(int width, int height, float tileWidth, float tileHeight);
     bool IsAvailable(void) const;
     void Destroy(void);
+
+    void SetRenderMode(RenderMode mode);
+
+    //设置WithAlphaTest绘制模式中的alpha分量阈值
+    void SetAlphaThreshold(float alpha);
 
     void SetTile(int tileX, int tileY, const glm::vec2 &uvLB, const glm::vec2 &uvRT, Texture2DView tex);
     Texture2DView GetTileTex(int tileX, int tileY) const;
@@ -45,13 +59,20 @@ public:
     void Draw(const glm::vec2 &LB, const ScreenScale &scale) const;
 
 private:
+    void DrawWithBasicMode(const glm::vec2 &LB, const ScreenScale &scale) const;
+    void DrawWithAlphaTestMode(const glm::vec2 &LB, const ScreenScale &scale) const;
+
     int width_;
     int height_;
     float tileWidth_;
     float tileHeight_;
     float reTileWidth_;
     float reTileHeight_;
+
     std::vector<_Tile> tiles_;
+
+    RenderMode renderMode_;
+    float alphaThreshold_;
 };
 
 __OWE_END_NAMESPACE__(_TiledTextureAux)
