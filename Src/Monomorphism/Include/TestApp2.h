@@ -117,14 +117,14 @@ namespace Test
                 if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_D))
                     pos_ += vec2(SPEED * clock_.ElapsedTime(), 0.0f);
 
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                RenderContext::GetInstance().ClearColorAndDepth();
 
                 uniforms_->GetUniform<glm::mat3>("transMat").SetVal(scale_.ProjMatrix() * Transform::Translate(pos_));
                 shader_.Bind();
                 attribs_->Bind();
 
                 uniforms_->Apply();
-                glDrawArrays(GL_TRIANGLES, 0, 6);
+                RenderContext::GetInstance().DrawTriangles(6);
 
                 attribs_->Bind();
                 shader_.Unbind();

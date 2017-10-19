@@ -175,6 +175,42 @@ void RenderContext::DoEvents(void)
     InputManager::GetInstance()._ProcessLockedCursor();
 }
 
+void RenderContext::SetClearColor(float r, float g, float b, float a)
+{
+    glClearColor(r, g, b, a);
+}
+
+void RenderContext::SetClearColor(const glm::vec4 &c)
+{
+    SetClearColor(c.r, c.g, c.b, c.a);
+}
+
+void RenderContext::SetClearDepth(float depth)
+{
+    glClearDepth(depth);
+}
+
+void RenderContext::ClearColor(void)
+{
+    glClear(GL_COLOR_BUFFER_BIT);
+}
+
+void RenderContext::ClearDepth(void)
+{
+    glClear(GL_DEPTH_BUFFER_BIT);
+}
+
+void RenderContext::ClearColorAndDepth(void)
+{
+    ClearColor();
+    ClearDepth();
+}
+
+void RenderContext::DrawTriangles(int cnt, int start)
+{
+    glDrawArrays(GL_TRIANGLES, start, cnt);
+}
+
 void RenderContext::Present(void)
 {
     assert(glfwWindow);

@@ -107,7 +107,7 @@ namespace Test
             while(!closed_)
             {
                 glClearColor((abs(glm::sin(t_ += 0.08f)) + 1.0f) / 2.0f, 0.0f, 1.0f, 1.0f);
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                rc.ClearColorAndDepth();
 
                 constexpr float SPEED = 0.01f;
                 InputManager &im = InputManager::GetInstance();
@@ -125,7 +125,7 @@ namespace Test
                 fb.Begin();
                 {
                     glClearColor((abs(glm::sin(t_)) + 1.0f) / 2.0f, 1.0f, 0.0f, 1.0f);
-                    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                    rc.ClearColorAndDepth();
 
                     texSam.SetVal(tex);
 
@@ -133,7 +133,7 @@ namespace Test
                     attribMgr->Bind();
 
                     uniformMgr->Apply();
-                    glDrawArrays(GL_TRIANGLES, 0, 3);
+                    rc.DrawTriangles(3);
 
                     attribMgr->Unbind();
                     shader.Unbind();
@@ -147,7 +147,7 @@ namespace Test
                 attribMgr->Bind();
 
                 uniformMgr->Apply();
-                glDrawArrays(GL_TRIANGLES, 0, 3);
+                rc.DrawTriangles(3);
 
                 attribMgr->Unbind();
                 shader.Unbind();

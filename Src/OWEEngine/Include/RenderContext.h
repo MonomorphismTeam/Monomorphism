@@ -68,6 +68,15 @@ public:
     void SetVsync(int vsync);
 
     void DoEvents(void);
+
+    void SetClearColor(float r, float g, float b, float a);
+    void SetClearColor(const glm::vec4 &color);
+    void SetClearDepth(float depth);
+
+    void ClearColor(void);
+    void ClearDepth(void);
+    void ClearColorAndDepth(void);
+    void DrawTriangles(int cnt, int start = 0);
     void Present(void);
 
     void AddWindowListener(WindowListener *listener);

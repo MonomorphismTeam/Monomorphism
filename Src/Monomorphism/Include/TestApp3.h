@@ -73,10 +73,11 @@ namespace Test
             done_ = false;
             clock_.Restart();
             glClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+            rc.SetClearColor(0.0f, 1.0f, 1.0f, 1.0f);
             while(!done_)
             {
                 clock_.Tick();
-                glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+                rc.ClearColorAndDepth();
 
                 constexpr float SPEED = 50.0f / 1000.0f;
                 if(InputManager::GetInstance().IsKeyPressed(KEY_CODE::KEY_W))
