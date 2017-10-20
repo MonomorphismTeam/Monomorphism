@@ -43,6 +43,9 @@ public:
 
     void SetRenderMode(RenderMode mode);
 
+    void SetPosition(const glm::vec2 &pos);
+    glm::vec2 GetPosition(void) const;
+
     //设置WithAlphaTest绘制模式中的alpha分量阈值
     void SetAlphaThreshold(float alpha);
 
@@ -68,6 +71,8 @@ private:
     float tileHeight_;
     float reTileWidth_;
     float reTileHeight_;
+
+    glm::vec2 LBpos_;
 
     std::vector<_Tile> tiles_;
 

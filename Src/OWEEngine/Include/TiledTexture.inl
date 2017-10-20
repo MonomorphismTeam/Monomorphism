@@ -16,7 +16,8 @@ inline _TiledTexture::_TiledTexture(void)
       tileWidth_(0.0f), tileHeight_(0.0f),
       reTileWidth_(0.0f), reTileHeight_(0.0f),
       renderMode_(RenderMode::Basic),
-      alphaThreshold_(1.0f)
+      alphaThreshold_(1.0f),
+      LBpos_(0.0f, 0.0f)
 {
 
 }
@@ -34,6 +35,16 @@ inline bool _TiledTexture::IsAvailable(void) const
 inline void _TiledTexture::SetRenderMode(RenderMode mode)
 {
     renderMode_ = mode;
+}
+
+inline void _TiledTexture::SetPosition(const glm::vec2 &pos)
+{
+    LBpos_ = pos;
+}
+
+inline glm::vec2 _TiledTexture::GetPosition(void) const
+{
+    return LBpos_;
 }
 
 inline void _TiledTexture::SetAlphaThreshold(float alpha)

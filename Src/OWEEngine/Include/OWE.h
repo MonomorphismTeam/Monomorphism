@@ -23,6 +23,7 @@ Created by AirGuanZ
 
 #include "ScreenScale.h"
 #include "Transform2D.h"
+#include "VerticesGen.h"
 
 #include "TiledTexture.h"
 

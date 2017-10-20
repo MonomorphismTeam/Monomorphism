@@ -66,6 +66,7 @@ namespace Test
             //丢弃alpha分量小于0.5f的像素
             bkgd_.SetRenderMode(TiledTexture::RenderMode::AlphaTest);
             bkgd_.SetAlphaThreshold(0.5f);
+            bkgd_.SetPosition(vec2(-20.0f, -20.0f));
 
             scale_.Reinit(10.0f, 10.0f);
             pos_ = vec2(0.0f, 0.0f);

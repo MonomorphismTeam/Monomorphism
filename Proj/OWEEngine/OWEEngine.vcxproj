@@ -27,6 +27,7 @@
     <ClCompile Include="..\..\Src\OWEEngine\Shader.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Texture2D.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\TiledTexture.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\VerticesGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\OWEEngine\Include\ASCIIFile.h" />
@@ -54,6 +55,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariable.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariableManager.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\VertexBuffer.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\VerticesGen.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl" />

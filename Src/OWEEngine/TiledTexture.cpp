@@ -177,9 +177,11 @@ void _TiledTexture::Draw(const glm::vec2 &LB, const ScreenScale &scale) const
     (this->*drawers[static_cast<int>(renderMode_)])(LB, scale);
 }
 
-void _TiledTexture::DrawWithBasicMode(const glm::vec2 &LB, const ScreenScale &scale) const
+void _TiledTexture::DrawWithBasicMode(const glm::vec2 &_LB, const ScreenScale &scale) const
 {
     assert(IsAvailable());
+
+    const glm::vec2 LB = _LB - LBpos_;
     int tileXBegin = static_cast<int>(glm::floor(LB.x * reTileWidth_));
     int tileYBegin = static_cast<int>(glm::floor(LB.y * reTileHeight_));
     int tileXEnd = static_cast<int>(glm::ceil((LB.x + scale.ScreenWidth()) * reTileWidth_));
@@ -200,9 +202,11 @@ void _TiledTexture::DrawWithBasicMode(const glm::vec2 &LB, const ScreenScale &sc
     }
 }
 
-void _TiledTexture::DrawWithAlphaTestMode(const glm::vec2 &LB, const ScreenScale &scale) const
+void _TiledTexture::DrawWithAlphaTestMode(const glm::vec2 &_LB, const ScreenScale &scale) const
 {
     assert(IsAvailable());
+
+    const glm::vec2 LB = _LB - LBpos_;
     int tileXBegin = static_cast<int>(glm::floor(LB.x * reTileWidth_));
     int tileYBegin = static_cast<int>(glm::floor(LB.y * reTileHeight_));
     int tileXEnd = static_cast<int>(glm::ceil((LB.x + scale.ScreenWidth()) * reTileWidth_));

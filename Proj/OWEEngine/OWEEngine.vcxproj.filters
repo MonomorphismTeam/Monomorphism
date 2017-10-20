@@ -61,6 +61,9 @@
     <ClCompile Include="..\..\Src\OWEEngine\TiledTexture.cpp">
       <Filter>TiledTexture</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\OWEEngine\VerticesGen.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\OWEEngine\Include\BoundingArea.h">
@@ -135,6 +138,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\OWEEngine\Include\TiledTexture.h">
       <Filter>TiledTexture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\OWEEngine\Include\VerticesGen.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
