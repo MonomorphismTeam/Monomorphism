@@ -116,14 +116,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(OPENGL_PATH)\;$(GLFW_INCLUDE);$(GLM_PATH)\;$(FREEIMAGE_PATH);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)../../Libs/OpenGL/;$(ProjectDir)../../Libs/glfw/;$(ProjectDir)../../Libs/FreeImage/;$(ProjectDir)../../Libs/glm/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <IncludePath>$(OPENGL_PATH)\;$(GLM_PATH)\;$(GLFW_INCLUDE);$(FREEIMAGE_PATH);$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)../../Libs/OpenGL/;$(ProjectDir)../../Libs/FreeImage/;$(ProjectDir)../../Libs/glfw/;$(ProjectDir)../../Libs/glm/;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

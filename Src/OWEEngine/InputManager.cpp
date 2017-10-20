@@ -9,7 +9,7 @@ Created by AirGuanZ
 #include <Windows.h>
 
 #include "Include\GLHeaders.h"
-#include <GLFW\glfw3.h>
+#include <glfw3.h>
 
 #include "Include\Common.h"
 #include "Include\InputManager.h"

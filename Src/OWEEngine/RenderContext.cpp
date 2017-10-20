@@ -9,7 +9,7 @@ Created by AirGuanZ
 #include <stack>
 
 #include "Include\GLHeaders.h"
-#include <GLFW\glfw3.h>
+#include <glfw3.h>
 
 #include "Include\InputManager.h"
 #include "Include\RenderContext.h"
