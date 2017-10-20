@@ -8,6 +8,18 @@
     <Filter Include="Test">
       <UniqueIdentifier>{a9390728-4ca7-4458-ba5e-4c4c955e6bad}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DamageArea">
+      <UniqueIdentifier>{cbdd1a71-6d32-4bc2-891c-515271618c04}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Creature">
+      <UniqueIdentifier>{f2f82635-6115-45a4-b870-c833415833d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BlockArea">
+      <UniqueIdentifier>{5bc5310b-d0f0-4dd0-9945-5c8a40fb21ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Item">
+      <UniqueIdentifier>{f942c90f-de92-4e41-960d-c57ddd28eb0d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
@@ -21,6 +33,18 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp3.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\DamageArea.h">
+      <Filter>DamageArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Creature.h">
+      <Filter>Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\BlockArea.h">
+      <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Item.h">
+      <Filter>Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

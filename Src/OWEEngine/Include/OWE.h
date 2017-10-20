@@ -25,6 +25,7 @@ Created by AirGuanZ
 #include "Transform2D.h"
 #include "VerticesGen.h"
 
+#include "SimpleCollisionManager.h"
 #include "TiledTexture.h"
 
 #endif //__OWE_H__
