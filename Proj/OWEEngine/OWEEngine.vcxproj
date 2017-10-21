@@ -52,6 +52,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\TiledTexture.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Transform2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\TypeOpr.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Uncopyable.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariable.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariableManager.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\VertexBuffer.h" />
