@@ -8,6 +8,7 @@ Created by AirGuanZ
 
 #include "ASCIIFile.h"
 #include "Clock.h"
+#include "Uncopyable.h"
 
 #include "RenderContext.h"
 #include "InputManager.h"

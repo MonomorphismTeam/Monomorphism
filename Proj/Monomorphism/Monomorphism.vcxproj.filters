@@ -20,9 +20,15 @@
     <Filter Include="Item">
       <UniqueIdentifier>{f942c90f-de92-4e41-960d-c57ddd28eb0d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Actor">
+      <UniqueIdentifier>{c13ea59f-9872-47ac-8a47-ab5ea5b04722}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\Actor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -45,6 +51,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\Item.h">
       <Filter>Item</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Actor.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

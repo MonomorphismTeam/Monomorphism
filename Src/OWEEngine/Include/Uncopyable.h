@@ -13,8 +13,10 @@ __OWE_BEGIN_NAMESPACE__(Utility)
 
 class Uncopyable
 {
-    Uncopyable(const Uncopyable&) = delete;
-    Uncopyable(Uncopyable&&) = delete;
+public:
+    Uncopyable(void)                         = default;
+    Uncopyable(const Uncopyable&)            = delete;
+    Uncopyable(Uncopyable&&)                 = delete;
     Uncopyable &operator=(const Uncopyable&) = delete;
 };
 
