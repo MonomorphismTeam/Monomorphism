@@ -11,16 +11,16 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 #include <OWE.h>
 
-class Monster;
 class Actor;
+class Monster;
 
 class DamageArea
 {
 public:
     virtual ~DamageArea(void) { }
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) = 0;
-    virtual void Damage(Monster *monster);
-    virtual void Damage(Actor *actor);
+    virtual void Damage(Monster *monster) = 0;
+    virtual void Damage(Actor *actor) = 0;
 };
 
 #endif //__DAMAGE_AREA_H__

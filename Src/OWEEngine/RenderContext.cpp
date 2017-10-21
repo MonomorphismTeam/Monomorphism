@@ -11,6 +11,7 @@ Created by AirGuanZ
 #include "Include\GLHeaders.h"
 #include <glfw3.h>
 
+#include "Include\FatalError.h"
 #include "Include\InputManager.h"
 #include "Include\RenderContext.h"
 
@@ -317,7 +318,7 @@ namespace
 RenderContext::RenderContext(const RenderContext::Desc &desc)
 {
     if(!InitGLContext(desc))
-        throw std::runtime_error("Failed to initialize GL render context");
+        throw FatalError("RenderContext: failed to initialize OpenGL rendering context");
 
     glfwSetWindowCloseCallback(glfwWindow, WindowClosedCallback);
 

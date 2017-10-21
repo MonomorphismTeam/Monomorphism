@@ -64,7 +64,7 @@ namespace
             if(shaderBasic.Initialize(err, VSSrc(tiledTexVtxShaderSrc_Basic),
                                            FSSrc(tiledTexFragShaderSrc_Basic))
                 != Shader::InitState::Success)
-                throw std::runtime_error("Failed to initialize shader for tiled texture");
+                throw FatalError("TiledTexture: failed to initialize basic shader for tiled texture");
 
             uniformsBasic = shaderBasic.GetUniformMgrPtr();
             attribsBasic = shaderBasic.GetAttribMgrPtr();
@@ -81,7 +81,7 @@ namespace
             if(shaderAlphaTest.Initialize(err, VSSrc(tiledTexVtxShaderSrc_AlphaTest),
                                                FSSrc(tiledTexFragShaderSrc_AlphaTest))
                 != Shader::InitState::Success)
-                throw std::runtime_error("Failed to initialize shader for tiled texture");
+                throw FatalError("TiledTexture: failed to initialize alpha-test shader for tiled texture");
 
             uniformsAlphaTest = shaderAlphaTest.GetUniformMgrPtr();
             attribsAlphaTest = shaderAlphaTest.GetAttribMgrPtr();

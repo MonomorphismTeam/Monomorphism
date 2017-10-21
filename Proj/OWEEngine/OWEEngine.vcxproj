@@ -36,6 +36,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\Clock.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\CollisionManagerBase.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Common.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\FatalError.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\FrameBuffer.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\GLHeaders.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\InputManager.h" />

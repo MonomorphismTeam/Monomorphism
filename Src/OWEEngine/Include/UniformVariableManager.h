@@ -11,6 +11,7 @@ Created by AirGuanZ
 #include <vector>
 
 #include "Common.h"
+#include "FatalError.h"
 #include "GLHeaders.h"
 #include "UniformVariable.h"
 
@@ -88,10 +89,6 @@ public:
         _UniformAux::_UniformVariableBase *_var;
     };
 
-    struct UniformNameLengthError { std::string name; };
-    struct UniformTypeError { std::string name; GLenum actType; };
-    struct UniformNotFoundError { std::string name; };
-
     explicit _UniformVariableManager(GLuint prog)
         : sampler2DCnt_(0)
     {
@@ -149,10 +146,10 @@ public:
     {
         auto it = vars_.find(name);
         if(it == vars_.end())
-            throw UniformNotFoundError{ name };
+            throw FatalError("Shader uniform not found: " + name);
         VarInfo &info = it->second;
         if(!_UniformTypeChecker<VarType>(info.type))
-            throw UniformTypeError{ name, info.type };
+            throw FatalError("Shader uniform with wrong type: " + name);
         if(!info._var)
             info._var = new _UniformVariableImpl<VarType>(info.location, info.tex2DSlot);
         return _UniformVariable<VarType>(*dynamic_cast<_UniformVariableImpl<VarType>*>(info._var));

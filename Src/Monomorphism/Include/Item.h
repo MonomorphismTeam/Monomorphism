@@ -9,8 +9,8 @@ Created by AirGuanZ
 #include <vector>
 #include <OWE.h>
 
-class Creature;
 class Actor;
+class Creature;
 
 class Item
 {

@@ -14,6 +14,7 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 
 #include "Common.h"
+#include "FatalError.h"
 #include "GLHeaders.h"
 #include "VertexBuffer.h"
 
@@ -226,9 +227,6 @@ public:
         GLint idx;
     };
 
-    struct AttribTypeError { std::string name; GLenum type; };
-    struct AttribNotFoundError { std::string name; };
-
     explicit _AttribVariableManager(GLint prog)
     {
         assert(glIsProgram(prog));
@@ -274,10 +272,10 @@ public:
     {
         auto it = attribs_.find(name);
         if(it == attribs_.end())
-            throw AttribNotFoundError{ name };
+            throw FatalError("Shader attribute not found: " + name);
         const _AttribInfo &info = it->second;
         if(_VertexAttribTypeChecker<AttribType>() != info.type)
-            throw AttribTypeError{ name, info.type };
+            throw FatalError("Shader attribute with wrong type: " + name);
         return _AttribVariable<AttribType>(vao_, info.location, info.idx);
     }
 
