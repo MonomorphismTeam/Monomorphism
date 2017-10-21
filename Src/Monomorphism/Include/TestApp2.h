@@ -49,16 +49,8 @@ namespace Test
 
         void InitVertices(void)
         {
-            const vec2 vtxPosData[] =
-            {
-                { -1.0f, -1.0f },
-                { -1.0f, +1.0f },
-                { +1.0f, +1.0f },
-
-                { -1.0f, -1.0f },
-                { +1.0f, +1.0f },
-                { +1.0f, -1.0f }
-            };
+            vec2 vtxPosData[6];
+            Utility::GenBoxVertices(vec2(-1.0f), vec2(1.0f), vtxPosData);
             vtxPos_.Initialize(6, vtxPosData);
 
             const vec3 vtxColorData[] =

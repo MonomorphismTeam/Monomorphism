@@ -10,6 +10,7 @@ Created by AirGuanZ
 #include "Include\Shader.h"
 #include "Include\TiledTexture.h"
 #include "Include\Transform2D.h"
+#include "Include\VerticesGen.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_TiledTextureAux)
@@ -46,15 +47,8 @@ namespace
     {
         if(!vtxPos.IsAvailable())
         {
-            const glm::vec2 vtxPosData[] =
-            {
-                { 0.0f, 0.0f },
-                { 0.0f, 1.0f },
-                { 1.0f, 1.0f },
-                { 0.0f, 0.0f },
-                { 1.0f, 1.0f },
-                { 1.0f, 0.0f }
-            };
+            glm::vec2 vtxPosData[6];
+            Utility::GenBoxVertices(glm::vec2(0.0f), glm::vec2(1.0f), vtxPosData);
             vtxPos.Initialize(6, vtxPosData);
         }
 

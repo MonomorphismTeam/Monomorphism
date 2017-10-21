@@ -27,7 +27,6 @@
     <ClCompile Include="..\..\Src\OWEEngine\Shader.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Texture2D.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\TiledTexture.cpp" />
-    <ClCompile Include="..\..\Src\OWEEngine\VerticesGen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\OWEEngine\Include\ASCIIFile.h" />
@@ -62,6 +61,7 @@
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl" />
     <None Include="..\..\Src\OWEEngine\Include\TiledTexture.inl" />
     <None Include="..\..\Src\OWEEngine\Include\TiledTextureShaderSource.inl" />
+    <None Include="..\..\Src\OWEEngine\Include\VerticesGen.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
