@@ -35,6 +35,9 @@
     <Filter Include="GLBuffer">
       <UniqueIdentifier>{6b10e359-fbe6-4843-86c4-5e153a3c29a2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{e5e54958-0da6-4f05-a307-d5601b608d6f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\OWEEngine\BoundingArea.cpp">
@@ -144,6 +147,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\OWEEngine\Include\Uncopyable.h">
       <Filter>Utility</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Animation.h">
+      <Filter>Animation</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

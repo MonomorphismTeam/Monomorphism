@@ -12,6 +12,7 @@ Created by AirGuanZ
 #include "GLHeaders.h"
 #include "Texture2DBase.h"
 #include "Texture2DView.h"
+#include "Uncopyable.h"
 
 __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_Texture2DAux)
@@ -56,14 +57,12 @@ struct Desc
     GLint wrapT;
 };
 
-class _Texture2D : public Texture2DBase
+class _Texture2D : public Texture2DBase, public Utility::Uncopyable
 {
 public:
     using Desc = ::OWE::_Texture2DAux::Desc;
 
     _Texture2D(void);
-    _Texture2D(const _Texture2D&) = delete;
-    _Texture2D &operator=(const _Texture2D&) = delete;
     ~_Texture2D(void);
 
     void Initialize(const Desc &desc, void *data);
