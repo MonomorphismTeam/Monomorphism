@@ -17,8 +17,11 @@ __OWE_BEGIN_NAMESPACE__(_ImmediateRendererAux)
 
 namespace
 {
+    //(0, 0) - (1, 1)的顶点数据
+    //同时用于顶点位置和纹理坐标
     VertexBuffer<glm::vec2> vtxBuf;
 
+    //基本渲染模式
     Shader shaderBasic;
     Shader::AttribMgrPtr attribsBasic;
     Shader::UniformMgrPtr uniformsBasic;
@@ -26,6 +29,7 @@ namespace
     UniformVariable<glm::mat3> texTransBasic;
     UniformVariable<Texture2DView> texBasic;
 
+    //带alpha test的渲染
     Shader shaderAlphaTest;
     Shader::AttribMgrPtr attribsAlphaTest;
     Shader::UniformMgrPtr uniformsAlphaTest;

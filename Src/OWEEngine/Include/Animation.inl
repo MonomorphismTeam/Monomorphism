@@ -73,18 +73,13 @@ inline void _Animation::Restart(void)
 inline void _Animation::Tick(double deltaTime)
 {
     time_ += deltaTime;
-    if(data_ && idx_ < data_->kpSeq.back() && time_ >= data_->kpSeq[idx_])
+    while(data_ && idx_ < data_->kpSeq.back() && time_ >= data_->kpSeq[idx_])
         ++idx_;
 }
 
 inline double _Animation::GetTime(void) const
 {
     return time_;
-}
-
-inline void _Animation::SetTime(double time)
-{
-    time_ = time;
 }
 
 inline void _Animation::Draw(

@@ -28,25 +28,29 @@ struct _RenderDesc
 
     }
 
+    //启用alpha test时的阈值，a分量小于该值的像素被丢弃
     float alphaThreshold = 0.5f;
 };
 
 class _ImmediateRenderer
 {
 public:
+    friend class RenderContext;
     using RenderMode = _RenderMode;
     using RenderDesc = _RenderDesc;
 
-    static void Initialize(void);
-    static bool IsAvailable(void);
-    static void Destroy(void);
-
+    //给定坐标系，在屏幕上绘制一个带纹理的矩形
     static void DrawTexturedBox(
         const glm::vec2 &LB, const glm::vec2 &RT,
         const glm::vec2 &uvLB, const glm::vec2 &uvRT,
         const Texture2DView tex, const ScreenScale &scale,
         RenderMode mode = RenderMode::Basic,
         const RenderDesc &desc = RenderDesc());
+
+private:
+    static void Initialize(void);
+    static bool IsAvailable(void);
+    static void Destroy(void);
 };
 
 __OWE_END_NAMESPACE__(_ImmediateRendererAux)
