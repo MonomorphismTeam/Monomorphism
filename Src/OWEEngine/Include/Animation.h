@@ -8,6 +8,7 @@ Created by AirGuanZ
 
 #include <vector>
 
+#include "ImmediateRenderer.h"
 #include "ScreenScale.h"
 #include "Texture2D.h"
 
@@ -28,7 +29,11 @@ class _Animation
 public:
     using Data = _AnimationData;
 
-    _Animation(const Data *data);
+    _Animation(const Data *data = nullptr);
+
+    void SetTexData(const Data *data);
+    bool IsAvailable(void) const;
+    const Data *GetTexData(void) const;
     
     glm::vec2 GetLBPosition(void) const;
     void SetLBPosition(const glm::vec2 &LB);
@@ -39,19 +44,23 @@ public:
     void Move(const glm::vec2 &deltaPos);
 
     void Restart(void);
-    void Tick(float time);
+    void Tick(double deltaTime);
 
     double GetTime(void) const;
     void SetTime(double time);
 
-    void Draw(const ScreenScale &scale);
+    void Draw(
+        const ScreenScale &scale,
+        ImmediateRenderer::RenderMode mode = ImmediateRenderer::RenderMode::AlphaTest,
+        const ImmediateRenderer::RenderDesc &desc = ImmediateRenderer::RenderDesc(0.5f));
 
 private:
     glm::vec2 LB_;
     glm::vec2 RT_;
 
     double time_;
-    const Data *texSeq_;
+    int idx_;
+    const Data *data_;
 };
 
 __OWE_END_NAMESPACE__(_AnimationAux)
@@ -59,5 +68,7 @@ __OWE_END_NAMESPACE__(_AnimationAux)
 using Animation = _AnimationAux::_Animation;
 
 __OWE_END_NAMESPACE__(OWE)
+
+#include "Animation.inl"
 
 #endif //__ANIMATION_H__

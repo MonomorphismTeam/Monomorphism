@@ -124,31 +124,38 @@ namespace
     }
 }
 
-void ImmediateRenderer::Initialize(void)
+void _ImmediateRenderer::Initialize(void)
 {
     _InitVtxBuf();
     _InitShaderBasic();
     _InitShaderAlphaTest();
 }
 
-bool ImmediateRenderer::IsAvailable(void)
+bool _ImmediateRenderer::IsAvailable(void)
 {
     return vtxBuf.IsAvailable();
 }
 
-void ImmediateRenderer::Destroy(void)
+void _ImmediateRenderer::Destroy(void)
 {
     vtxBuf.Destroy();
+
     shaderBasic.Destroy();
+    attribsBasic.reset();
+    uniformsBasic.reset();
+
     shaderAlphaTest.Destroy();
+    attribsAlphaTest.reset();
+    uniformsAlphaTest.reset();
 }
 
-void ImmediateRenderer::DrawTexturedBox(
+void _ImmediateRenderer::DrawTexturedBox(
     const glm::vec2 &LB, const glm::vec2 &RT,
     const glm::vec2 &uvLB, const glm::vec2 &uvRT,
     const Texture2DView tex, const ScreenScale &scale,
     RenderMode mode, const RenderDesc &desc)
 {
+    assert(IsAvailable());
     glm::mat3 posTransMat = scale.ProjMatrix() *
                             Transform::Translate(LB) *
                             Transform::Scale(RT - LB);

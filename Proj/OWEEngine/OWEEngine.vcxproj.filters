@@ -165,14 +165,14 @@
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl">
       <Filter>Scale</Filter>
     </None>
-    <None Include="..\..\Src\OWEEngine\Include\TiledTextureShaderSource.inl">
-      <Filter>TiledTexture</Filter>
-    </None>
     <None Include="..\..\Src\OWEEngine\Include\TiledTexture.inl">
       <Filter>TiledTexture</Filter>
     </None>
     <None Include="..\..\Src\OWEEngine\Include\VerticesGen.inl">
       <Filter>Utility</Filter>
+    </None>
+    <None Include="..\..\Src\OWEEngine\Include\Animation.inl">
+      <Filter>Animation</Filter>
     </None>
   </ItemGroup>
 </Project>

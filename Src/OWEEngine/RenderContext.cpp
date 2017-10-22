@@ -12,6 +12,7 @@ Created by AirGuanZ
 #include <glfw3.h>
 
 #include "Include\FatalError.h"
+#include "Include\ImmediateRenderer.h"
 #include "Include\InputManager.h"
 #include "Include\RenderContext.h"
 
@@ -327,6 +328,8 @@ RenderContext::RenderContext(const RenderContext::Desc &desc)
     glfwSetKeyCallback(glfwWindow, KeyCallback);
     glfwSetCursorPosCallback(glfwWindow, MouseMoveCallback);
     glfwSetMouseButtonCallback(glfwWindow, MouseButtonCallback);
+
+    ImmediateRenderer::Initialize();
 }
 
 RenderContext::~RenderContext(void)
