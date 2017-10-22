@@ -171,5 +171,8 @@
     <None Include="..\..\Src\OWEEngine\Include\VerticesGen.inl">
       <Filter>Utility</Filter>
     </None>
+    <None Include="..\..\Src\OWEEngine\Include\Animation.inl">
+      <Filter>Animation</Filter>
+    </None>
   </ItemGroup>
 </Project>

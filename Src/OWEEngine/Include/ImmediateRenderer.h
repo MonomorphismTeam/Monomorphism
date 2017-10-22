@@ -22,6 +22,11 @@ enum class _RenderMode
 struct _RenderDesc
 {
     _RenderDesc(void) = default;
+    _RenderDesc(float minAlpha)
+        : alphaThreshold(minAlpha)
+    {
+
+    }
 
     float alphaThreshold = 0.5f;
 };
