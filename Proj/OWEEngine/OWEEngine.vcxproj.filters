@@ -165,9 +165,6 @@
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl">
       <Filter>Scale</Filter>
     </None>
-    <None Include="..\..\Src\OWEEngine\Include\TiledTextureShaderSource.inl">
-      <Filter>TiledTexture</Filter>
-    </None>
     <None Include="..\..\Src\OWEEngine\Include\TiledTexture.inl">
       <Filter>TiledTexture</Filter>
     </None>

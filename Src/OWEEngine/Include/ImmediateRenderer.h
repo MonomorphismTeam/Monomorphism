@@ -26,7 +26,7 @@ struct _RenderDesc
     float alphaThreshold = 0.5f;
 };
 
-class ImmediateRenderer
+class _ImmediateRenderer
 {
 public:
     using RenderMode = _RenderMode;
@@ -45,6 +45,9 @@ public:
 };
 
 __OWE_END_NAMESPACE__(_ImmediateRendererAux)
+
+using ImmediateRenderer = _ImmediateRendererAux::_ImmediateRenderer;
+
 __OWE_END_NAMESPACE__(OWE)
 
 #endif //__OWE_IMMEDIATE_RENDERER_H__
