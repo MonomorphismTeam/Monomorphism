@@ -8,7 +8,8 @@ Created by AirGuanZ
 Actor::Actor(void)
     : position_(0.0f),
       velocity_(0.0f),
-      acceleratedVelocity_(0.0f)
+      acceleratedVelocity_(0.0f),
+      HP_(0.0f), onGround_(false)
 {
 
 }

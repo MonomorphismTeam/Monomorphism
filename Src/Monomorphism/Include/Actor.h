@@ -4,7 +4,7 @@ Date: 2017.10.21
 Created by AirGuanZ
 ================================================================*/
 #ifndef __ACTOR_H__
-#define __ACTOR_H__ 
+#define __ACTOR_H__
 
 #include <glm\glm.hpp>
 #include <OWE.h>
