@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\Src\OWEEngine\BoundingArea.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Clock.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\FrameBuffer.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\ImmediateRenderer.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\InputManager.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\RenderContext.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Shader.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\FatalError.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\FrameBuffer.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\GLHeaders.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\ImmediateRenderer.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\InputManager.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\OWE.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\RenderContext.h" />

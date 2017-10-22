@@ -38,6 +38,9 @@
     <Filter Include="Animation">
       <UniqueIdentifier>{e5e54958-0da6-4f05-a307-d5601b608d6f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ImmediateRenderer">
+      <UniqueIdentifier>{6b7aaa46-b5dc-422c-8a14-02c39be1c914}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\OWEEngine\BoundingArea.cpp">
@@ -63,6 +66,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\OWEEngine\TiledTexture.cpp">
       <Filter>TiledTexture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\OWEEngine\ImmediateRenderer.cpp">
+      <Filter>ImmediateRenderer</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -150,6 +156,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\OWEEngine\Include\Animation.h">
       <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\OWEEngine\Include\ImmediateRenderer.h">
+      <Filter>ImmediateRenderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

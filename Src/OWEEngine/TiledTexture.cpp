@@ -104,7 +104,7 @@ namespace
         texTransMat_Basic.SetAndApply(texTransMat);
         tex_Basic.SetAndApply(tile.tex);
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        RenderContext::GetInstance().DrawTriangles(6);
 
         attribsBasic->Unbind();
         shaderBasic.Unbind();
@@ -127,7 +127,7 @@ namespace
         texAlphaTest.SetAndApply(tile.tex);
         minAlphaAlphaTest.SetAndApply(minAlpha);
 
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        RenderContext::GetInstance().DrawTriangles(6);
 
         attribsAlphaTest->Unbind();
         shaderAlphaTest.Unbind();
