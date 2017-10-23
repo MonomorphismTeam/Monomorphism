@@ -19,7 +19,6 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Monomorphism\Actor.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -31,6 +30,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp2.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp3.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

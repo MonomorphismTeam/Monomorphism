@@ -1,21 +1,21 @@
 /*================================================================
-Filename: Animation.inl
+Filename: TextureAnimation.inl
 Date: 2017.10.22
 Created by AirGuanZ
 ================================================================*/
 #include <cassert>
 
 __OWE_BEGIN_NAMESPACE__(OWE)
-__OWE_BEGIN_NAMESPACE__(_AnimationAux)
+__OWE_BEGIN_NAMESPACE__(_TextureAnimationAux)
 
-inline _Animation::_Animation(const Data *data)
+inline _TextureAnimation::_TextureAnimation(const Data *data)
     : LB_(0.0f), RT_(1.0f),
     time_(0.0), idx_(0)
 {
     SetTexData(data);
 }
 
-inline void _Animation::SetTexData(const _Animation::Data *data)
+inline void _TextureAnimation::SetTexData(const _TextureAnimation::Data *data)
 {
 #ifdef _DEBUG
     if(data)
@@ -28,61 +28,61 @@ inline void _Animation::SetTexData(const _Animation::Data *data)
     Restart();
 }
 
-inline bool _Animation::IsAvailable(void) const
+inline bool _TextureAnimation::IsAvailable(void) const
 {
     return data_ != nullptr;
 }
 
-inline const _Animation::Data *_Animation::GetTexData(void) const
+inline const _TextureAnimation::Data *_TextureAnimation::GetTexData(void) const
 {
     return data_;
 }
 
-inline glm::vec2 _Animation::GetLBPosition(void) const
+inline glm::vec2 _TextureAnimation::GetLBPosition(void) const
 {
     return LB_;
 }
 
-inline void _Animation::SetLBPosition(const glm::vec2 &LB)
+inline void _TextureAnimation::SetLBPosition(const glm::vec2 &LB)
 {
     LB_ = LB;
 }
 
-inline glm::vec2 _Animation::GetRTPosition(void) const
+inline glm::vec2 _TextureAnimation::GetRTPosition(void) const
 {
     return RT_;
 }
 
-inline void _Animation::SetRTPosition(const glm::vec2 &RT)
+inline void _TextureAnimation::SetRTPosition(const glm::vec2 &RT)
 {
     RT_ = RT;
 }
 
-inline void _Animation::Move(const glm::vec2 &deltaPos)
+inline void _TextureAnimation::Move(const glm::vec2 &deltaPos)
 {
     LB_ += deltaPos;
     RT_ += deltaPos;
 }
 
-inline void _Animation::Restart(void)
+inline void _TextureAnimation::Restart(void)
 {
     time_ = 0.0;
     idx_ = 0;
 }
 
-inline void _Animation::Tick(double deltaTime)
+inline void _TextureAnimation::Tick(double deltaTime)
 {
     time_ += deltaTime;
     while(data_ && idx_ < data_->kpSeq.back() && time_ >= data_->kpSeq[idx_])
         ++idx_;
 }
 
-inline double _Animation::GetTime(void) const
+inline double _TextureAnimation::GetTime(void) const
 {
     return time_;
 }
 
-inline void _Animation::Draw(
+inline void _TextureAnimation::Draw(
     const ScreenScale &scale,
     ImmediateRenderer::RenderMode mode,
     const ImmediateRenderer::RenderDesc &desc)
@@ -93,5 +93,5 @@ inline void _Animation::Draw(
         data_->texSeq[idx_], scale, mode, desc);
 }
 
-__OWE_END_NAMESPACE__(_AnimationAux)
+__OWE_END_NAMESPACE__(_TextureAnimationAux)
 __OWE_END_NAMESPACE__(OWE)
