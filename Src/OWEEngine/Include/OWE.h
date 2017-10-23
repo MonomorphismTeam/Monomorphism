@@ -8,6 +8,7 @@ Created by AirGuanZ
 
 #include "ASCIIFile.h"
 #include "Clock.h"
+#include "Uncopyable.h"
 
 #include "RenderContext.h"
 #include "InputManager.h"
@@ -26,6 +27,7 @@ Created by AirGuanZ
 #include "VerticesGen.h"
 
 #include "SimpleCollisionManager.h"
+#include "TextureAnimation.h"
 #include "TiledTexture.h"
 
 #endif //__OWE_H__

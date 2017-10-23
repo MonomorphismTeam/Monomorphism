@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\Src\OWEEngine\BoundingArea.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Clock.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\FrameBuffer.cpp" />
+    <ClCompile Include="..\..\Src\OWEEngine\ImmediateRenderer.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\InputManager.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\RenderContext.cpp" />
     <ClCompile Include="..\..\Src\OWEEngine\Shader.cpp" />
@@ -38,6 +39,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\FatalError.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\FrameBuffer.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\GLHeaders.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\ImmediateRenderer.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\InputManager.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\OWE.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\RenderContext.h" />
@@ -49,18 +51,20 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DBase.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DView.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\TextureAnimation.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\TiledTexture.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Transform2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\TypeOpr.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\Uncopyable.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariable.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\UniformVariableManager.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\VertexBuffer.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\VerticesGen.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Src\OWEEngine\Include\TextureAnimation.inl" />
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl" />
     <None Include="..\..\Src\OWEEngine\Include\TiledTexture.inl" />
-    <None Include="..\..\Src\OWEEngine\Include\TiledTextureShaderSource.inl" />
     <None Include="..\..\Src\OWEEngine\Include\VerticesGen.inl" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

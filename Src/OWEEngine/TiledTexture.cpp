@@ -7,6 +7,7 @@ Created by AirGuanZ
 #include <stdexcept>
 #include <string>
 
+#include "Include\ImmediateRenderer.h"
 #include "Include\Shader.h"
 #include "Include\TiledTexture.h"
 #include "Include\Transform2D.h"
@@ -17,120 +18,22 @@ __OWE_BEGIN_NAMESPACE__(_TiledTextureAux)
 
 namespace
 {
-#include "Include\TiledTextureShaderSource.inl"
-
-    //用于tiled texture绘制的顶点缓存
-    VertexBuffer<glm::vec2> vtxPos;
-
-    //基本绘制模式
-    Shader shaderBasic;
-
-    Shader::UniformMgrPtr uniformsBasic;
-    Shader::AttribMgrPtr attribsBasic;
-
-    UniformVariable<glm::mat3> vtxTransMat_Basic;
-    UniformVariable<glm::mat3> texTransMat_Basic;
-    UniformVariable<Texture2DBase> tex_Basic;
-
-    //带alpha test的绘制模式
-    Shader shaderAlphaTest;
-
-    Shader::UniformMgrPtr uniformsAlphaTest;
-    Shader::AttribMgrPtr attribsAlphaTest;
-
-    UniformVariable<glm::mat3> vtxTransMatAlphaTest;
-    UniformVariable<glm::mat3> texTransMatAlphaTest;
-    UniformVariable<Texture2DBase> texAlphaTest;
-    UniformVariable<GLfloat> minAlphaAlphaTest;
-
-    void _InitTiledTexture(void)
+    inline void _DrawTileWithBasicMode(float xLB, float yLB, float width, float height,
+                                       const _Tile &tile, const ScreenScale &scale)
     {
-        if(!vtxPos.IsAvailable())
-        {
-            glm::vec2 vtxPosData[6];
-            Utility::GenBoxVertices(glm::vec2(0.0f), glm::vec2(1.0f), vtxPosData);
-            vtxPos.Initialize(6, vtxPosData);
-        }
-
-        if(!shaderBasic.IsAvailable())
-        {
-            std::string err;
-            if(shaderBasic.Initialize(err, VSSrc(tiledTexVtxShaderSrc_Basic),
-                                           FSSrc(tiledTexFragShaderSrc_Basic))
-                != Shader::InitState::Success)
-                throw FatalError("TiledTexture: failed to initialize basic shader for tiled texture");
-
-            uniformsBasic = shaderBasic.GetUniformMgrPtr();
-            attribsBasic = shaderBasic.GetAttribMgrPtr();
-
-            attribsBasic->GetAttrib<glm::vec2>("inPos").SetBuffer(vtxPos);
-            vtxTransMat_Basic = uniformsBasic->GetUniform<glm::mat3>("vtxTransMat");
-            texTransMat_Basic = uniformsBasic->GetUniform<glm::mat3>("texTransMat");
-            tex_Basic = uniformsBasic->GetUniform<Texture2DBase>("tex");
-        }
-
-        if(!shaderAlphaTest.IsAvailable())
-        {
-            std::string err;
-            if(shaderAlphaTest.Initialize(err, VSSrc(tiledTexVtxShaderSrc_AlphaTest),
-                                               FSSrc(tiledTexFragShaderSrc_AlphaTest))
-                != Shader::InitState::Success)
-                throw FatalError("TiledTexture: failed to initialize alpha-test shader for tiled texture");
-
-            uniformsAlphaTest = shaderAlphaTest.GetUniformMgrPtr();
-            attribsAlphaTest = shaderAlphaTest.GetAttribMgrPtr();
-
-            attribsAlphaTest->GetAttrib<glm::vec2>("inPos").SetBuffer(vtxPos);
-            vtxTransMatAlphaTest = uniformsAlphaTest->GetUniform<glm::mat3>("vtxTransMat");
-            texTransMatAlphaTest = uniformsAlphaTest->GetUniform<glm::mat3>("texTransMat");
-            texAlphaTest = uniformsAlphaTest->GetUniform<Texture2DBase>("tex");
-            minAlphaAlphaTest = uniformsAlphaTest->GetUniform<GLfloat>("minAlpha");
-        }
+        ImmediateRenderer::DrawTexturedBox(
+            glm::vec2(xLB, yLB), glm::vec2(xLB, yLB) + glm::vec2(width, height),
+            tile.uvLB, tile.uvRT, tile.tex, scale);
     }
 
-    void _DrawTileWithBasicMode(float xLB, float yLB, float width, float height,
-                                const _Tile &tile, const ScreenScale &scale)
+    inline void _DrawTileWithAlphaTestMode(float xLB, float yLB, float width, float height,
+                                           const _Tile &tile, const ScreenScale &scale, float minAlpha)
     {
-        glm::mat3 vtxTransMat = scale.ProjMatrix() *
-                                Transform::Translate(glm::vec2(xLB, yLB)) *
-                                Transform::Scale(glm::vec2(width, height));
-        glm::mat3 texTransMat = Transform::Translate(tile.uvLB) *
-                                Transform::Scale(tile.uvRT - tile.uvLB);
-
-        shaderBasic.Bind();
-        attribsBasic->Bind();
-
-        vtxTransMat_Basic.SetAndApply(vtxTransMat);
-        texTransMat_Basic.SetAndApply(texTransMat);
-        tex_Basic.SetAndApply(tile.tex);
-
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        attribsBasic->Unbind();
-        shaderBasic.Unbind();
-    }
-
-    void _DrawTileWithBasicMode(float xLB, float yLB, float width, float height,
-                                const _Tile &tile, const ScreenScale &scale, float minAlpha)
-    {
-        glm::mat3 vtxTransMat = scale.ProjMatrix() *
-                                Transform::Translate(glm::vec2(xLB, yLB)) *
-                                Transform::Scale(glm::vec2(width, height));
-        glm::mat3 texTransMat = Transform::Translate(tile.uvLB) *
-                                Transform::Scale(tile.uvRT - tile.uvLB);
-
-        shaderAlphaTest.Bind();
-        attribsAlphaTest->Bind();
-
-        vtxTransMatAlphaTest.SetAndApply(vtxTransMat);
-        texTransMatAlphaTest.SetAndApply(texTransMat);
-        texAlphaTest.SetAndApply(tile.tex);
-        minAlphaAlphaTest.SetAndApply(minAlpha);
-
-        glDrawArrays(GL_TRIANGLES, 0, 6);
-
-        attribsAlphaTest->Unbind();
-        shaderAlphaTest.Unbind();
+        ImmediateRenderer::DrawTexturedBox(
+            glm::vec2(xLB, yLB), glm::vec2(xLB, yLB) + glm::vec2(width, height),
+            tile.uvLB, tile.uvRT, tile.tex, scale,
+            ImmediateRenderer::RenderMode::AlphaTest,
+            ImmediateRenderer::RenderDesc{ minAlpha });
     }
 }
 
@@ -138,7 +41,6 @@ void _TiledTexture::Initialize(int width, int height, float tileWidth, float til
 {
     assert(width > 0 && height > 0 && tileWidth > 0.0f && tileHeight > 0.0f);
 
-    _InitTiledTexture();
     Destroy();
 
     width_        = width;
@@ -217,8 +119,8 @@ void _TiledTexture::DrawWithAlphaTestMode(const glm::vec2 &_LB, const ScreenScal
     {
         float xLB = tileXBegin * tileWidth_ - LB.x;
         for(int x = tileXBegin; x < tileXEnd; ++x, xLB += tileWidth_)
-            _DrawTileWithBasicMode(xLB, yLB, tileWidth_, tileHeight_,
-                                   tiles_[yIdxBase + x], scale, alphaThreshold_);
+            _DrawTileWithAlphaTestMode(xLB, yLB, tileWidth_, tileHeight_,
+                                       tiles_[yIdxBase + x], scale, alphaThreshold_);
     }
 }
 
