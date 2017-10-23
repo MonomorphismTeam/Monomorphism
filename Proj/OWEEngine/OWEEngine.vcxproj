@@ -51,7 +51,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DBase.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Texture2DView.h" />
-    <ClInclude Include="..\..\Src\OWEEngine\Include\Animation.h" />
+    <ClInclude Include="..\..\Src\OWEEngine\Include\TextureAnimation.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\TiledTexture.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\Transform2D.h" />
     <ClInclude Include="..\..\Src\OWEEngine\Include\TypeOpr.h" />
@@ -62,7 +62,7 @@
     <ClInclude Include="..\..\Src\OWEEngine\Include\VerticesGen.h" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\Src\OWEEngine\Include\Animation.inl" />
+    <None Include="..\..\Src\OWEEngine\Include\TextureAnimation.inl" />
     <None Include="..\..\Src\OWEEngine\Include\ScreenScale.inl" />
     <None Include="..\..\Src\OWEEngine\Include\TiledTexture.inl" />
     <None Include="..\..\Src\OWEEngine\Include\VerticesGen.inl" />

@@ -75,6 +75,6 @@ using Animation = _AnimationAux::_Animation;
 
 __OWE_END_NAMESPACE__(OWE)
 
-#include "Animation.inl"
+#include "TextureAnimation.inl"
 
 #endif //__ANIMATION_H__
