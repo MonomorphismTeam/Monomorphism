@@ -148,6 +148,25 @@ namespace
     {
         return _Intersect(aabb, obb);
     }
+
+    //OBB与圆相交测试
+    inline bool _Intersect(const _BoundingArea::OBB &obb,
+                           const _BoundingArea::Circle &cir)
+    {
+        float e1L = glm::length(obb.e1), e2L = glm::length(obb.e2);
+        glm::vec2 ne1 = obb.e1 / e1L, ne2 = obb.e2 / e2L;
+        glm::vec2 newCen = glm::mat2(ne1.x, ne2.x, ne1.y, ne2.y) * cir.cen;
+        return _Intersect(
+            _BoundingArea::AABB(obb.p.x, obb.p.y, obb.p.x + e1L, obb.p.y + e2L),
+            _BoundingArea::Circle(newCen.x, newCen.y, cir.radius));
+    }
+
+    //圆与OBB相交测试
+    inline bool _Intersect(const _BoundingArea::Circle &cir,
+                           const _BoundingArea::OBB &obb)
+    {
+        return _Intersect(obb, cir);
+    }
 }
 
 //辅助函数：线段与包围区域的相交测试
@@ -211,6 +230,18 @@ namespace
         float ft1 = t1 < 0.0f ? -1.0f : t1;
         return (0.0f <= t2 && (ft1 < 0.0f || t2 < ft1)) ? t2 : ft1;
     }
+
+    //射线与obb相交测试
+    inline float _Intersect(const _BoundingArea::OBB &obb,
+        const glm::vec2 &p, const glm::vec2 &d)
+    {
+        float e1L = glm::length(obb.e1), e2L = glm::length(obb.e2);
+        glm::vec2 ne1 = obb.e1 / e1L, ne2 = obb.e2 / e2L;
+        glm::mat2 rotMat = glm::mat2(ne1.x, ne2.x, ne1.y, ne2.y);
+        return _Intersect(
+            _BoundingArea::AABB(obb.p.x, obb.p.y, obb.p.x + e1L, obb.p.y + e2L),
+            rotMat * p, rotMat * d);
+    }
 }
 
 _BoundingArea::_BoundingArea(const _BoundingArea::AABB &aabb)
@@ -236,7 +267,7 @@ _BoundingArea::Type _BoundingArea::GetType(void) const
     return type_;
 }
 
-//IMPROVE：优化do real work的函数的选择流程
+//IMPROVE：优化函数的选择流程
 bool _BoundingArea::Intersect(const _BoundingArea &other) const
 {
     switch(type_)
@@ -259,6 +290,8 @@ bool _BoundingArea::Intersect(const _BoundingArea &other) const
             return _Intersect(circle_, other.aabb_);
         case Type::Circle:
             return _Intersect(circle_, other.circle_);
+        case Type::OBB:
+            return _Intersect(circle_, other.obb_);
         }
         break;
     case Type::OBB:
@@ -266,6 +299,8 @@ bool _BoundingArea::Intersect(const _BoundingArea &other) const
         {
         case Type::AABB:
             return _Intersect(obb_, other.aabb_);
+        case Type::Circle:
+            return _Intersect(obb_, other.circle_);
         case Type::OBB:
             return _Intersect(obb_, other.obb_);
         }
@@ -282,6 +317,8 @@ float _BoundingArea::Intersect(const glm::vec2 &p, const glm::vec2 &d) const
         return _Intersect(aabb_, p, d);
     case Type::Circle:
         return _Intersect(circle_, p, d);
+    case Type::OBB:
+        return _Intersect(obb_, p, d);
     }
     abort();
     return -1.0f;

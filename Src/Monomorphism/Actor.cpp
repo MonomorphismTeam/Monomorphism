@@ -104,8 +104,5 @@ void Actor::AttackWithWeapon(int idx)
     assert(0 <= idx && idx < weapons_.size());
     if(!weapons_[idx] || weapons_[idx]->IsBusy())
         return;
-    switch(state_)
-    {
 
-    }
 }
