@@ -22,6 +22,7 @@ namespace
         return !(max1 < min2 || max2 < min1);
     }
 
+    //AABB与AABB相交测试
     inline bool _Intersect(const _BoundingArea::AABB &box1,
                            const _BoundingArea::AABB &box2)
     {
@@ -29,6 +30,7 @@ namespace
             _IntervalInct(box1.LB.y, box1.RT.y, box2.LB.y, box2.RT.y);
     }
 
+    //圆与圆相交测试
     inline bool _Intersect(const _BoundingArea::Circle &cir1,
                            const _BoundingArea::Circle &cir2)
     {
@@ -37,6 +39,7 @@ namespace
         return d.x * d.x + d.y * d.y < r * r;
     }
 
+    //AABB与圆相交测试
     inline bool _Intersect(const _BoundingArea::AABB &box,
                            const _BoundingArea::Circle &cir)
     {
@@ -45,17 +48,113 @@ namespace
         return v.x * v.x + v.y * v.y < cir.radius * cir.radius;
     }
 
+    //圆与AABB相交测试
     inline bool _Intersect(const _BoundingArea::Circle &cir,
                            const _BoundingArea::AABB &box)
     {
         return _Intersect(box, cir);
     }
+
+    //IMPROVE：消除冗余计算
+    //OBB与OBB相交测试
+    inline bool _Intersect(const _BoundingArea::OBB &obb1,
+                           const _BoundingArea::OBB &obb2)
+    {
+        using namespace glm;
+
+        //对四条分离轴，分别投影并求区间是否相交
+        float min1, max1, min2, max2;
+
+        //轴obb1.e1
+        float projL1_11 = 0.0f;                   //dot(obb1.p - obb1.p, obb1.e1)
+        float projL1_21 = dot(obb1.e1, obb1.e1);
+        float projL1_12 = dot(obb1.e2, obb1.e1);
+        float projL1_22 = projL1_12 + projL1_21;  //dot(obb1.e1 + obb1.e2, obb1.e1)
+        std::tie(min1, max1) = std::minmax({ projL1_11, projL1_21, projL1_12, projL1_22 });
+
+        float projL2_11 = dot(obb2.p - obb1.p, obb1.e1);
+        float projL2_12 = dot(obb2.p + obb2.e1 - obb1.p, obb1.e1);
+        float projL2_21 = dot(obb2.p + obb2.e2 - obb1.p, obb1.e1);
+        float projL2_22 = dot(obb2.p + obb2.e1 + obb2.e2 - obb1.p, obb1.e1);
+        std::tie(min2, max2) = std::minmax({ projL2_11, projL2_12, projL2_21, projL2_22 });
+
+        if(!_IntervalInct(min1, max1, min2, max2))
+            return false;
+
+        //轴obb1.e2
+        projL1_11 = 0.0f;
+        projL1_12 = dot(obb1.e1, obb1.e2);
+        projL1_21 = dot(obb1.e2, obb1.e2);
+        projL1_22 = dot(obb1.e1 + obb1.e2, obb1.e2);
+        std::tie(min1, max1) = std::minmax({ projL1_11, projL1_12, projL1_21, projL1_22 });
+
+        projL2_11 = dot(obb2.p - obb1.p, obb1.e2);
+        projL2_12 = dot(obb2.p + obb2.e1 - obb1.p, obb1.e2);
+        projL2_21 = dot(obb2.p + obb2.e2 - obb1.p, obb1.e2);
+        projL2_22 = dot(obb2.p + obb2.e1 + obb2.e2 - obb1.p, obb1.e2);
+        std::tie(min2, max2) = std::minmax({ projL2_11, projL2_12, projL2_21, projL2_22 });
+
+        if(!_IntervalInct(min1, max1, min2, max2))
+            return false;
+
+        //轴obb2.e1
+        projL1_11 = dot(obb1.p - obb2.p, obb2.e1);
+        projL1_12 = dot(obb1.p + obb1.e1 - obb2.p, obb2.e1);
+        projL1_21 = dot(obb1.p + obb1.e2 - obb2.p, obb2.e1);
+        projL1_22 = dot(obb1.p + obb1.e1 + obb1.e2 - obb2.p, obb2.e1);
+        std::tie(min1, max1) = std::minmax({ projL1_11, projL1_12, projL1_21, projL1_22 });
+
+        projL2_11 = 0.0f;
+        projL2_12 = dot(obb2.e1, obb2.e1);
+        projL2_21 = dot(obb2.e2, obb2.e1);
+        projL2_22 = dot(obb2.e1 + obb2.e2, obb2.e1);
+        std::tie(min2, max2) = std::minmax({ projL2_11, projL2_12, projL2_21, projL2_22 });
+
+        if(!_IntervalInct(min1, max1, min2, max2))
+            return false;
+
+        //轴obb2.e2
+        projL1_11 = dot(obb1.p - obb2.p, obb2.e2);
+        projL1_12 = dot(obb1.p + obb1.e1 - obb2.p, obb2.e2);
+        projL1_21 = dot(obb1.p + obb1.e2 - obb2.p, obb2.e2);
+        projL1_22 = dot(obb1.p + obb1.e1 + obb1.e2 - obb2.p, obb2.e2);
+        std::tie(min1, max1) = std::minmax({ projL1_11, projL1_12, projL1_21, projL1_22 });
+
+        projL2_11 = 0.0f;
+        projL2_12 = dot(obb2.e1, obb2.e2);
+        projL2_21 = dot(obb2.e2, obb2.e2);
+        projL2_22 = dot(obb2.e1 + obb2.e2, obb2.e2);
+        std::tie(min2, max2) = std::minmax({ projL2_11, projL2_12, projL2_21, projL2_22 });
+
+        if(!_IntervalInct(min1, max1, min2, max2))
+            return false;
+
+        return true;
+    }
+
+    //AABB与OBB相交测试
+    inline bool _Intersect(const _BoundingArea::AABB &aabb,
+                           const _BoundingArea::OBB &obb)
+    {
+        return _Intersect(_BoundingArea::OBB(aabb.LB.x, aabb.LB.y,
+                                             aabb.RT.x - aabb.LB.x, 0.0f,
+                                             0.0f, aabb.RT.y - aabb.LB.y),
+                          obb);
+    }
+
+    //OBB与AABB相交测试
+    inline bool _Intersect(const _BoundingArea::OBB &obb,
+                           const _BoundingArea::AABB &aabb)
+    {
+        return _Intersect(aabb, obb);
+    }
 }
 
 //辅助函数：线段与包围区域的相交测试
-//估计编译器会不给内联...
+//编译器应该会不给内联...
 namespace
 {
+    //射线与AABB相交测试
     inline float _Intersect(const _BoundingArea::AABB &aabb,
         const glm::vec2 &p, const glm::vec2 &d)
     {
@@ -91,6 +190,7 @@ namespace
         return _IntervalInct(tx1, tx2, ty1, ty2);
     }
 
+    //射线与圆相交测试
     inline float _Intersect(const _BoundingArea::Circle &cir,
         const glm::vec2 &p, const glm::vec2 &d)
     {
@@ -125,6 +225,12 @@ _BoundingArea::_BoundingArea(const _BoundingArea::Circle &circle)
     circle_ = circle;
 }
 
+_BoundingArea::_BoundingArea(const _BoundingArea::OBB &obb)
+    : type_(Type::OBB)
+{
+    obb_ = obb;
+}
+
 _BoundingArea::Type _BoundingArea::GetType(void) const
 {
     return type_;
@@ -142,6 +248,8 @@ bool _BoundingArea::Intersect(const _BoundingArea &other) const
             return _Intersect(aabb_, other.aabb_);
         case Type::Circle:
             return _Intersect(aabb_, other.circle_);
+        case Type::OBB:
+            return _Intersect(aabb_, other.obb_);
         }
         break;
     case Type::Circle:
@@ -153,6 +261,14 @@ bool _BoundingArea::Intersect(const _BoundingArea &other) const
             return _Intersect(circle_, other.circle_);
         }
         break;
+    case Type::OBB:
+        switch(other.GetType())
+        {
+        case Type::AABB:
+            return _Intersect(obb_, other.aabb_);
+        case Type::OBB:
+            return _Intersect(obb_, other.obb_);
+        }
     }
     abort();
     return false;

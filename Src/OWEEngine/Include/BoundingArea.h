@@ -17,7 +17,8 @@ __OWE_BEGIN_NAMESPACE__(_BoundingAreaAux)
 enum class _BoundingAreaType
 {
     AABB,
-    Circle
+    Circle,
+    OBB
 };
 
 //AABB包围盒
@@ -47,15 +48,30 @@ struct _BoundingArea_Circle
     float radius;
 };
 
+//非平行轴式包围盒
+struct _BoundingArea_OBB
+{
+    _BoundingArea_OBB(float x = 0.0f, float y = 0.0f, float ex1 = 0.0f, float ey1 = 0.0f, float ex2 = 0.0f, float ey2 = 0.0f)
+        : p(x, y), e1(ex1, ey1), e2(ex2, ey2)
+    {
+        assert(dot(e1, e2) < 1e-4f);
+    }
+    glm::vec2 p;
+    glm::vec2 e1;
+    glm::vec2 e2;
+};
+
 class _BoundingArea
 {
 public:
     using Type = _BoundingAreaType;
     using AABB = _BoundingArea_AABB;
     using Circle = _BoundingArea_Circle;
+    using OBB = _BoundingArea_OBB;
 
     _BoundingArea(const AABB &aabb);
     _BoundingArea(const Circle &circle);
+    _BoundingArea(const OBB &obb);
 
     Type GetType(void) const;
 
@@ -72,6 +88,7 @@ private:
     {
         AABB aabb_;
         Circle circle_;
+        OBB obb_;
     };
 };
 

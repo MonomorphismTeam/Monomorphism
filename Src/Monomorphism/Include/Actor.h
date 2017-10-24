@@ -14,15 +14,25 @@ Created by AirGuanZ
 #ifndef __ACTOR_H__
 #define __ACTOR_H__
 
+#include <vector>
+
 #include <OWE.h>
+#include "Weapon.h"
+
+constexpr int ACTOR_WEAPON_CNT = 2;
 
 class Actor : public OWE::Utility::Uncopyable
 {
 public:
     enum class State
     {
-        Stand,
-        Walk
+        Unknown,
+        Standing,
+        Walking,
+        Floating,
+        Attacking,
+        Shifting,
+        BeingAttacked
     };
 
     enum class Direction
@@ -33,40 +43,50 @@ public:
     Actor(void);
     ~Actor(void);
 
-    void Initialize(void);
-    bool IsAvailable(void);
-    void Destroy(void);
+    void Reset(void);
 
-    void Restart(void);
+    void SetMaxVelocity(float maxVel);
+    float GetMaxVelocity(void) const;
 
-    glm::vec2 GetPosition(void) const;
+    void SetMinVelocity(float minVel);
+    float GetMinVelocity(void) const;
+
     void SetPosition(const glm::vec2 &pos);
+    glm::vec2 GetPosition(void) const;
 
-    glm::vec2 GetVelocity(void) const;
     void SetVelocity(const glm::vec2 &vel);
-    
-    glm::vec2 GetAcceleratedVelocity(void) const;
-    void SetAcceleratedVelocity(const glm::vec2 &pos);
+    glm::vec2 GetVelocity(void) const;
 
-    bool IsOnGround(void) const;
-    void OnGround(bool onGround);
+    void SetAcceleratedVelocity(const glm::vec2 &pos);
+    glm::vec2 GetAcceleratedVelocity(void) const;
+
+    State GetState(void) const;
+
+    void SetWeapon(Weapon *weapon, int idx);
+    void AttackWithWeapon(int idx);
+
+    glm::mat3 GetWeaponTrans(void) const;
 
     void Update(double deltaTime);
     void Draw(void);
 
-    glm::mat3 GetWeaponTrans(void) const;
-
 private:
+    static bool _CanAttack(State state);
+
+    float maxVelocity_;
+    float minVelocity_;
+
     glm::vec2 position_;
     glm::vec2 velocity_;
     glm::vec2 acceleratedVelocity_;
 
     float HP_;
-    bool onGround_;
 
     State state_;
     Direction dir_;
     OWE::Clock clock_;
+
+    std::vector<Weapon*> weapons_;
 };
 
 #endif //__ACTOR_H__

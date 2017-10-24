@@ -16,11 +16,14 @@ class Weapon
 public:
     virtual ~Weapon(void) { }
 
-    virtual void Update(void) = 0;
-    virtual void Draw(const glm::mat3 &trans, const OWE::ScreenScale &scale) = 0;
+    virtual void Update(const glm::mat3 &trans, const OWE::ScreenScale &scale) = 0;
+    virtual void Draw(void) = 0;
 
-    virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) = 0;
+    virtual std::vector<OWE::BoundingArea> GetDamageAreas(void) = 0;
     virtual void Attack(void) = 0;
+    virtual void Terminate(void) = 0;
+
+    virtual bool IsBusy(void) const = 0;
 };
 
 #endif //__WEAPON_H__
