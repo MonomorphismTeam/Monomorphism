@@ -6,13 +6,35 @@ Created by AirGuanZ
 #ifndef __ACTOR_ACTION_H__
 #define __ACTOR_ACTION_H__
 
+#include <string>
+#include <vector>
+
 #include <glm\glm.hpp>
 #include <OWE.h>
 
 //一个动作是一系列针对身体部件的仿射变换
-struct ActorAction
+//kpSeq[i]指出变换transSeq[i]的结束时间
+//要求transSeq.size() = kpSeq.size()
+struct ActorActionData
 {
+    using TransSeq = std::vector<glm::mat3>;
+    using KeypntsSeq = std::vector<float>;
 
+    TransSeq transSeq;
+    KeypntsSeq kpSeq;
 };
+
+//访问权限好烦 >_< 干脆struct吧
+struct ActorAction : public ActorActionData
+{
+    void Tick(float deltaTime);
+    void Restart(void);
+    bool End(void) const;
+
+    float time = 0.0f;
+    int idx;
+};
+
+bool LoadActorAction(const std::string &filename, ActorActionData &rt);
 
 #endif //__ACTOR_ACTION_H__

@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Actor.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\ActorAction.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
