@@ -22,6 +22,12 @@ struct ActorActionData
 
     TransSeq transSeq;
     KeypntsSeq kpSeq;
+
+    /* 文件格式
+        (float float^9 \n)+
+       每行第一个float值为kp值，其后9个float值给出仿射变换矩阵的列主序表示
+    */
+    bool LoadFromFile(const std::string &filename);
 };
 
 //访问权限好烦 >_< 干脆struct吧
@@ -34,7 +40,5 @@ struct ActorAction : public ActorActionData
     float time = 0.0f;
     int idx;
 };
-
-bool LoadActorAction(const std::string &filename, ActorActionData &rt);
 
 #endif //__ACTOR_ACTION_H__

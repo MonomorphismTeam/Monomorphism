@@ -54,6 +54,7 @@ public:
     void Tick(double deltaTime);
 
     double GetTime(void) const;
+    bool End(void) const;
 
     void Draw(
         const ScreenScale &scale,

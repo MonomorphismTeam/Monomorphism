@@ -67,5 +67,8 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h">
       <Filter>Actor</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp4_TextureAnimation.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

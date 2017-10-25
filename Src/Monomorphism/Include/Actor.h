@@ -87,6 +87,8 @@ private:
     OWE::Clock clock_;
 
     std::vector<Weapon*> weapons_;
+
+    OWE::TextureAnimation walkingAni_;
 };
 
 #endif //__ACTOR_H__

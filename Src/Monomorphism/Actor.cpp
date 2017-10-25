@@ -95,14 +95,13 @@ Actor::State Actor::GetState(void) const
 
 void Actor::SetWeapon(Weapon *weapon, int idx)
 {
-    assert(0 <= idx && idx < weapons_.size());
+    assert(0 <= idx && idx < static_cast<int>(weapons_.size()));
     weapons_[idx] = weapon;
 }
 
 void Actor::AttackWithWeapon(int idx)
 {
-    assert(0 <= idx && idx < weapons_.size());
+    assert(0 <= idx && idx < static_cast<int>(weapons_.size()));
     if(!weapons_[idx] || weapons_[idx]->IsBusy())
         return;
-
 }
