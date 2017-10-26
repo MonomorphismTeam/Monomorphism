@@ -6,7 +6,9 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 #include "Include\Actor.h"
 
+using namespace std;
 using namespace glm;
+using namespace OWE;
 
 Actor::Actor(void)
 {
@@ -35,7 +37,8 @@ void Actor::Reset(void)
     weapons_.clear();
     weapons_.resize(ACTOR_WEAPON_CNT, nullptr);
 
-    clock_.Restart();
+    aniTime_ = 0.0f;
+    aniIdx_ = 0;
 }
 
 void Actor::SetMaxVelocity(float maxVel)
@@ -104,4 +107,5 @@ void Actor::AttackWithWeapon(int idx)
     assert(0 <= idx && idx < static_cast<int>(weapons_.size()));
     if(!weapons_[idx] || weapons_[idx]->IsBusy())
         return;
+
 }

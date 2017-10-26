@@ -65,8 +65,6 @@ public:
     void SetWeapon(Weapon *weapon, int idx);
     void AttackWithWeapon(int idx);
 
-    glm::mat3 GetWeaponTrans(void) const;
-
     void Update(double deltaTime);
     void Draw(void);
 
@@ -84,11 +82,25 @@ private:
 
     State state_;
     Direction dir_;
-    OWE::Clock clock_;
 
     std::vector<Weapon*> weapons_;
 
-    OWE::TextureAnimation walkingAni_;
+    //动画计时器
+    float aniTime_;
+    int aniIdx_;
+
+    //每个动画分为texSeq和kpSeq两部分
+    //texSeq给出一个动画帧序列，人物位于画面中央下部
+    //kpSeq[i]给出第i帧的结束时间
+
+    //站立动画
+    std::vector<OWE::Texture2D> standingTexSeq_;
+    std::vector<float> standingKpSeq_;
+
+    //行走动画
+    std::vector<OWE::Texture2D> walkingTexSeq_;
+    std::vector<float> walkingKpSeq_;
+    std::vector<float> walkingSpeed_;
 };
 
 #endif //__ACTOR_H__

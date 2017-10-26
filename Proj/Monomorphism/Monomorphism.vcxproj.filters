@@ -32,9 +32,6 @@
     <ClCompile Include="..\..\Src\Monomorphism\Actor.cpp">
       <Filter>Actor</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Monomorphism\ActorAction.cpp">
-      <Filter>Actor</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -64,11 +61,12 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h">
       <Filter>Weapon</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h">
-      <Filter>Actor</Filter>
-    </ClInclude>
+<<<<<<< HEAD
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp4_TextureAnimation.h">
       <Filter>Test</Filter>
     </ClInclude>
+=======
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
+>>>>>>> master
   </ItemGroup>
 </Project>
