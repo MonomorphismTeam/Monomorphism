@@ -3,9 +3,12 @@ Filename: Actor.cpp
 Date: 2017.10.24
 Created by AirGuanZ
 ================================================================*/
-#include <glm\glm.hpp>
+#include <limits>
+#include <numeric>
 
+#include <glm\glm.hpp>
 #include "Include\Actor.h"
+#include "Include\ConfigureFile.h"
 #include "Include\ResourceNames.h"
 
 using namespace std;
@@ -14,16 +17,70 @@ using namespace OWE;
 
 namespace
 {
-    void _LoadActorStandingAnimation(vector<Texture2D> &texSeq,
-                                     vector<float> &kpSeq,
-                                     vector<float> &speedSeq)
+    void _LoadActorStandingAnimation(vector<Texture2D> &texSeq, vector<float> &kpSeq)
     {
+        texSeq.clear();
+        kpSeq.clear();
 
+        ConfigureFile config;
+        if(!config.Load(ACTOR_ANIMATION_STANDING_CONFIGURE))
+        {
+            throw OWE::FatalError(string("Failed to load configure file: ") +
+                                  ACTOR_ANIMATION_STANDING_CONFIGURE);
+        }
+
+        int cnt = stoi(config("Count"));
+        texSeq.resize(cnt);
+        kpSeq.resize(cnt);
+        for(int i = 0; i != cnt; ++i)
+        {
+            string stri = to_string(i);
+            string filename = config("Tex" + stri);
+            if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
+                throw FatalError("Failed to load texture from file: " + filename);
+            kpSeq[i] = stof(config("KeyPoint") + stri);
+        }
+    }
+
+    void _LoadActorWalkingAnimation(vector<Texture2D> &texSeq, vector<float> &kpSeq, vector<float> &speedSeq)
+    {
+        texSeq.clear();
+        kpSeq.clear();
+        speedSeq.clear();
+
+        ConfigureFile config;
+        if(!config.Load(ACTOR_ANIMATION_WALKING_CONFIGURE))
+        {
+            throw OWE::FatalError(string("Failed to load configure file: ") +
+                                  ACTOR_ANIMATION_WALKING_CONFIGURE);
+        }
+
+        int cnt = stoi(config("Count"));
+        texSeq.resize(cnt);
+        kpSeq.resize(cnt);
+        speedSeq.resize(cnt);
+        for(int i = 0; i != cnt; ++i)
+        {
+            string stri = to_string(i);
+            string filename = config("Tex" + stri);
+            if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
+                throw FatalError("Failed to load texture from file: " + filename);
+            kpSeq[i] = stof(config("KeyPoint" + stri));
+            speedSeq[i] = stof(config("Speed" + stri));
+        }
+
+        //速度归一化
+        float speedFactor = 1.0f / accumulate(begin(speedSeq), end(speedSeq), numeric_limits<float>::min(),
+            [](float acc, float f) { return std::max(acc, f); });
+        for(float &f : speedSeq)
+            f *= speedFactor;
     }
 }
 
 Actor::Actor(void)
 {
+    _LoadActorStandingAnimation(standingTexSeq_, standingKpSeq_);
+    _LoadActorWalkingAnimation(walkingTexSeq_, walkingKpSeq_, walkingSpeedSeq_);
     Reset();
 }
 

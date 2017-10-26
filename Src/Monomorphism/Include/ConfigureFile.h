@@ -17,6 +17,8 @@ public:
     const std::string &operator()(const std::string &item) const;
     const std::string &operator()(const std::string &section, const std::string &item) const;
 
+    void Clear(void);
+
 private:
     std::map<std::string, std::string> items_;
 };

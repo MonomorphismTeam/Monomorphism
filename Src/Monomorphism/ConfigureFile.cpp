@@ -8,6 +8,7 @@ Created by AirGuanZ
 #include <fstream>
 #include <string>
 
+#include <OWE.h>
 #include "Include\ConfigureFile.h"
 
 using namespace std;
@@ -74,6 +75,11 @@ const std::string &ConfigureFile::operator()(const std::string &section, const s
 {
     auto it = items_.find(section + "::" + item);
     if(it == items_.end())
-        return "";
+        throw OWE::FatalError("ConfigureFile: " + section + "::" + item + " not found");
     return it->second;
+}
+
+void ConfigureFile::Clear(void)
+{
+    items_.clear();
 }

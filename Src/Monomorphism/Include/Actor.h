@@ -100,7 +100,7 @@ private:
     //ÐÐ×ß¶¯»­
     std::vector<OWE::Texture2D> walkingTexSeq_;
     std::vector<float> walkingKpSeq_;
-    std::vector<float> walkingSpeed_;
+    std::vector<float> walkingSpeedSeq_;
 };
 
 #endif //__ACTOR_H__

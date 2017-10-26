@@ -72,7 +72,7 @@ namespace Test
             texAni_.SetLBPosition(vec2(0.0f, 0.0f));
             texAni_.SetRTPosition(vec2(0.86f, 2.22f));
             
-            rc.SetClearColor(0.0f, 1.0f, 1.0f, 1.0f);
+            rc.SetClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 
             scale_.Reinit(80.0f, 80.0f);
             clock_.Restart();
