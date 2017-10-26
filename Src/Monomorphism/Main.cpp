@@ -10,6 +10,17 @@ Created by AirGuanZ
 
 int main(void)
 {
-    Test::TestApp4_TextureAnimation app;
-    app.Run();
+    try
+    {
+        Test::TestApp4_TextureAnimation app;
+        app.Run();
+    }
+    catch(const OWE::FatalError &err)
+    {
+        std::cout << err.What() << std::endl;
+    }
+    catch(const std::exception &err)
+    {
+        std::cout << err.what() << std::endl;
+    }
 }

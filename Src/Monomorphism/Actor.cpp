@@ -4,11 +4,23 @@ Date: 2017.10.24
 Created by AirGuanZ
 ================================================================*/
 #include <glm\glm.hpp>
+
 #include "Include\Actor.h"
+#include "Include\ResourceNames.h"
 
 using namespace std;
 using namespace glm;
 using namespace OWE;
+
+namespace
+{
+    void _LoadActorStandingAnimation(vector<Texture2D> &texSeq,
+                                     vector<float> &kpSeq,
+                                     vector<float> &speedSeq)
+    {
+
+    }
+}
 
 Actor::Actor(void)
 {
@@ -61,32 +73,32 @@ float Actor::GetMinVelocity(void) const
     return minVelocity_;
 }
 
-void Actor::SetPosition(const glm::vec2 &pos)
+void Actor::SetPosition(const vec2 &pos)
 {
     position_ = pos;
 }
 
-glm::vec2 Actor::GetPosition(void) const
+vec2 Actor::GetPosition(void) const
 {
     return position_;
 }
 
-void Actor::SetVelocity(const glm::vec2 &vel)
+void Actor::SetVelocity(const vec2 &vel)
 {
     velocity_ = vel;
 }
 
-glm::vec2 Actor::GetVelocity(void) const
+vec2 Actor::GetVelocity(void) const
 {
     return velocity_;
 }
 
-void Actor::SetAcceleratedVelocity(const glm::vec2 &accVel)
+void Actor::SetAcceleratedVelocity(const vec2 &accVel)
 {
     acceleratedVelocity_ = accVel;
 }
 
-glm::vec2 Actor::GetAcceleratedVelocity(void) const
+vec2 Actor::GetAcceleratedVelocity(void) const
 {
     return acceleratedVelocity_;
 }
