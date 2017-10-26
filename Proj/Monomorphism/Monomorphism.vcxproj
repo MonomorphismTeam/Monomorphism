@@ -26,6 +26,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\BlockArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Creature.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageArea.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Item.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp2.h" />

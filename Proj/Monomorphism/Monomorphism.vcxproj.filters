@@ -58,5 +58,6 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h">
       <Filter>Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
   </ItemGroup>
 </Project>
