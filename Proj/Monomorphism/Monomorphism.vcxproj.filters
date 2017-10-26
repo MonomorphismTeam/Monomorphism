@@ -61,12 +61,9 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h">
       <Filter>Weapon</Filter>
     </ClInclude>
-<<<<<<< HEAD
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp4_TextureAnimation.h">
       <Filter>Test</Filter>
     </ClInclude>
-=======
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
->>>>>>> master
   </ItemGroup>
 </Project>
