@@ -17,9 +17,18 @@ class Texture2DBase
 {
 public:
     explicit Texture2DBase(GLuint tex = 0)
-        :tex_(tex)
+        : tex_(tex)
     {
 
+    }
+
+    Texture2DBase(const Texture2DBase &) = default;
+    Texture2DBase &operator=(const Texture2DBase&) = default;
+
+    Texture2DBase(Texture2DBase &&other)
+        : tex_(other.tex_)
+    {
+        other.tex_ = 0;
     }
 
     bool IsAvailable(void) const

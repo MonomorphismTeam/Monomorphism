@@ -63,6 +63,7 @@ public:
     using Desc = ::OWE::_Texture2DAux::Desc;
 
     _Texture2D(void);
+    _Texture2D(_Texture2D &&other);
     ~_Texture2D(void);
 
     void Initialize(const Desc &desc, void *data);

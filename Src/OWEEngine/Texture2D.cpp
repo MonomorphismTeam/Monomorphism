@@ -15,9 +15,16 @@ __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_Texture2DAux)
 
 _Texture2D::_Texture2D(void)
-    :Texture2DBase(0)
+    : Texture2DBase(0)
 {
 
+}
+
+_Texture2D::_Texture2D(_Texture2D &&other)
+    : Texture2DBase(std::move(other)), width_(other.width_), height_(other.height_)
+{
+    other.width_  = 0;
+    other.height_ = 0;
 }
 
 _Texture2D::~_Texture2D(void)
