@@ -17,7 +17,7 @@ namespace Test
 
     class TestApp4_TextureAnimation : public KeyboardListener
     {
-        static const int TEX_CNT = 7;
+        static const int TEX_CNT = 8;
 
         TextureAnimation texAni_;
         Texture2D texs_[TEX_CNT];
@@ -54,7 +54,7 @@ namespace Test
             //º”‘ÿ∂Øª≠Œ∆¿Ì
             for(int i = 0; i != TEX_CNT; ++i)
             {
-                if(!LoadTexture2DFromFile("TestApp4_TextureAnimation/run" + to_string(i) + ".png", Texture2D::Desc(), texs_[i]))
+                if(!LoadTexture2DFromFile("TestApp4_TextureAnimation/walk" + to_string(i) + ".png", Texture2D::Desc(), texs_[i]))
                 {
                     cout << "Failed to load texture from file" << endl;
                     return;
@@ -64,13 +64,13 @@ namespace Test
             TextureAnimation::Data data;
             for(int i = 0; i != TEX_CNT; ++i)
                 data.texSeq.push_back(texs_[i]);
-            data.kpSeq.push_back(10);
+            data.kpSeq.push_back(5);
             for(int i = 1; i != TEX_CNT - 1; ++i)
                 data.kpSeq.push_back(data.kpSeq[i - 1] + 100);
 
             texAni_ = TextureAnimation(&data);
             texAni_.SetLBPosition(vec2(0.0f, 0.0f));
-            texAni_.SetRTPosition(vec2(2.4f, 3.0f));
+            texAni_.SetRTPosition(vec2(0.86f, 2.22f));
             
             rc.SetClearColor(0.0f, 1.0f, 1.0f, 1.0f);
 
@@ -87,8 +87,11 @@ namespace Test
                 {
                     texAni_.Tick(clock_.ElapsedTime());
                     if(texAni_.End())
+                    {
                         texAni_.Restart();
-                    texAni_.Move(vec2(0.12, 0.0f));
+                        texAni_.Tick(10.0);
+                    }
+                    texAni_.Move(vec2(0.03f * (1.0f - abs(texAni_.GetIdx() - data.kpSeq.size() / 2.0f) / data.texSeq.size()), 0.0f));
                 }
                 else
                     texAni_.Restart();

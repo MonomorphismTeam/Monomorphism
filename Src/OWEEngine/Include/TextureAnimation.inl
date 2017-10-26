@@ -82,6 +82,11 @@ inline double _TextureAnimation::GetTime(void) const
     return time_;
 }
 
+inline int _TextureAnimation::GetIdx(void) const
+{
+    return idx_;
+}
+
 inline bool _TextureAnimation::End(void) const
 {
     return !data_ || time_ >= data_->kpSeq.back();
