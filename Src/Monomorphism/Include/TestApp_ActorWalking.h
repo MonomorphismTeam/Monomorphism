@@ -20,10 +20,10 @@ namespace Test
     {
         bool done_;
 
-        Clock clock;
+        Clock clock_;
         ScreenScale scale_;
 
-        Actor actor;
+        Actor actor_;
 
     public:
         void KeyDown(KEY_CODE kc)
@@ -48,6 +48,24 @@ namespace Test
             RenderContext &rc = RenderContext::GetInstance();
             InputManager &im = InputManager::GetInstance();
             im.AddKeyboardListener(this);
+
+            actor_.Initialize();
+            actor_.SetPosition(vec2(5.0f, 0.0f));
+
+            scale_.Reinit(50.0f, 50.0f);
+            clock_.Restart();
+            done_ = false;
+            while(!done_)
+            {
+                rc.ClearColorAndDepth();
+                clock_.Tick();
+
+                actor_.UpdateMoving(clock_.ElapsedTime());
+                actor_.UpdateJumping(clock_.ElapsedTime());
+
+                rc.DoEvents();
+                rc.Present();
+            }
         }
     };
 }

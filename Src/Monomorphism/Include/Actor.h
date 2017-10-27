@@ -85,7 +85,7 @@ private:
     Direction dir_;
 
     //动画计时器
-    float aniTime_;
+    double aniTime_;
     int aniIdx_;
 
     //每个动画分为texSeq和kpSeq两部分
@@ -94,16 +94,15 @@ private:
 
     //站立动画
     std::vector<OWE::Texture2D> standingTexSeq_;
-    std::vector<float> standingKpSeq_;
+    std::vector<double> standingKpSeq_;
 
     //行走动画
     std::vector<OWE::Texture2D> walkingTexSeq_;
-    std::vector<float> walkingKpSeq_;
-    std::vector<float> walkingSpeedSeq_;
+    std::vector<double> walkingKpSeq_;
 
     //跳跃动画
     std::vector<OWE::Texture2D> jumpingTexSeq_;
-    std::vector<float> jumpingKpSeq_;
+    std::vector<double> jumpingKpSeq_;
 
     static OWE::KEY_CODE keyLeft_;
     static OWE::KEY_CODE keyRight_;

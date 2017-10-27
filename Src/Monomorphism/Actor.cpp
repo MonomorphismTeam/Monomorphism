@@ -17,7 +17,7 @@ using namespace OWE;
 
 namespace
 {
-    void _LoadActorStandingAnimation(vector<Texture2D> &texSeq, vector<float> &kpSeq)
+    void _LoadActorStandingAnimation(vector<Texture2D> &texSeq, vector<double> &kpSeq)
     {
         texSeq.clear();
         kpSeq.clear();
@@ -38,15 +38,14 @@ namespace
             string filename = config("Tex" + stri);
             if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + filename);
-            kpSeq[i] = stof(config("KeyPoint") + stri);
+            kpSeq[i] = stod(config("KeyPoint") + stri);
         }
     }
 
-    void _LoadActorWalkingAnimation(vector<Texture2D> &texSeq, vector<float> &kpSeq, vector<float> &speedSeq)
+    void _LoadActorWalkingAnimation(vector<Texture2D> &texSeq, vector<double> &kpSeq)
     {
         texSeq.clear();
         kpSeq.clear();
-        speedSeq.clear();
 
         ConfigureFile config;
         if(!config.Load(ACTOR_ANIMATION_WALKING_CONFIGURE))
@@ -58,25 +57,17 @@ namespace
         int cnt = stoi(config("Count"));
         texSeq.resize(cnt);
         kpSeq.resize(cnt);
-        speedSeq.resize(cnt);
         for(int i = 0; i != cnt; ++i)
         {
             string stri = to_string(i);
             string filename = config("Tex" + stri);
             if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + filename);
-            kpSeq[i] = stof(config("KeyPoint" + stri));
-            speedSeq[i] = stof(config("Speed" + stri));
+            kpSeq[i] = stod(config("KeyPoint" + stri));
         }
-
-        //速度归一化
-        float speedFactor = 1.0f / accumulate(begin(speedSeq), end(speedSeq), numeric_limits<float>::min(),
-            [](float acc, float f) { return std::max(acc, f); });
-        for(float &f : speedSeq)
-            f *= speedFactor;
     }
 
-    void _LoadActorJumpingAnimation(vector<OWE::Texture2D> &texSeq, vector<float> &kpSeq)
+    void _LoadActorJumpingAnimation(vector<OWE::Texture2D> &texSeq, vector<double> &kpSeq)
     {
         texSeq.clear();
         kpSeq.clear();
@@ -98,7 +89,7 @@ namespace
             string filename = config("Tex" + stri);
             if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + filename);
-            kpSeq[i] = stoi(config("KeyPoint" + stri));
+            kpSeq[i] = stod(config("KeyPoint" + stri));
         }
     }
 }
@@ -124,7 +115,7 @@ void Actor::Initialize(void)
 {
     //各种动作的纹理资源
     _LoadActorStandingAnimation(standingTexSeq_, standingKpSeq_);
-    _LoadActorWalkingAnimation(walkingTexSeq_, walkingKpSeq_, walkingSpeedSeq_);
+    _LoadActorWalkingAnimation(walkingTexSeq_, walkingKpSeq_);
     _LoadActorJumpingAnimation(jumpingTexSeq_, jumpingKpSeq_);
 
     Reset();
@@ -221,7 +212,7 @@ void Actor::UpdateMoving(double time)
         }
     }
 
-    if(newState == State::Walking) //没得走
+    if(newState == State::Walking)
     {
         if(state_ == State::Walking && newDir == dir_) //继续播放移动动画
         {
@@ -239,6 +230,7 @@ void Actor::UpdateMoving(double time)
             aniTime_ = 0.0f;
             aniIdx_ = 0;
         }
+        velocity_ = vec2(newDir == Direction::Left ? -walkingSpeed_ : walkingSpeed_, 0.0f);
     }
 
     state_ = newState;
