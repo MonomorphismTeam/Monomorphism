@@ -16,5 +16,6 @@ Created by AirGuanZ
 
 #define ACTOR_ANIMATION_STANDING_CONFIGURE MM_FILENAME("Actor\\AnimationStanding.conf")
 #define ACTOR_ANIMATION_WALKING_CONFIGURE  MM_FILENAME("Actor\\AnimationWalking.conf")
+#define ACTOR_ANIMATION_JUMPING_CONFIGURE  MM_FILENAME("Actor\\AnimationJumping.conf")
 
 #endif //__RESOURCE_NAMES_H__

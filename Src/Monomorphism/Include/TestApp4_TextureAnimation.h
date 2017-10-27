@@ -91,7 +91,7 @@ namespace Test
                         texAni_.Restart();
                         texAni_.Tick(10.0);
                     }
-                    texAni_.Move(vec2(0.03f * (1.0f - abs(texAni_.GetIdx() - data.kpSeq.size() / 2.0f) / data.texSeq.size()), 0.0f));
+                    texAni_.Move(vec2(0.02f * (1.0f - abs(texAni_.GetIdx() - data.kpSeq.size() / 2.0f) / data.texSeq.size()), 0.0f));
                 }
                 else
                     texAni_.Restart();

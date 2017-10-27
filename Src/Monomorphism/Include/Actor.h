@@ -43,6 +43,7 @@ public:
     Actor(void);
     ~Actor(void);
 
+    void Initialize(void);
     void Reset(void);
 
     void SetMaxVelocity(float maxVel);
@@ -62,28 +63,26 @@ public:
 
     State GetState(void) const;
 
-    void SetWeapon(Weapon *weapon, int idx);
-    void AttackWithWeapon(int idx);
+    void UpdateMoving(double deltaTime);
+    void UpdateJumping(double deltaTime);
 
-    void Update(double deltaTime);
-    void Draw(void);
+    void Draw(const OWE::ScreenScale &scale);
 
 private:
-    static bool _CanAttack(State state);
+    static bool _CanWalk(State state);
+    static bool _CanJump(State state);
 
     float maxVelocity_;
     float minVelocity_;
 
     glm::vec2 position_;
+    glm::vec2 size_;
+
     glm::vec2 velocity_;
     glm::vec2 acceleratedVelocity_;
 
-    float HP_;
-
     State state_;
     Direction dir_;
-
-    std::vector<Weapon*> weapons_;
 
     //动画计时器
     float aniTime_;
@@ -101,6 +100,18 @@ private:
     std::vector<OWE::Texture2D> walkingTexSeq_;
     std::vector<float> walkingKpSeq_;
     std::vector<float> walkingSpeedSeq_;
+
+    //跳跃动画
+    std::vector<OWE::Texture2D> jumpingTexSeq_;
+    std::vector<float> jumpingKpSeq_;
+
+    static OWE::KEY_CODE keyLeft_;
+    static OWE::KEY_CODE keyRight_;
+    static OWE::KEY_CODE keyJump_;
+
+    //行走速度
+    static float walkingSpeed_;
+    static float jumpingSpeed_;
 };
 
 #endif //__ACTOR_H__
