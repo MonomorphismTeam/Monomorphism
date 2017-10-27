@@ -38,7 +38,7 @@ namespace
             string filename = config("Tex" + stri);
             if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + filename);
-            kpSeq[i] = stod(config("KeyPoint") + stri);
+            kpSeq[i] = stod(config("KeyPoint" + stri));
         }
     }
 
@@ -98,8 +98,8 @@ OWE::KEY_CODE Actor::keyLeft_  = OWE::KEY_CODE::KEY_A;
 OWE::KEY_CODE Actor::keyRight_ = OWE::KEY_CODE::KEY_D;
 OWE::KEY_CODE Actor::keyJump_  = OWE::KEY_CODE::KEY_SPACE;
 
-float Actor::walkingSpeed_ = 1.0f;
-float Actor::jumpingSpeed_ = 1.0f;
+float Actor::walkingSpeed_ = 0.002f;
+float Actor::jumpingSpeed_ = 0.008f;
 
 Actor::Actor(void)
 {
@@ -167,6 +167,16 @@ vec2 Actor::GetPosition(void) const
     return position_;
 }
 
+void Actor::SetSize(const glm::vec2 &size)
+{
+    size_ = size;
+}
+
+glm::vec2 Actor::GetSize(void) const
+{
+    return size_;
+}
+
 void Actor::SetVelocity(const vec2 &vel)
 {
     velocity_ = vel;
@@ -187,6 +197,11 @@ vec2 Actor::GetAcceleratedVelocity(void) const
     return acceleratedVelocity_;
 }
 
+void Actor::SetState(Actor::State state)
+{
+    state_ = state;
+}
+
 Actor::State Actor::GetState(void) const
 {
     return state_;
@@ -200,6 +215,7 @@ void Actor::UpdateMoving(double time)
     Direction newDir = dir_;
     if(_CanWalk(state_))
     {
+        newState = State::Standing;
         if(im.IsKeyPressed(keyLeft_))
         {
             newState = State::Walking;
@@ -232,6 +248,12 @@ void Actor::UpdateMoving(double time)
         }
         velocity_ = vec2(newDir == Direction::Left ? -walkingSpeed_ : walkingSpeed_, 0.0f);
     }
+    else if(newState == State::Standing)
+    {
+        aniTime_ = 0.0f;
+        aniIdx_ = 0;
+        velocity_ = vec2(0.0f);
+    }
 
     state_ = newState;
     dir_ = newDir;
@@ -257,6 +279,8 @@ void Actor::UpdateJumping(double time)
             newDir = Direction::Left;
         else if(im.IsKeyPressed(keyRight_))
             newDir = Direction::Right;
+        if(newDir != dir_)
+            velocity_.x = -velocity_.x;
 
         if(state_ == State::Floating && newDir == dir_) //¼ÌÐø²¥·Å¶¯»­
         {

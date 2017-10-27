@@ -7,12 +7,13 @@ Created by AirGuanZ
 #include "Include\TestApp2.h"
 #include "Include\TestApp3.h"
 #include "Include\TestApp4_TextureAnimation.h"
+#include "Include\TestApp_ActorWalking.h"
 
 int main(void)
 {
     try
     {
-        Test::TestApp4_TextureAnimation app;
+        Test::TestApp_ActorWalking app;
         app.Run();
     }
     catch(const OWE::FatalError &err)

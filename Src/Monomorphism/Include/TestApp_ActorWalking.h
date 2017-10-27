@@ -38,8 +38,8 @@ namespace Test
             desc.bordered = true;
             desc.resizable = false;
             desc.fullscreen = false;
-            desc.winWidth = 1440;
-            desc.winHeight = 768;
+            desc.winWidth = 800;
+            desc.winHeight = 600;
             desc.title = "Monomorphism";
             desc.glVersion = "4.3";
 
@@ -49,8 +49,11 @@ namespace Test
             InputManager &im = InputManager::GetInstance();
             im.AddKeyboardListener(this);
 
+            rc.SetClearColor(0.0f, 1.0f, 1.0f, 0.0f);
+
             actor_.Initialize();
-            actor_.SetPosition(vec2(5.0f, 0.0f));
+            actor_.SetPosition(vec2(1.0f, 0.0f));
+            actor_.SetSize(vec2(0.86f, 2.23f));
 
             scale_.Reinit(50.0f, 50.0f);
             clock_.Restart();
@@ -62,6 +65,15 @@ namespace Test
 
                 actor_.UpdateMoving(clock_.ElapsedTime());
                 actor_.UpdateJumping(clock_.ElapsedTime());
+                actor_.SetVelocity(actor_.GetVelocity() - vec2(0.0f, 0.0005f));
+                actor_.SetPosition(actor_.GetPosition() + static_cast<float>(clock_.ElapsedTime()) * actor_.GetVelocity());
+                if(actor_.GetPosition().y <= 0.0f)
+                {
+                    if(actor_.GetState() == Actor::State::Floating)
+                        actor_.SetState(Actor::State::Standing);
+                    actor_.SetPosition(vec2(actor_.GetPosition().x, 0.0f));
+                }
+                actor_.Draw(scale_);
 
                 rc.DoEvents();
                 rc.Present();

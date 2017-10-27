@@ -55,12 +55,16 @@ public:
     void SetPosition(const glm::vec2 &pos);
     glm::vec2 GetPosition(void) const;
 
+    void SetSize(const glm::vec2 &size);
+    glm::vec2 GetSize(void) const;
+
     void SetVelocity(const glm::vec2 &vel);
     glm::vec2 GetVelocity(void) const;
 
     void SetAcceleratedVelocity(const glm::vec2 &pos);
     glm::vec2 GetAcceleratedVelocity(void) const;
 
+    void SetState(State state);
     State GetState(void) const;
 
     void UpdateMoving(double deltaTime);
