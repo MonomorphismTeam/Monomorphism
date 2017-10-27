@@ -11,6 +11,8 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 #include <OWE.h>
 
+class DamageArea;
+
 class Weapon
 {
 public:
@@ -19,7 +21,7 @@ public:
     virtual void Update(void) = 0;
     virtual void Draw(const glm::mat3 &trans, const OWE::ScreenScale &scale) = 0;
 
-    virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) = 0;
+    virtual std::vector<DamageArea*> GetBoundingAreas(void) = 0;
     virtual void Attack(void) = 0;
 };
 
