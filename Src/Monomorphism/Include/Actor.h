@@ -69,6 +69,7 @@ public:
 
     void UpdateMoving(double deltaTime);
     void UpdateJumping(double deltaTime);
+    void EndFloating(void);
 
     void Draw(const OWE::ScreenScale &scale);
 

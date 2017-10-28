@@ -53,9 +53,9 @@ namespace Test
 
             actor_.Initialize();
             actor_.SetPosition(vec2(1.0f, 0.0f));
-            actor_.SetSize(vec2(0.86f, 2.23f));
+            actor_.SetSize(vec2(0.72f, 0.88f));
 
-            scale_.Reinit(50.0f, 50.0f);
+            scale_.Reinit(100, 100);
             clock_.Restart();
             done_ = false;
             while(!done_)
@@ -69,8 +69,7 @@ namespace Test
                 actor_.SetPosition(actor_.GetPosition() + static_cast<float>(clock_.ElapsedTime()) * actor_.GetVelocity());
                 if(actor_.GetPosition().y <= 0.0f)
                 {
-                    if(actor_.GetState() == Actor::State::Floating)
-                        actor_.SetState(Actor::State::Standing);
+                    actor_.EndFloating();
                     actor_.SetPosition(vec2(actor_.GetPosition().x, 0.0f));
                 }
                 actor_.Draw(scale_);

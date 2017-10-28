@@ -39,6 +39,7 @@ namespace
             if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + filename);
             kpSeq[i] = stod(config("KeyPoint" + stri));
+            if(i) kpSeq[i] += kpSeq[i - 1];
         }
     }
 
@@ -64,6 +65,7 @@ namespace
             if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + filename);
             kpSeq[i] = stod(config("KeyPoint" + stri));
+            if(i) kpSeq[i] += kpSeq[i - 1];
         }
     }
 
@@ -90,6 +92,7 @@ namespace
             if(!LoadTexture2DFromFile(filename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + filename);
             kpSeq[i] = stod(config("KeyPoint" + stri));
+            if(i) kpSeq[i] += kpSeq[i - 1];
         }
     }
 }
@@ -98,7 +101,7 @@ OWE::KEY_CODE Actor::keyLeft_  = OWE::KEY_CODE::KEY_A;
 OWE::KEY_CODE Actor::keyRight_ = OWE::KEY_CODE::KEY_D;
 OWE::KEY_CODE Actor::keyJump_  = OWE::KEY_CODE::KEY_SPACE;
 
-float Actor::walkingSpeed_ = 0.002f;
+float Actor::walkingSpeed_ = 0.005f;
 float Actor::jumpingSpeed_ = 0.008f;
 
 Actor::Actor(void)
@@ -279,6 +282,7 @@ void Actor::UpdateJumping(double time)
             newDir = Direction::Left;
         else if(im.IsKeyPressed(keyRight_))
             newDir = Direction::Right;
+        else velocity_.x = 0.0f;
         if(newDir != dir_)
             velocity_.x = -velocity_.x;
 
@@ -302,6 +306,17 @@ void Actor::UpdateJumping(double time)
 
     state_ = newState;
     dir_ = newDir;
+}
+
+void Actor::EndFloating(void)
+{
+    if(state_ == State::Floating)
+    {
+        state_ = State::Standing;
+        aniIdx_ = 0;
+        aniTime_ = 0;
+        UpdateMoving(0.0f);
+    }
 }
 
 void Actor::Draw(const ScreenScale &scale)
