@@ -208,7 +208,7 @@ private:
     void _Preupdate(void);
     void _StateTransfer(void);
 
-    //_EnterXXX：新转移到某个状态
+    //新转移到某个状态
     void _EnterFloating(void);
     void _EnterBeingAttacked(void);
     void _EnterJumping(void);
@@ -217,8 +217,8 @@ private:
     void _EnterRunning(void);
     void _EnterStanding(void);
     void _EnterLying(void);
-    //保持某个状态
-    //虽然方向可能变
+
+    //保持某个状态，虽然方向可能变
     void _KeepStanding(void);
     void _KeepRunning(void);
     void _KeepJumping(void);
@@ -234,18 +234,35 @@ private:
     //当前状态
     ExpandingState *expandingState_;
     InternalState internalState_;
-    Direction dir_;
+    Direction dir_; //人面朝的方向
 
     //动作相关
     Action action_;
+    bool actionTexFlip_;
 
-    Action::TexSeq  actionTexStanding_;
-    Action::TexSeq  actionTexRunning_;
-    Action::TexSeq  actionTexShifting_;
-    Action::TexSeq  actionTexJumping_;
-    Action::TexSeq  actionTexBeingAttacked_;
-    Action::TexSeq  actionTexFloating_;
-    Action::TexSeq  actionTexLying_;
+    Action::TexSeq actionTexStanding_;
+    Action::TexSeq actionTexRunning_;
+    Action::TexSeq actionTexShifting_;
+    Action::TexSeq actionTexJumping_;
+    Action::TexSeq actionTexBeingAttacked_;
+    Action::TexSeq actionTexFloating_;
+    Action::TexSeq actionTexLying_;
+
+    Action::KpSeq actionKpStanding_;
+    Action::KpSeq actionKpRunning_;
+    Action::KpSeq actionKpShifting_;
+    Action::KpSeq actionKpJumping_;
+    Action::KpSeq actionKpBeingAttacked_;
+    Action::KpSeq actionKpFloating_;
+    Action::KpSeq actionKpLying_;
+
+    Action::ColSeq actionColStanding_;
+    Action::ColSeq actionColRunning_;
+    Action::ColSeq actionColShifting_;
+    Action::ColSeq actionColJumping_;
+    Action::ColSeq actionColBeingAttacked_;
+    Action::ColSeq actionColFloating_;
+    Action::ColSeq actionColLying_;
 
     ActionTexRsc actionTexRscStanding_;
     ActionTexRsc actionTexRscRunning_;

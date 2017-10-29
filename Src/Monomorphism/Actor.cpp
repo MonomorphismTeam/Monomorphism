@@ -175,3 +175,20 @@ void Actor::_StateTransfer(void)
         expandingState_->Transfer(this);
     }
 }
+
+void Actor::_EnterFloating(void)
+{
+    if(envir_.outVelocity.x > 0.0f)
+    {
+        actionTexFlip_ = true;
+        dir_ = Direction::Left;
+    }
+    else
+    {
+        actionTexFlip_ = false;
+        dir_ = Direction::Right;
+    }
+    action_.SetData(actionTexLying_, actionKpLying_, actionColLying_);
+    action_.EnableLoop(true);
+    action_.Restart();
+}

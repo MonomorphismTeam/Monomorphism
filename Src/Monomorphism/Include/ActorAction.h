@@ -17,7 +17,7 @@ namespace _ActorAux
     public:
         using TexSeq = std::vector<OWE::Texture2DView>;
         using KpSeq = std::vector<double>;
-        using CollisionSeq = std::vector<OWE::BoundingArea>;
+        using ColSeq = std::vector<OWE::BoundingArea>;
 
         ActorAction(void)
             : loop_(false), time_(0.0), idx_(0)
@@ -77,7 +77,7 @@ namespace _ActorAux
             return idx_;
         }
 
-        void Initialize(const TexSeq &texSeq, const KpSeq &kpSeq, const CollisionSeq &colSeq)
+        void SetData(const TexSeq &texSeq, const KpSeq &kpSeq, const ColSeq &colSeq)
         {
             assert(!texSeq.empty() && texSeq.size() == kpSeq.size() && kpSeq.size() == colSeq.size());
             texSeq_ = texSeq;
@@ -100,7 +100,7 @@ namespace _ActorAux
 
         TexSeq texSeq_;
         KpSeq kpSeq_;
-        CollisionSeq colSeq_;
+        ColSeq colSeq_;
     };
 }
 
