@@ -48,6 +48,7 @@ Created by AirGuanZ
         Unknown[被外界打击]                        -> BeingAttacked
         Unknown[跳跃键]                            -> Jumping，给跳跃竖直速度，继承水平速度
         Unknown[攻击键]                            -> 交给武器注册的转移函数
+        Unknown[翻滚键]                            -> Shifting
         Unknown[移动键]                            -> Running，给移动加速度
         Unknown[其他]                              -> Standing
 
@@ -55,16 +56,16 @@ Created by AirGuanZ
         Standing[被外界打击]                       -> BeingAttacked
         Standing[跳跃键]                           -> Jumping，给跳跃竖直速度，继承水平速度
         Standing[攻击键]                           -> 交给武器注册的转移函数
-        Standing[移动键]                           -> Running，给移动加速度
         Standing[翻滚键]                           -> Shifting
+        Standing[移动键]                           -> Running，给移动加速度
 
         Running[被外界强力打击以致悬空]            -> Floating
         Running[被外界打击]                        -> BeingAttacked
         Running[跳跃键]                            -> Jumping，给跳跃竖直速度，继承水平速度
         Running[攻击键]                            -> 交给武器注册的状态
+        Running[翻滚键]                            -> Shifting
         Running[移动键]                            -> Running，给移动加速度
         Running[其他]                              -> Standing
-        Running[翻滚键]                            -> Shifting
 
         Jumping[被外界强力打击/被外界打击]         -> Floating
         Jumping[攻击键]                            -> 交给武器注册的转移函数
@@ -89,8 +90,8 @@ namespace _ActorAux
     {
     public:
         virtual ~ActorExpandingState(void) { }
-        virtual void Preupdate(Actor &actor) = 0;
-        virtual void Transfer(Actor &actor) = 0;
+        virtual void Preupdate(Actor *actor) = 0;
+        virtual void Transfer(Actor *actor) = 0;
     };
 
     enum class ActorState
@@ -104,6 +105,12 @@ namespace _ActorAux
         Floating,
         Lying,
         Other
+    };
+
+    enum class ActorDirection
+    {
+        Left,
+        Right
     };
 
     //每帧Actor会接受到的外界输入
@@ -123,6 +130,9 @@ namespace _ActorAux
 
             outVelocity     = glm::vec2(0.0f);
             outAcceVelocity = glm::vec2(0.0f);
+
+            normalHit = false;
+            strongHit = false;
         }
 
         //上下左右四个方向有没有撞墙
@@ -135,6 +145,9 @@ namespace _ActorAux
         glm::vec2 outVelocity;
         glm::vec2 outAcceVelocity;
 
+        //外界打击
+        bool normalHit;
+        bool strongHit;
     };
 
     //每帧Actor接收到的用户操作
@@ -151,12 +164,18 @@ namespace _ActorAux
             movingRight = false;
             jumping     = false;
             shifting    = false;
+
+            attack1 = false;
+            attack2 = false;
         }
 
         bool movingLeft;
         bool movingRight;
         bool jumping;
         bool shifting;
+
+        bool attack1;
+        bool attack2;
     };
 }
 
@@ -164,6 +183,7 @@ class Actor : public OWE::Utility::Uncopyable
 {
 public:
     using Action         = _ActorAux::ActorAction;          //动作动画
+    using Direction      = _ActorAux::ActorDirection;       //角色朝向
     using ExpandingState = _ActorAux::ActorExpandingState;  //扩展状态
     using InternalState  = _ActorAux::ActorState;           //内建状态
     using Environment    = _ActorAux::ActorEnvironment;     //环境输入
@@ -186,14 +206,36 @@ public:
 
 private:
     void _Preupdate(void);
+    void _StateTransfer(void);
+
+    //_EnterXXX：新转移到某个状态
+    void _EnterFloating(void);
+    void _EnterBeingAttacked(void);
+    void _EnterJumping(void);
+    void _EnterWeaponState(Weapon *weapon);
+    void _EnterShifting(void);
+    void _EnterRunning(void);
+    void _EnterStanding(void);
+    void _EnterLying(void);
+    //保持某个状态
+    //虽然方向可能变
+    void _KeepStanding(void);
+    void _KeepRunning(void);
+    void _KeepJumping(void);
+    void _KeepBeingAttacked(void);
+    void _KeepFloating(void);
+    void _KeepLying(void);
 
 private:
     //输入
     Input input_;
     Environment envir_;
+
     //当前状态
     ExpandingState *expandingState_;
     InternalState internalState_;
+    Direction dir_;
+
     //动作相关
     Action action_;
 
@@ -212,6 +254,10 @@ private:
     ActionTexRsc actionTexRscBeingAttacked_;
     ActionTexRsc actionTexRscFloating_;
     ActionTexRsc actionTexRscLying_;
+
+    //武器
+    Weapon *weapon1_;
+    Weapon *weapon2_;
 };
 
 #endif //__ACTOR_H__

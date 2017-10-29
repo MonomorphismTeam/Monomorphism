@@ -44,6 +44,7 @@ Actor::Environment &Actor::GetEnvironment(void)
 void Actor::Update(void)
 {
     _Preupdate();
+    _StateTransfer();
 }
 
 void Actor::_Preupdate(void)
@@ -73,9 +74,104 @@ void Actor::_Preupdate(void)
             internalState_ = InternalState::Unknown;
         break;
     case InternalState::Other:
-        expandingState_->Preupdate(*this);
+        expandingState_->Preupdate(this);
         break;
     default:
         abort();
+    }
+}
+
+//表驱动的话会太大，反正这样一堆if开销可以接受
+void Actor::_StateTransfer(void)
+{
+    switch(internalState_)
+    {
+    case InternalState::Unknown:
+        if(envir_.strongHit)
+            _EnterFloating();
+        else if(envir_.normalHit)
+            _EnterBeingAttacked();
+        else if(input_.jumping)
+            _EnterJumping();
+        else if(input_.attack1 && weapon1_)
+            _EnterWeaponState(weapon1_);
+        else if(input_.attack2 && weapon2_)
+            _EnterWeaponState(weapon2_);
+        else if(input_.shifting)
+            _EnterShifting();
+        else if(input_.movingLeft || input_.movingRight)
+            _EnterRunning();
+        else
+            _EnterStanding();
+        break;
+    case InternalState::Standing:
+        if(envir_.strongHit)
+            _EnterFloating();
+        else if(envir_.normalHit)
+            _EnterBeingAttacked();
+        else if(input_.jumping)
+            _EnterJumping();
+        else if(input_.attack1 && weapon1_)
+            _EnterWeaponState(weapon1_);
+        else if(input_.attack2 && weapon2_)
+            _EnterWeaponState(weapon2_);
+        else if(input_.shifting)
+            _EnterShifting();
+        else if(input_.movingLeft || input_.movingRight)
+            _EnterRunning();
+        else
+            _KeepStanding();
+        break;
+    case InternalState::Running:
+        if(envir_.strongHit)
+            _EnterFloating();
+        else if(envir_.normalHit)
+            _EnterBeingAttacked();
+        else if(input_.jumping)
+            _EnterJumping();
+        else if(input_.attack1 && weapon1_)
+            _EnterWeaponState(weapon1_);
+        else if(input_.attack2 && weapon2_)
+            _EnterWeaponState(weapon2_);
+        else if(input_.shifting)
+            _EnterShifting();
+        else if(input_.movingLeft || input_.movingRight)
+            _KeepRunning();
+        else
+            _EnterStanding();
+        break;
+    case InternalState::Jumping:
+        if(envir_.strongHit || envir_.normalHit)
+            _EnterFloating();
+        else if(input_.attack1)
+            _EnterWeaponState(weapon1_);
+        else if(input_.attack2)
+            _EnterWeaponState(weapon2_);
+        else
+            _KeepJumping();
+        break;
+    case InternalState::BeingAttacked:
+        if(envir_.strongHit)
+            _EnterFloating();
+        else if(envir_.normalHit)
+            _EnterBeingAttacked();
+        else
+            _KeepBeingAttacked();
+        break;
+    case InternalState::Floating:
+        _KeepFloating();
+        break;
+    case InternalState::Lying:
+        if(envir_.strongHit)
+            _EnterFloating();
+        else if(envir_.normalHit)
+            _EnterLying();
+        else
+            _KeepLying();
+        break;
+    default:
+        assert(internalState_ == InternalState::Other);
+        assert(expandingState_);
+        expandingState_->Transfer(this);
     }
 }
