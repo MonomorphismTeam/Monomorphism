@@ -25,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\Actor.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\BlockArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Creature.h" />
@@ -35,7 +36,6 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp2.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp3.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp4_TextureAnimation.h" />
-    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_ActorWalking.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

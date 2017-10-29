@@ -74,8 +74,8 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h">
       <Filter>ConfigureFile</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_ActorWalking.h">
-      <Filter>Test</Filter>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h">
+      <Filter>Actor</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
