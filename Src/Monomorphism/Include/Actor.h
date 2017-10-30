@@ -13,98 +13,15 @@ Created by AirGuanZ
 #include "ActorAction.h"
 #include "Weapon.h"
 
-/* Actor概要
-    本身按 加速度-速度-位移 的套路来，有些操作是给加速度，有些操作是给速度
-    首先是状态机：
-        Unknown                 根据输入待定（在地上）
-        Standing                普通的站立
-        Running                 水平移动
-        Shifting                翻滚
-        Jumping                 跳跃
-        BeingAttacked           被捶
-        Floating                被捶得飞起 Orz
-        Lying                   倒地
-        外来状态                外界注册的状态，要求给转移函数
-    可能的外界输入：
-        左右键，跳跃键，调用武器
-        外来运动量
-            外来速度
-            外来加速度
-        自给运动量
-            自给速度
-            自给加速度
-
-    接收键盘输入
-
-    先做preupdate
-        Floating落地进入Lying
-        Jumping落地进入Unknown
-        Standing、Running脚下悬空进入Jumping
-        Shifting、Lying、BeingAttacked时间结束进入Unknown
-        外界注册状态自己处理
-    
-    再做state transfer
-        Unknown[被外界强力打击以致悬空]            -> Floating
-        Unknown[被外界打击]                        -> BeingAttacked
-        Unknown[跳跃键]                            -> Jumping，给跳跃竖直速度，继承水平速度
-        Unknown[攻击键]                            -> 交给武器注册的转移函数
-        Unknown[翻滚键]                            -> Shifting
-        Unknown[移动键]                            -> Running，给移动加速度
-        Unknown[其他]                              -> Standing
-
-        Standing[被外界强力打击以致悬空]           -> Floating
-        Standing[被外界打击]                       -> BeingAttacked
-        Standing[跳跃键]                           -> Jumping，给跳跃竖直速度，继承水平速度
-        Standing[攻击键]                           -> 交给武器注册的转移函数
-        Standing[翻滚键]                           -> Shifting
-        Standing[移动键]                           -> Running，给移动加速度
-
-        Running[被外界强力打击以致悬空]            -> Floating
-        Running[被外界打击]                        -> BeingAttacked
-        Running[跳跃键]                            -> Jumping，给跳跃竖直速度，继承水平速度
-        Running[攻击键]                            -> 交给武器注册的状态
-        Running[翻滚键]                            -> Shifting
-        Running[移动键]                            -> Running，给移动加速度
-        Running[其他]                              -> Standing
-
-        Jumping[被外界强力打击/被外界打击]         -> Floating
-        Jumping[攻击键]                            -> 交给武器注册的转移函数
-        Jumping[移动键]                            -> Jumping, 给水平加速度
-
-        BeingAttacked[被外界强力打击以致悬空]      -> Floating
-        BeingAttacked[被外界打击]                  -> BeingAttacked，重置计时器
-
-        Floating[被外界强力打击/被外界打击]        -> Floating
-
-        Lying[被外界强力打击以致悬空]              -> Floating
-        Lying[被外界打击]                          -> Lying，重置计时器
-
-    最后做移动和场景碰撞检测、伤害检测等一大堆东西
-*/
-
-class Actor;
-
 namespace _ActorAux
 {
-    class ActorExpandingState
-    {
-    public:
-        virtual ~ActorExpandingState(void) { }
-        virtual void Preupdate(Actor *actor) = 0;
-        virtual void Transfer(Actor *actor) = 0;
-    };
-
-    enum class ActorState
+    enum class ActorInternalState
     {
         Unknown,
         Standing,
         Running,
-        Shifting,
         Jumping,
-        BeingAttacked,
-        Floating,
-        Lying,
-        Other
+        Shifting
     };
 
     enum class ActorDirection
@@ -113,44 +30,6 @@ namespace _ActorAux
         Right
     };
 
-    //每帧Actor会接受到的外界输入
-    struct ActorEnvironment
-    {
-        ActorEnvironment(void)
-        {
-            Reset();
-        }
-
-        void Reset(void)
-        {
-            collisionLeft  = false;
-            collisionRight = false;
-            collisionUp    = false;
-            collisionDown  = false;
-
-            outVelocity     = glm::vec2(0.0f);
-            outAcceVelocity = glm::vec2(0.0f);
-
-            normalHit = false;
-            strongHit = false;
-        }
-
-        //上下左右四个方向有没有撞墙
-        bool collisionLeft;
-        bool collisionRight;
-        bool collisionUp;
-        bool collisionDown;
-
-        //外来速度/加速度
-        glm::vec2 outVelocity;
-        glm::vec2 outAcceVelocity;
-
-        //外界打击
-        bool normalHit;
-        bool strongHit;
-    };
-
-    //每帧Actor接收到的用户操作
     struct ActorUserInput
     {
         ActorUserInput(void)
@@ -160,121 +39,95 @@ namespace _ActorAux
 
         void Reset(void)
         {
-            movingLeft  = false;
-            movingRight = false;
-            jumping     = false;
-            shifting    = false;
-
-            attack1 = false;
-            attack2 = false;
+            left  = false;
+            right = false;
+            jump  = false;
+            shift = false;
         }
 
-        bool movingLeft;
-        bool movingRight;
-        bool jumping;
-        bool shifting;
+        bool left;
+        bool right;
+        bool jump;
+        bool shift;
+    };
 
-        bool attack1;
-        bool attack2;
+    struct ActorEnvirInput
+    {
+        ActorEnvirInput(void)
+        {
+            Reset();
+        }
+
+        void Reset(void)
+        {
+            colLeft  = false;
+            colRight = false;
+            colUp    = false;
+            colDown  = false;
+        }
+
+        bool colLeft;
+        bool colRight;
+        bool colUp;
+        bool colDown;
     };
 }
 
-class Actor : public OWE::Utility::Uncopyable
+class Actor
 {
 public:
-    using Action         = _ActorAux::ActorAction;          //动作动画
-    using Direction      = _ActorAux::ActorDirection;       //角色朝向
-    using ExpandingState = _ActorAux::ActorExpandingState;  //扩展状态
-    using InternalState  = _ActorAux::ActorState;           //内建状态
-    using Environment    = _ActorAux::ActorEnvironment;     //环境输入
-    using Input          = _ActorAux::ActorUserInput;       //用户输入
-
-    using ActionTexRsc = std::vector<OWE::Texture2D>;       //动作纹理序列
+    using Action = _ActorAux::ActorAction;
+    using State = _ActorAux::ActorInternalState;
+    using Direction = _ActorAux::ActorDirection;
+    using UserInput = _ActorAux::ActorUserInput;
+    using EnvirInput = _ActorAux::ActorEnvirInput;
 
     Actor(void);
 
-    //输入设置
-    const Input &GetInput(void) const;
-    Input &GetInput(void);
+    void Initialize(void);
 
-    //环境设置
-    const Environment &GetEnvironment(void) const;
-    Environment &GetEnvironment(void);
+    UserInput &GetUserInput(void);
+    EnvirInput &GetEnvirInput(void);
 
-    //状态自演
-    void Update(void);
+    void Update(double time);
 
 private:
-    void _Preupdate(void);
-    void _StateTransfer(void);
-
-    //新转移到某个状态
-    void _EnterFloating(void);
-    void _EnterBeingAttacked(void);
-    void _EnterJumping(void);
-    void _EnterWeaponState(Weapon *weapon);
-    void _EnterShifting(void);
-    void _EnterRunning(void);
-    void _EnterStanding(void);
-    void _EnterLying(void);
-
-    //保持某个状态，虽然方向可能变
-    void _KeepStanding(void);
-    void _KeepRunning(void);
-    void _KeepJumping(void);
-    void _KeepBeingAttacked(void);
-    void _KeepFloating(void);
-    void _KeepLying(void);
+    void _UpdateStanding(double time);
+    void _UpdateRunning(double time);
+    void _UpdateJumping(double time);
+    void _UpdateShifting(double time);
 
 private:
-    //输入
-    Input input_;
-    Environment envir_;
+    glm::vec2 pos_;
+    glm::vec2 vel_;
+    glm::vec2 accVel_;
 
-    //当前状态
-    ExpandingState *expandingState_;
-    InternalState internalState_;
-    Direction dir_; //人面朝的方向
+    float runningAccVel_;  //移动时自给的水平加速度
+    float floatingAccVel_; //在空中时自给的水平加速度
+    float jumpingVel_;     //跳跃竖直方向带来的初速度
+    float shiftingVel_;    //闪避速度
 
-    //动作相关
-    Action action_;
-    bool actionTexFlip_;
+    State state_;
+    Direction dir_;
+    
+    UserInput user_;
+    EnvirInput envir_;
 
-    Action::TexSeq actionTexStanding_;
-    Action::TexSeq actionTexRunning_;
-    Action::TexSeq actionTexShifting_;
-    Action::TexSeq actionTexJumping_;
-    Action::TexSeq actionTexBeingAttacked_;
-    Action::TexSeq actionTexFloating_;
-    Action::TexSeq actionTexLying_;
+    Action act_;
+    
+    //各种动作资源
 
-    Action::KpSeq actionKpStanding_;
-    Action::KpSeq actionKpRunning_;
-    Action::KpSeq actionKpShifting_;
-    Action::KpSeq actionKpJumping_;
-    Action::KpSeq actionKpBeingAttacked_;
-    Action::KpSeq actionKpFloating_;
-    Action::KpSeq actionKpLying_;
+    Action::TexSeq actTexStanding_;
+    Action::KpSeq  actKpStanding_;
 
-    Action::ColSeq actionColStanding_;
-    Action::ColSeq actionColRunning_;
-    Action::ColSeq actionColShifting_;
-    Action::ColSeq actionColJumping_;
-    Action::ColSeq actionColBeingAttacked_;
-    Action::ColSeq actionColFloating_;
-    Action::ColSeq actionColLying_;
+    Action::TexSeq actTexRunning_;
+    Action::KpSeq  actKpRunning_;
 
-    ActionTexRsc actionTexRscStanding_;
-    ActionTexRsc actionTexRscRunning_;
-    ActionTexRsc actionTexRscShifting_;
-    ActionTexRsc actionTexRscJumping_;
-    ActionTexRsc actionTexRscBeingAttacked_;
-    ActionTexRsc actionTexRscFloating_;
-    ActionTexRsc actionTexRscLying_;
+    Action::TexSeq actTexJumping_;
+    Action::KpSeq  actKpJumping_;
 
-    //武器
-    Weapon *weapon1_;
-    Weapon *weapon2_;
+    Action::TexSeq actTexShifting_;
+    Action::KpSeq  actKpShifting_;
 };
 
 #endif //__ACTOR_H__

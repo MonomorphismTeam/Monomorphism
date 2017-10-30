@@ -14,4 +14,6 @@ Created by AirGuanZ
 #define MM_FILENAME(X) (_MM_FILENAME(X))
 #define _MM_FILENAME(X) "Bin\\"##X
 
+#define ACTOR_ACTION_RESOURCE MM_FILENAME("Actor\\actionRsc.conf")
+
 #endif //__RESOURCE_NAMES_H__

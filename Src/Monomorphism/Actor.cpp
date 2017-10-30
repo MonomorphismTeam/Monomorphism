@@ -5,8 +5,11 @@ Created by AirGuanZ
 ================================================================*/
 #include <limits>
 #include <numeric>
+#include <string>
 
 #include <glm\glm.hpp>
+#include <OWE.h>
+
 #include "Include\Actor.h"
 #include "Include\ConfigureFile.h"
 #include "Include\ResourceNames.h"
@@ -15,180 +18,236 @@ using namespace std;
 using namespace glm;
 using namespace OWE;
 
+namespace
+{
+    void _LoadActionRsc(const ConfigureFile &conf, const string &action,
+                        Actor::Action::TexSeq &texSeq, Actor::Action::KpSeq &kpSeq)
+    {
+        texSeq.clear();
+        kpSeq.clear();
+
+        int cnt = stoi(conf(action, "Count"));
+        texSeq.resize(cnt);
+        kpSeq.resize(cnt);
+
+        for(int i = 0; i != cnt; ++i)
+        {
+            string stri = to_string(i);
+            string texFilename = conf(action, "Tex" + stri);
+            if(!LoadTexture2DFromFile(texFilename, Texture2D::Desc(), texSeq[i]))
+                throw FatalError("Failed to load texture from file: " + texFilename);
+            kpSeq[i] = stod(conf(action, "Kp" + stri)) + (i ? kpSeq[i - 1] : 0.0);
+        }
+    }
+}
+
 Actor::Actor(void)
 {
-    expandingState_ = nullptr;
-    internalState_ = InternalState::Standing;
+    state_ = State::Unknown;
+    dir_ = Direction::Right;
 }
 
-const Actor::Input &Actor::GetInput(void) const
+void Actor::Initialize(void)
 {
-    return input_;
+    //========= 初始化用于绘制的纹理资源 =========
+
+    ConfigureFile conf;
+    if(!conf.Load(ACTOR_ACTION_RESOURCE))
+        throw FatalError(string("Failed to load configure file: ") + ACTOR_ACTION_RESOURCE);
+
+    _LoadActionRsc(conf, "Standing", actTexStanding_, actKpStanding_);
+    _LoadActionRsc(conf, "Running",  actTexRunning_,  actKpRunning_);
+    _LoadActionRsc(conf, "Jumping",  actTexJumping_,  actKpJumping_);
+    _LoadActionRsc(conf, "Shifting", actTexShifting_, actKpShifting_);
+
+    conf.Clear();
 }
 
-Actor::Input &Actor::GetInput(void)
+Actor::UserInput &Actor::GetUserInput(void)
 {
-    return input_;
+    return user_;
 }
 
-const Actor::Environment &Actor::GetEnvironment(void) const
+Actor::EnvirInput &Actor::GetEnvirInput(void)
 {
     return envir_;
 }
 
-Actor::Environment &Actor::GetEnvironment(void)
-{
-    return envir_;
-}
 
-void Actor::Update(void)
+/*
+    根据当前动作决定是否要转移到其他动作
+*/
+void Actor::Update(double time)
 {
-    _Preupdate();
-    _StateTransfer();
-}
-
-void Actor::_Preupdate(void)
-{
-    switch(internalState_)
+    switch(state_)
     {
-    case InternalState::Unknown:
-        //do nothing
+    case State::Unknown:
+        _UpdateStanding(time);
         break;
-    case InternalState::Standing:
-    case InternalState::Running:
-        if(!envir_.collisionDown)
-            internalState_ = InternalState::Unknown;
+    case State::Standing:
+        _UpdateStanding(time);
         break;
-    case InternalState::Floating:
-        if(envir_.collisionDown)
-            internalState_ = InternalState::Lying;
+    case State::Running:
+        _UpdateRunning(time);
         break;
-    case InternalState::Jumping:
-        if(envir_.collisionDown)
-            internalState_ = InternalState::Unknown;
+    case State::Jumping:
+        _UpdateJumping(time);
         break;
-    case InternalState::Shifting:
-    case InternalState::BeingAttacked:
-    case InternalState::Lying:
-        if(action_.End())
-            internalState_ = InternalState::Unknown;
+    case State::Shifting:
+        _UpdateShifting(time);
         break;
-    case InternalState::Other:
-        expandingState_->Preupdate(this);
-        break;
-    default:
-        abort();
     }
 }
 
-//表驱动的话会太大，反正这样一堆if开销可以接受
-void Actor::_StateTransfer(void)
+void Actor::_UpdateStanding(double time)
 {
-    switch(internalState_)
+    State oldState = state_;
+    state_ = State::Standing;
+
+    //若脚下悬空或按了跳跃键，进入跳跃姿态
+    if(!envir_.colDown || user_.jump)
     {
-    case InternalState::Unknown:
-        if(envir_.strongHit)
-            _EnterFloating();
-        else if(envir_.normalHit)
-            _EnterBeingAttacked();
-        else if(input_.jumping)
-            _EnterJumping();
-        else if(input_.attack1 && weapon1_)
-            _EnterWeaponState(weapon1_);
-        else if(input_.attack2 && weapon2_)
-            _EnterWeaponState(weapon2_);
-        else if(input_.shifting)
-            _EnterShifting();
-        else if(input_.movingLeft || input_.movingRight)
-            _EnterRunning();
-        else
-            _EnterStanding();
-        break;
-    case InternalState::Standing:
-        if(envir_.strongHit)
-            _EnterFloating();
-        else if(envir_.normalHit)
-            _EnterBeingAttacked();
-        else if(input_.jumping)
-            _EnterJumping();
-        else if(input_.attack1 && weapon1_)
-            _EnterWeaponState(weapon1_);
-        else if(input_.attack2 && weapon2_)
-            _EnterWeaponState(weapon2_);
-        else if(input_.shifting)
-            _EnterShifting();
-        else if(input_.movingLeft || input_.movingRight)
-            _EnterRunning();
-        else
-            _KeepStanding();
-        break;
-    case InternalState::Running:
-        if(envir_.strongHit)
-            _EnterFloating();
-        else if(envir_.normalHit)
-            _EnterBeingAttacked();
-        else if(input_.jumping)
-            _EnterJumping();
-        else if(input_.attack1 && weapon1_)
-            _EnterWeaponState(weapon1_);
-        else if(input_.attack2 && weapon2_)
-            _EnterWeaponState(weapon2_);
-        else if(input_.shifting)
-            _EnterShifting();
-        else if(input_.movingLeft || input_.movingRight)
-            _KeepRunning();
-        else
-            _EnterStanding();
-        break;
-    case InternalState::Jumping:
-        if(envir_.strongHit || envir_.normalHit)
-            _EnterFloating();
-        else if(input_.attack1)
-            _EnterWeaponState(weapon1_);
-        else if(input_.attack2)
-            _EnterWeaponState(weapon2_);
-        else
-            _KeepJumping();
-        break;
-    case InternalState::BeingAttacked:
-        if(envir_.strongHit)
-            _EnterFloating();
-        else if(envir_.normalHit)
-            _EnterBeingAttacked();
-        else
-            _KeepBeingAttacked();
-        break;
-    case InternalState::Floating:
-        _KeepFloating();
-        break;
-    case InternalState::Lying:
-        if(envir_.strongHit)
-            _EnterFloating();
-        else if(envir_.normalHit)
-            _EnterLying();
-        else
-            _KeepLying();
-        break;
-    default:
-        assert(internalState_ == InternalState::Other);
-        assert(expandingState_);
-        expandingState_->Transfer(this);
+        _UpdateJumping(time);
+        return;
     }
+
+    //若按下shift，进入闪避姿态
+    if(user_.shift)
+    {
+        _UpdateShifting(time);
+        return;
+    }
+
+    //进入移动状态
+    if(user_.left || user_.right)
+    {
+        _UpdateRunning(time);
+        return;
+    }
+
+    //是否是新进入Standing状态
+    if(state_ != oldState)
+    {
+        act_.SetData(&actTexStanding_, &actKpStanding_);
+        act_.EnableLoop(true);
+        act_.Restart();
+    }
+
+    act_.Tick(time);
 }
 
-void Actor::_EnterFloating(void)
+void Actor::_UpdateRunning(double time)
 {
-    if(envir_.outVelocity.x > 0.0f)
+    State oldState = state_;
+    state_ = State::Running;
+
+    //若脚下悬空或按了跳跃键，进入跳跃姿态
+    if(!envir_.colDown || user_.jump)
     {
-        actionTexFlip_ = true;
+        _UpdateJumping(time);
+        return;
+    }
+
+    //若按下shift，进入闪避姿态
+    if(user_.shift)
+    {
+        _UpdateShifting(time);
+        return;
+    }
+
+    //若没按移动键，回到Standing
+    if(!user_.left && !user_.right)
+    {
+        _UpdateStanding(time);
+        return;
+    }
+
+    //本帧输入的移动方向
+    Direction newDir = user_.left ? Direction::Left : Direction::Right;
+
+    //是否算作新进入Running状态
+    if(state_ != oldState || newDir != dir_)
+    {
+        dir_ = newDir;
+        act_.SetData(&actTexRunning_, &actKpRunning_);
+        act_.EnableLoop(true);
+        act_.Restart();
+    }
+
+    accVel_ += vec2((dir_ == Direction::Right ? runningAccVel_ : -runningAccVel_), 0.0f);
+    act_.Tick(time);
+}
+
+void Actor::_UpdateJumping(double time)
+{
+    State oldState = state_;
+    state_ = State::Jumping;
+
+    //若脚下着地，进入站立姿态
+    //加上!jump条件是因为主动起跳时也符合colDown条件
+    if(envir_.colDown && !user_.jump)
+    {
+        _UpdateStanding(time);
+        return;
+    }
+
+    //是否是新进入Jumping状态
+    if(state_ != oldState)
+    {
+        act_.SetData(&actTexJumping_, &actKpJumping_);
+        act_.EnableLoop(true);
+        act_.Restart();
+
+        //如果是主动跳起来的，给予竖直初速度
+        if(envir_.colDown && user_.jump)
+            vel_.y = jumpingVel_;
+    }
+
+    //是否在空中给予了加速度
+    if(user_.left)
+    {
+        accVel_.x -= floatingAccVel_;
         dir_ = Direction::Left;
     }
-    else
+    else if(user_.right)
     {
-        actionTexFlip_ = false;
+        accVel_.y += floatingAccVel_;
         dir_ = Direction::Right;
     }
-    action_.SetData(actionTexLying_, actionKpLying_, actionColLying_);
-    action_.EnableLoop(true);
-    action_.Restart();
+
+    act_.Tick(time);
 }
+
+void Actor::_UpdateShifting(double time)
+{
+    State oldState = state_;
+    state_ = State::Shifting;
+
+    //时间结束，自动转移为Standing状态
+    if(act_.End())
+    {
+        _UpdateStanding(time);
+        return;
+    }
+
+    //是否是新进入Shifting状态的
+    if(state_ != oldState)
+    {
+        //刚进Shifting时还有改方向的机会
+        if(user_.left)
+            dir_ = Direction::Left;
+        else if(user_.right)
+            dir_ = Direction::Right;
+
+        act_.SetData(&actTexShifting_, &actKpShifting_);
+        act_.EnableLoop(false);
+        act_.Restart();
+    }
+
+    //只要还在地上就给翻滚速度
+    if(envir_.colDown)
+        vel_.x = (dir_ == Direction::Left ? -shiftingVel_ : shiftingVel_);
+
+    act_.Tick(time);
+}
+

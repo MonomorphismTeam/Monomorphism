@@ -15,12 +15,12 @@ namespace _ActorAux
     class ActorAction
     {
     public:
-        using TexSeq = std::vector<OWE::Texture2DView>;
+        using TexSeq = std::vector<OWE::Texture2D>;
         using KpSeq = std::vector<double>;
-        using ColSeq = std::vector<OWE::BoundingArea>;
-
+        
         ActorAction(void)
-            : loop_(false), time_(0.0), idx_(0)
+            : loop_(false), time_(0.0), idx_(0),
+            texSeq_(nullptr), kpSeq_(nullptr)
         {
 
         }
@@ -28,13 +28,14 @@ namespace _ActorAux
         void Tick(double time)
         {
             time_ += time;
-            while(idx_ + 1 < static_cast<int>(kpSeq_.size()) && time >= kpSeq_[idx_])
+            while(idx_ + 1 < static_cast<int>(kpSeq_->size()) && time >= kpSeq_->at(idx_))
                 ++idx_;
-            if(loop_ && time_ >= kpSeq_.back())
+            if(loop_ && time_ >= kpSeq_->back())
             {
-                time_ -= std::floor(time_ / kpSeq_.back()) * kpSeq_.back();
-                for(idx_ = 0; idx_ + 1 < static_cast<int>(kpSeq_.size()) && time >= kpSeq_[idx_]; ++idx_)
-                    ; //do nothing
+                time_ -= std::floor(time_ / kpSeq_->back()) * kpSeq_->back();
+                idx_ = 0;
+                while(idx_ + 1 < static_cast<int>(kpSeq_->size()) && time >= kpSeq_->at(idx_))
+                    ++idx_;
             }
         }
 
@@ -58,13 +59,13 @@ namespace _ActorAux
 
         bool End(void) const
         {
-            return !loop_ && time_ >= kpSeq_.back();
+            return !loop_ && time_ >= kpSeq_->back();
         }
 
         OWE::Texture2DView CurrentTex(void) const
         {
-            assert(0 <= idx_ && idx_ < static_cast<int>(texSeq_.size()));
-            return texSeq_[idx_];
+            assert(0 <= idx_ && idx_ < static_cast<int>(texSeq_->size()));
+            return texSeq_->at(idx_);
         }
 
         double CurrentTime(void) const
@@ -77,19 +78,17 @@ namespace _ActorAux
             return idx_;
         }
 
-        void SetData(const TexSeq &texSeq, const KpSeq &kpSeq, const ColSeq &colSeq)
+        void SetData(const TexSeq *texSeq, const KpSeq *kpSeq)
         {
-            assert(!texSeq.empty() && texSeq.size() == kpSeq.size() && kpSeq.size() == colSeq.size());
+            assert(!texSeq->empty() && texSeq->size() == kpSeq->size());
             texSeq_ = texSeq;
             kpSeq_  = kpSeq;
-            colSeq_ = colSeq;
         }
 
         void Clear(void)
         {
-            texSeq_.clear();
-            kpSeq_.clear();
-            colSeq_.clear();
+            texSeq_ = nullptr;
+            kpSeq_  = nullptr;
         }
 
     private:
@@ -98,9 +97,8 @@ namespace _ActorAux
         double time_;
         int idx_;
 
-        TexSeq texSeq_;
-        KpSeq kpSeq_;
-        ColSeq colSeq_;
+        const TexSeq *texSeq_;
+        const KpSeq *kpSeq_;
     };
 }
 
