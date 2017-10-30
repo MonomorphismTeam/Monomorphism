@@ -91,14 +91,28 @@ public:
 
     void Update(double time);
 
+    void Draw(const OWE::ScreenScale &scale);
+
+    glm::vec2 &GetPosition(void);
+    glm::vec2 &GetTexSize(void);
+    glm::vec2 &GetVelocity(void);
+    glm::vec2 &GetAccVelocity(void);
+
 private:
     void _UpdateStanding(double time);
     void _UpdateRunning(double time);
     void _UpdateJumping(double time);
     void _UpdateShifting(double time);
 
+    void _DrawNormalAction(const OWE::ScreenScale &scale);
+    void _DrawStanding(const OWE::ScreenScale &scale);
+    void _DrawRunning(const OWE::ScreenScale &scale);
+    void _DrawJumping(const OWE::ScreenScale &scale);
+    void _DrawShifting(const OWE::ScreenScale &scale);
+
 private:
     glm::vec2 pos_;
+    glm::vec2 texSize_;
     glm::vec2 vel_;
     glm::vec2 accVel_;
 

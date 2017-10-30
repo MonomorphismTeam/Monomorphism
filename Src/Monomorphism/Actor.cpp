@@ -73,7 +73,6 @@ Actor::EnvirInput &Actor::GetEnvirInput(void)
     return envir_;
 }
 
-
 /*
     根据当前动作决定是否要转移到其他动作
 */
@@ -251,3 +250,105 @@ void Actor::_UpdateShifting(double time)
     act_.Tick(time);
 }
 
+void Actor::Draw(const ScreenScale &scale)
+{
+    switch(state_)
+    {
+    case State::Standing:
+        _DrawStanding(scale);
+        break;
+    case State::Running:
+        _DrawRunning(scale);
+        break;
+    case State::Jumping:
+        _DrawJumping(scale);
+        break;
+    case State::Shifting:
+        _DrawShifting(scale);
+        break;
+    default:
+        abort();
+    }
+}
+
+void Actor::_DrawNormalAction(const ScreenScale &scale)
+{
+    vec2 LB = pos_ - vec2(texSize_.x / 2.0f, 0.0f);
+    vec2 RT = pos_ + vec2(texSize_.x / 2.0f, texSize_.y);
+    vec2 uvLB, uvRT;
+    if(dir_ == Direction::Left)
+    {
+        uvLB = vec2(1.0f, 0.0f);
+        uvRT = vec2(0.0f, 1.0f);
+    }
+    else
+    {
+        uvLB = vec2(0.0f, 0.0f);
+        uvRT = vec2(1.0f, 1.0f);
+    }
+    ImmediateRenderer::DrawTexturedBox(
+        LB, RT, uvLB, uvRT,
+        act_.CurrentTex(), scale,
+        ImmediateRenderer::RenderMode::AlphaTest);
+}
+
+void Actor::_DrawStanding(const ScreenScale &scale)
+{
+    _DrawNormalAction(scale);
+}
+
+void Actor::_DrawRunning(const ScreenScale &scale)
+{
+    _DrawNormalAction(scale);
+}
+
+void Actor::_DrawJumping(const ScreenScale &scale)
+{
+    vec2 LB = pos_ - vec2(texSize_.x / 2.0f, 0.0f);
+    vec2 RT = pos_ + vec2(texSize_.x / 2.0f, texSize_.y);
+    vec2 uvLB, uvRT;
+    if(dir_ == Direction::Left)
+    {
+        uvLB = vec2(1.0f, 0.0f);
+        uvRT = vec2(0.0f, 1.0f);
+    }
+    else
+    {
+        uvLB = vec2(0.0f, 0.0f);
+        uvRT = vec2(1.0f, 1.0f);
+    }
+    Texture2DView tex;
+    if(vel_.y >= 0.0f)
+        tex = actTexJumping_[0];
+    else
+        tex = actTexJumping_[1];
+    ImmediateRenderer::DrawTexturedBox(
+        LB, RT, uvLB, uvRT,
+        tex, scale,
+        ImmediateRenderer::RenderMode::AlphaTest);
+}
+
+void Actor::_DrawShifting(const ScreenScale &scale)
+{
+    _DrawNormalAction(scale);
+}
+
+vec2 &Actor::GetPosition(void)
+{
+    return pos_;
+}
+
+vec2 &Actor::GetTexSize(void)
+{
+    return texSize_;
+}
+
+vec2 &Actor::GetVelocity(void)
+{
+    return vel_;
+}
+
+vec2 &Actor::GetAccVelocity(void)
+{
+    return accVel_;
+}
