@@ -25,6 +25,7 @@ namespace Test
         Clock clock_;
 
         bool done_;
+        bool space_;
 
     public:
         void KeyDown(KEY_CODE kc)
@@ -39,8 +40,8 @@ namespace Test
             desc.bordered = true;
             desc.resizable = false;
             desc.fullscreen = false;
-            desc.winWidth = 1440;
-            desc.winHeight = 768;
+            desc.winWidth = 800;
+            desc.winHeight = 600;
             desc.title = "Monomorphism";
             desc.glVersion = "4.3";
 
@@ -54,19 +55,20 @@ namespace Test
             actor_.Initialize();
 
             actor_.SetRunningVel(0.012f);
-            actor_.SetFloatingAccVel(0.00008f);
-            actor_.SetShiftingVel(0.03f);
+            actor_.SetFloatingAccVel(0.00006f);
+            actor_.SetShiftingVel(0.04f);
             actor_.SetJumpingVel(0.025f);
 
             actor_.SetMaxFloatingVel(0.012f);
-            actor_.SetFloatingFricAccVel(0.00004f);
+            actor_.SetFloatingFricAccVel(0.00003f);
 
             actor_.GetPosition() = vec2(3.0f, 2.0f);
             actor_.GetTexSize() = vec2(2.0f, 2.8f);
 
-            rc.SetClearColor(0.0f, 1.0f, 1.0f, 0.0f);
-            scale_.Reinit(50.0f, 50.0f);
+            rc.SetClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            scale_.Reinit(40.0f, 40.0f);
             done_ = false;
+            space_ = false;
             clock_.Restart();
             
             while(!done_)
@@ -97,10 +99,17 @@ namespace Test
                     actor_.GetUserInput().left = true;
                 if(im.IsKeyPressed(KEY_CODE::KEY_D))
                     actor_.GetUserInput().right = true;
-                if(im.IsKeyPressed(KEY_CODE::KEY_SPACE))
-                    actor_.GetUserInput().jump = true;
                 if(im.IsKeyPressed(KEY_CODE::KEY_LSHIFT))
                     actor_.GetUserInput().shift = true;
+                if(im.IsKeyPressed(KEY_CODE::KEY_SPACE))
+                {
+                    if(!space_)
+                    {
+                        actor_.GetUserInput().jump = true;
+                        space_ = true;
+                    }
+                }
+                else space_ = false;
 
                 rc.ClearColorAndDepth();
                 actor_.Draw(scale_);
