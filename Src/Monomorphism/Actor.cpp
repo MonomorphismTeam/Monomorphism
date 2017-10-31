@@ -43,13 +43,18 @@ namespace
 
 Actor::Actor(void)
 {
-    pos_     = vec2(0.0f, 0.0f);
-    texSize_ = vec2(1.0f, 1.0f);
-    vel_     = vec2(0.0f, 0.0f);
-    accVel_  = vec2(0.0f, 0.0f);
+    pos_        = vec2(0.0f, 0.0f);
+    texSize_    = vec2(1.0f, 1.0f);
+    vel_        = vec2(0.0f, 0.0f);
+    accVel_     = vec2(0.0f, 0.0f);
+    airFricAccVel_ = vec2(0.0f, 0.0f);
 
-    runningVel_     = 0.0f;
-    floatingVel_    = 0.0f;
+    runningVel_  = 0.0f;
+    floatingAccVel_ = 0.0f;
+
+    maxFloatingVel_ = 0.0f;
+    floatingFricAccVel_ = 0.0f;
+
     jumpingVel_     = 0.0f;
     shiftingVel_    = 0.0f;
 
@@ -74,6 +79,12 @@ void Actor::Initialize(void)
     _LoadActionRsc(conf, "Shifting", actTexShifting_, actKpShifting_);
 
     conf.Clear();
+}
+
+void Actor::ClearAccVel(void)
+{
+    accVel_     = vec2(0.0f, 0.0f);
+    airFricAccVel_ = vec2(0.0f, 0.0f);
 }
 
 Actor::UserInput &Actor::GetUserInput(void)
@@ -109,6 +120,22 @@ void Actor::Update(double time)
         _UpdateShifting(time);
         break;
     }
+}
+
+void Actor::UpdateVelocity(double time)
+{
+    float t = static_cast<float>(time);
+    vel_ += t * accVel_;
+
+    if(sign(vel_.x) != sign(airFricAccVel_.x))
+    {
+        if(vel_.x < 0.0f)
+            vel_.x = glm::min(0.0f, vel_.x + airFricAccVel_.x * t);
+        else if(vel_.x > 0.0f)
+            vel_.x = glm::max(0.0f, vel_.x + airFricAccVel_.x * t);
+    }
+
+    vel_.x = clamp(vel_.x, -maxFloatingVel_, maxFloatingVel_);
 }
 
 void Actor::_UpdateStanding(double time)
@@ -220,13 +247,20 @@ void Actor::_UpdateJumping(double time)
     //是否在空中给予了加速度
     if(user_.left)
     {
-        vel_.x = std::min(vel_.x, -floatingVel_);
+        accVel_ += vec2(-floatingAccVel_, 0.0f);
         dir_ = Direction::Left;
     }
     else if(user_.right)
     {
-        vel_.x = std::max(vel_.x, floatingVel_);
+        accVel_ += vec2(floatingAccVel_, 0.0f);
         dir_ = Direction::Right;
+    }
+    else //没按键，接受阻力的制裁
+    {
+        if(vel_.x > 0.0f)
+            airFricAccVel_ += vec2(-floatingFricAccVel_, 0.0f);
+        else if(vel_.x < 0.0f)
+            airFricAccVel_ += vec2(floatingFricAccVel_, 0.0f);
     }
 
     act_.Tick(time);
@@ -259,9 +293,8 @@ void Actor::_UpdateShifting(double time)
         act_.Restart();
     }
 
-    //只要还在地上就给翻滚速度
-    if(envir_.colDown)
-        vel_.x = (dir_ == Direction::Left ? -shiftingVel_ : shiftingVel_);
+    //给翻滚速度，不管还在不在地上
+    vel_.x = (dir_ == Direction::Left ? -shiftingVel_ : shiftingVel_);
 
     act_.Tick(time);
 }
@@ -374,9 +407,9 @@ void Actor::SetRunningVel(float accVel)
     runningVel_ = accVel;
 }
 
-void Actor::SetFloatVel(float accVel)
+void Actor::SetFloatingAccVel(float accVel)
 {
-    floatingVel_ = accVel;
+    floatingAccVel_ = accVel;
 }
 
 void Actor::SetJumpingVel(float vel)
@@ -387,4 +420,14 @@ void Actor::SetJumpingVel(float vel)
 void Actor::SetShiftingVel(float vel)
 {
     shiftingVel_ = vel;
+}
+
+void Actor::SetMaxFloatingVel(float vel)
+{
+    maxFloatingVel_ = vel;
+}
+
+void Actor::SetFloatingFricAccVel(float accVel)
+{
+    floatingFricAccVel_ = accVel;
 }

@@ -74,9 +74,11 @@ namespace _ActorAux
 }
 
 /* 状态更新流程：
+    重置加速度
     actor_.Update();
+    叠加外界加速度
+    actor_.UpdateVelocity();
     重置环境输入和用户输入
-    速度、加速度演化
     备份位置，碰撞检测，改速度，恢复碰撞的位置，改环境输入
     记录用户输入
 */
@@ -92,11 +94,13 @@ public:
     Actor(void);
 
     void Initialize(void);
+    void ClearAccVel(void);
 
     UserInput &GetUserInput(void);
     EnvirInput &GetEnvirInput(void);
 
     void Update(double time);
+    void UpdateVelocity(double time);
 
     void Draw(const OWE::ScreenScale &scale);
 
@@ -105,10 +109,13 @@ public:
     glm::vec2 &GetVelocity(void);
     glm::vec2 &GetAccVelocity(void);
 
-    void SetRunningVel(float Vel);       //移动时自给的水平加速度
-    void SetFloatVel(float accVel);   //在空中时自给的水平加速度
-    void SetJumpingVel(float vel);       //跳跃竖直方向带来的初速度
-    void SetShiftingVel(float vel);      //闪避速度
+    void SetRunningVel(float Vel);      //移动时自给的水平加速度
+    void SetFloatingAccVel(float accVel);     //在空中时自给的水平加速度
+    void SetJumpingVel(float vel);         //跳跃竖直方向带来的初速度
+    void SetShiftingVel(float vel);        //闪避速度
+
+    void SetMaxFloatingVel(float vel);
+    void SetFloatingFricAccVel(float accVel);
 
 private:
     void _UpdateStanding(double time);
@@ -128,10 +135,20 @@ private:
     glm::vec2 vel_;
     glm::vec2 accVel_;
 
-    float runningVel_;  //移动时自给的水平加速度
-    float floatingVel_; //在空中时自给的水平加速度
-    float jumpingVel_;     //跳跃竖直方向带来的初速度
-    float shiftingVel_;    //闪避速度
+    glm::vec2 airFricAccVel_; //阻力加速度
+
+    /*
+        地面移动完全由玩家控制
+        空中有阻力，移动由加速度给出
+    */
+    float runningVel_;          //水平移动速度
+    float floatingAccVel_;      //空中移动加速度
+
+    float maxFloatingVel_;      //最大空中水平移动速度
+    float floatingFricAccVel_;  //空中阻力加速度
+    
+    float jumpingVel_;          //跳跃竖直方向带来的初速度
+    float shiftingVel_;         //闪避速度
 
     State state_;
     Direction dir_;

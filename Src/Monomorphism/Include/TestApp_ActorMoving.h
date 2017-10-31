@@ -54,9 +54,12 @@ namespace Test
             actor_.Initialize();
 
             actor_.SetRunningVel(0.012f);
+            actor_.SetFloatingAccVel(0.00008f);
             actor_.SetShiftingVel(0.03f);
             actor_.SetJumpingVel(0.025f);
-            actor_.SetFloatVel(0.008f);
+
+            actor_.SetMaxFloatingVel(0.012f);
+            actor_.SetFloatingFricAccVel(0.00004f);
 
             actor_.GetPosition() = vec2(3.0f, 2.0f);
             actor_.GetTexSize() = vec2(2.0f, 2.8f);
@@ -70,6 +73,7 @@ namespace Test
             {
                 clock_.Tick();
                 
+                actor_.ClearAccVel();
                 actor_.Update(clock_.ElapsedTime());
 
                 //清空actor输入
@@ -77,13 +81,8 @@ namespace Test
                 actor_.GetEnvirInput().Reset();
 
                 //给予重力加速度，做碰撞检测
-                actor_.GetAccVelocity().y = -0.00008f;
-                actor_.GetVelocity() += actor_.GetAccVelocity() *
-                                        static_cast<float>(clock_.ElapsedTime());
-                if(actor_.GetVelocity().y > 0.1f)
-                {
-                    actor_.GetVelocity().y += 0.0f;
-                }
+                actor_.GetAccVelocity().y += -0.00008f;
+                actor_.UpdateVelocity(clock_.ElapsedTime());
                 actor_.GetPosition() += actor_.GetVelocity() *
                                         static_cast<float>(clock_.ElapsedTime());
                 if(actor_.GetPosition().y < 1.0f)
