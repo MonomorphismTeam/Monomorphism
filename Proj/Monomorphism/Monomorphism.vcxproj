@@ -36,6 +36,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp2.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp3.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp4_TextureAnimation.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_ActorMoving.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

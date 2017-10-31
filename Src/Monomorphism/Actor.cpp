@@ -43,8 +43,21 @@ namespace
 
 Actor::Actor(void)
 {
+    pos_     = vec2(0.0f, 0.0f);
+    texSize_ = vec2(1.0f, 1.0f);
+    vel_     = vec2(0.0f, 0.0f);
+    accVel_  = vec2(0.0f, 0.0f);
+
+    runningVel_     = 0.0f;
+    floatingVel_    = 0.0f;
+    jumpingVel_     = 0.0f;
+    shiftingVel_    = 0.0f;
+
     state_ = State::Unknown;
-    dir_ = Direction::Right;
+    dir_   = Direction::Right;
+
+    user_.Reset();
+    envir_.Reset();
 }
 
 void Actor::Initialize(void)
@@ -132,6 +145,7 @@ void Actor::_UpdateStanding(double time)
         act_.Restart();
     }
 
+    vel_.x = 0.0f;
     act_.Tick(time);
 }
 
@@ -173,7 +187,8 @@ void Actor::_UpdateRunning(double time)
         act_.Restart();
     }
 
-    accVel_ += vec2((dir_ == Direction::Right ? runningAccVel_ : -runningAccVel_), 0.0f);
+    //accVel_ += vec2((dir_ == Direction::Right ? runningAccVel_ : -runningAccVel_), 0.0f);
+    vel_.x = (dir_ == Direction::Right ? runningVel_ : -runningVel_);
     act_.Tick(time);
 }
 
@@ -205,12 +220,12 @@ void Actor::_UpdateJumping(double time)
     //是否在空中给予了加速度
     if(user_.left)
     {
-        accVel_.x -= floatingAccVel_;
+        vel_.x = std::min(vel_.x, -floatingVel_);
         dir_ = Direction::Left;
     }
     else if(user_.right)
     {
-        accVel_.y += floatingAccVel_;
+        vel_.x = std::max(vel_.x, floatingVel_);
         dir_ = Direction::Right;
     }
 
@@ -225,6 +240,7 @@ void Actor::_UpdateShifting(double time)
     //时间结束，自动转移为Standing状态
     if(act_.End())
     {
+        act_.Restart();
         _UpdateStanding(time);
         return;
     }
@@ -351,4 +367,24 @@ vec2 &Actor::GetVelocity(void)
 vec2 &Actor::GetAccVelocity(void)
 {
     return accVel_;
+}
+
+void Actor::SetRunningVel(float accVel)
+{
+    runningVel_ = accVel;
+}
+
+void Actor::SetFloatVel(float accVel)
+{
+    floatingVel_ = accVel;
+}
+
+void Actor::SetJumpingVel(float vel)
+{
+    jumpingVel_ = vel;
+}
+
+void Actor::SetShiftingVel(float vel)
+{
+    shiftingVel_ = vel;
 }

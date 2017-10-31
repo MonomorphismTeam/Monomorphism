@@ -28,13 +28,13 @@ namespace _ActorAux
         void Tick(double time)
         {
             time_ += time;
-            while(idx_ + 1 < static_cast<int>(kpSeq_->size()) && time >= kpSeq_->at(idx_))
+            while(idx_ + 1 < static_cast<int>(kpSeq_->size()) && time_ >= kpSeq_->at(idx_))
                 ++idx_;
             if(loop_ && time_ >= kpSeq_->back())
             {
                 time_ -= std::floor(time_ / kpSeq_->back()) * kpSeq_->back();
                 idx_ = 0;
-                while(idx_ + 1 < static_cast<int>(kpSeq_->size()) && time >= kpSeq_->at(idx_))
+                while(idx_ + 1 < static_cast<int>(kpSeq_->size()) && time_ >= kpSeq_->at(idx_))
                     ++idx_;
             }
         }
@@ -80,6 +80,11 @@ namespace _ActorAux
 
         void SetData(const TexSeq *texSeq, const KpSeq *kpSeq)
         {
+            if(!texSeq || !kpSeq)
+            {
+                Clear();
+                return;
+            }
             assert(!texSeq->empty() && texSeq->size() == kpSeq->size());
             texSeq_ = texSeq;
             kpSeq_  = kpSeq;

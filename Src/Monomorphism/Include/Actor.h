@@ -98,6 +98,11 @@ public:
     glm::vec2 &GetVelocity(void);
     glm::vec2 &GetAccVelocity(void);
 
+    void SetRunningVel(float Vel);       //移动时自给的水平加速度
+    void SetFloatVel(float accVel);   //在空中时自给的水平加速度
+    void SetJumpingVel(float vel);       //跳跃竖直方向带来的初速度
+    void SetShiftingVel(float vel);      //闪避速度
+
 private:
     void _UpdateStanding(double time);
     void _UpdateRunning(double time);
@@ -116,8 +121,8 @@ private:
     glm::vec2 vel_;
     glm::vec2 accVel_;
 
-    float runningAccVel_;  //移动时自给的水平加速度
-    float floatingAccVel_; //在空中时自给的水平加速度
+    float runningVel_;  //移动时自给的水平加速度
+    float floatingVel_; //在空中时自给的水平加速度
     float jumpingVel_;     //跳跃竖直方向带来的初速度
     float shiftingVel_;    //闪避速度
 
