@@ -73,6 +73,13 @@ namespace _ActorAux
     };
 }
 
+/* 状态更新流程：
+    actor_.Update();
+    重置环境输入和用户输入
+    速度、加速度演化
+    备份位置，碰撞检测，改速度，恢复碰撞的位置，改环境输入
+    记录用户输入
+*/
 class Actor
 {
 public:
