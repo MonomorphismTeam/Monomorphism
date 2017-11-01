@@ -26,15 +26,9 @@
     <Filter Include="Weapon">
       <UniqueIdentifier>{a7017f9d-093f-46a3-8cbf-7d1bb9f5ff82}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ConfigureFile">
-      <UniqueIdentifier>{6309c116-a9b4-47fa-895e-31cd4d6456da}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
-    <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp">
-      <Filter>ConfigureFile</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -65,8 +59,5 @@
       <Filter>Weapon</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
-    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h">
-      <Filter>ConfigureFile</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

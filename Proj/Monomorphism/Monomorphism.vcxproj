@@ -19,13 +19,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\Actor.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\BlockArea.h" />
-    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Creature.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
