@@ -6,9 +6,22 @@ Created by AirGuanZ
 #include "Include\TestApp1.h"
 #include "Include\TestApp2.h"
 #include "Include\TestApp3.h"
+#include "Include\TestApp4_TextureAnimation.h"
+#include "Include\TestApp_ActorMoving.h"
 
 int main(void)
 {
-    Test::TestApp3 app;
-    app.Run();
+    try
+    {
+        Test::TestApp_ActorMoving app;
+        app.Run();
+    }
+    catch(const OWE::FatalError &err)
+    {
+        std::cout << err.What() << std::endl;
+    }
+    catch(const std::exception &err)
+    {
+        std::cout << err.what() << std::endl;
+    }
 }

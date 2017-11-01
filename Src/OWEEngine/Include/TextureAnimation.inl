@@ -73,13 +73,23 @@ inline void _TextureAnimation::Restart(void)
 inline void _TextureAnimation::Tick(double deltaTime)
 {
     time_ += deltaTime;
-    while(data_ && idx_ < data_->kpSeq.back() && time_ >= data_->kpSeq[idx_])
+    while(data_ && idx_ < static_cast<int>(data_->kpSeq.size()) && time_ >= data_->kpSeq[idx_])
         ++idx_;
 }
 
 inline double _TextureAnimation::GetTime(void) const
 {
     return time_;
+}
+
+inline int _TextureAnimation::GetIdx(void) const
+{
+    return idx_;
+}
+
+inline bool _TextureAnimation::End(void) const
+{
+    return !data_ || time_ >= data_->kpSeq.back();
 }
 
 inline void _TextureAnimation::Draw(

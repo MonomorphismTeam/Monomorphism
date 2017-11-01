@@ -26,9 +26,18 @@
     <Filter Include="Weapon">
       <UniqueIdentifier>{a7017f9d-093f-46a3-8cbf-7d1bb9f5ff82}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ConfigureFile">
+      <UniqueIdentifier>{cce67b36-0fc7-4eb7-8303-79143b209226}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\Actor.cpp">
+      <Filter>Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp">
+      <Filter>ConfigureFile</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -58,6 +67,18 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h">
       <Filter>Weapon</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp4_TextureAnimation.h">
+      <Filter>Test</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h">
+      <Filter>ConfigureFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h">
+      <Filter>Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_ActorMoving.h">
+      <Filter>Test</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

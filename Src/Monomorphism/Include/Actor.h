@@ -3,70 +3,174 @@ Filename: Actor.h
 Date: 2017.10.21
 Created by AirGuanZ
 ================================================================*/
-
-/* actor、weapon大概这么设计：
-    actor有本身的动画，也有根据weapon而变的动画
-    把actor的动画交给weapon会让actor的扩展非常不方便
-    所以应该是actor提供有限种可供选择的用weapon的动画，weapon告知actor应该用哪个
-    对weapon的形态和位置变换可以提供仿射变换，变换矩阵是actor交给weapon来画的
-*/
-
 #ifndef __ACTOR_H__
 #define __ACTOR_H__
 
+#include <vector>
+
 #include <OWE.h>
 
-class Actor : public OWE::Utility::Uncopyable
+#include "ActorAction.h"
+#include "Weapon.h"
+
+namespace _ActorAux
+{
+    enum class ActorInternalState
+    {
+        Unknown,
+        Standing,
+        Running,
+        Jumping,
+        Shifting
+    };
+
+    enum class ActorDirection
+    {
+        Left,
+        Right
+    };
+
+    struct ActorUserInput
+    {
+        ActorUserInput(void)
+        {
+            Reset();
+        }
+
+        void Reset(void)
+        {
+            left  = false;
+            right = false;
+            jump  = false;
+            shift = false;
+        }
+
+        bool left;
+        bool right;
+        bool jump;
+        bool shift;
+    };
+
+    struct ActorEnvirInput
+    {
+        ActorEnvirInput(void)
+        {
+            Reset();
+        }
+
+        void Reset(void)
+        {
+            colLeft  = false;
+            colRight = false;
+            colUp    = false;
+            colDown  = false;
+        }
+
+        bool colLeft;
+        bool colRight;
+        bool colUp;
+        bool colDown;
+    };
+}
+
+/* 状态更新流程：
+    重置加速度
+    actor_.Update();
+    叠加外界加速度
+    actor_.UpdateVelocity();
+    重置环境输入和用户输入
+    备份位置，碰撞检测，改速度，恢复碰撞的位置，改环境输入
+    记录用户输入
+*/
+class Actor
 {
 public:
-    enum class State
-    {
-        Stand,
-        Walk
-    };
-
-    enum class Direction
-    {
-        Left, Right
-    };
+    using Action = _ActorAux::ActorAction;
+    using State = _ActorAux::ActorInternalState;
+    using Direction = _ActorAux::ActorDirection;
+    using UserInput = _ActorAux::ActorUserInput;
+    using EnvirInput = _ActorAux::ActorEnvirInput;
 
     Actor(void);
-    ~Actor(void);
 
     void Initialize(void);
-    bool IsAvailable(void);
-    void Destroy(void);
+    void ClearAccVel(void);
 
-    void Restart(void);
+    UserInput &GetUserInput(void);
+    EnvirInput &GetEnvirInput(void);
 
-    glm::vec2 GetPosition(void) const;
-    void SetPosition(const glm::vec2 &pos);
+    void Update(double time);
+    void UpdateVelocity(double time);
 
-    glm::vec2 GetVelocity(void) const;
-    void SetVelocity(const glm::vec2 &vel);
-    
-    glm::vec2 GetAcceleratedVelocity(void) const;
-    void SetAcceleratedVelocity(const glm::vec2 &pos);
+    void Draw(const OWE::ScreenScale &scale);
 
-    bool IsOnGround(void) const;
-    void OnGround(bool onGround);
+    glm::vec2 &GetPosition(void);
+    glm::vec2 &GetTexSize(void);
+    glm::vec2 &GetVelocity(void);
+    glm::vec2 &GetAccVelocity(void);
 
-    void Update(double deltaTime);
-    void Draw(void);
+    void SetRunningVel(float Vel);      //移动时自给的水平加速度
+    void SetFloatingAccVel(float accVel);     //在空中时自给的水平加速度
+    void SetJumpingVel(float vel);         //跳跃竖直方向带来的初速度
+    void SetShiftingVel(float vel);        //闪避速度
 
-    glm::mat3 GetWeaponTrans(void) const;
+    void SetMaxFloatingVel(float vel);
+    void SetFloatingFricAccVel(float accVel);
 
 private:
-    glm::vec2 position_;
-    glm::vec2 velocity_;
-    glm::vec2 acceleratedVelocity_;
+    void _UpdateStanding(double time);
+    void _UpdateRunning(double time);
+    void _UpdateJumping(double time);
+    void _UpdateShifting(double time);
 
-    float HP_;
-    bool onGround_;
+    void _DrawNormalAction(const OWE::ScreenScale &scale);
+    void _DrawStanding(const OWE::ScreenScale &scale);
+    void _DrawRunning(const OWE::ScreenScale &scale);
+    void _DrawJumping(const OWE::ScreenScale &scale);
+    void _DrawShifting(const OWE::ScreenScale &scale);
+
+private:
+    glm::vec2 pos_;
+    glm::vec2 texSize_;
+    glm::vec2 vel_;
+    glm::vec2 accVel_;
+
+    glm::vec2 airFricAccVel_; //阻力加速度
+
+    /*
+        地面移动完全由玩家控制
+        空中有阻力，移动由加速度给出
+    */
+    float runningVel_;          //水平移动速度
+    float floatingAccVel_;      //空中移动加速度
+
+    float maxFloatingVel_;      //最大空中水平移动速度
+    float floatingFricAccVel_;  //空中阻力加速度
+    
+    float jumpingVel_;          //跳跃竖直方向带来的初速度
+    float shiftingVel_;         //闪避速度
 
     State state_;
     Direction dir_;
-    OWE::Clock clock_;
+    
+    UserInput user_;
+    EnvirInput envir_;
+
+    Action act_;
+    
+    //各种动作资源
+
+    Action::TexSeq actTexStanding_;
+    Action::KpSeq  actKpStanding_;
+
+    Action::TexSeq actTexRunning_;
+    Action::KpSeq  actKpRunning_;
+
+    Action::TexSeq actTexJumping_;
+    Action::KpSeq  actKpJumping_;
+
+    Action::TexSeq actTexShifting_;
+    Action::KpSeq  actKpShifting_;
 };
 
 #endif //__ACTOR_H__
