@@ -135,7 +135,10 @@ void Actor::UpdateVelocity(double time)
             vel_.x = glm::max(0.0f, vel_.x + airFricAccVel_.x * t);
     }
 
-    vel_.x = clamp(vel_.x, -maxFloatingVel_, maxFloatingVel_);
+    if(state_ == State::Jumping)
+        vel_.x = clamp(vel_.x, -maxFloatingVel_, maxFloatingVel_);
+    else
+        vel_.x = clamp(vel_.x, -runningVel_, runningVel_);
 }
 
 void Actor::_UpdateStanding(double time)

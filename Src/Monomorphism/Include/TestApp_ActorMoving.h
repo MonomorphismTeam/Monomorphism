@@ -56,7 +56,7 @@ namespace Test
 
             actor_.SetRunningVel(0.012f);
             actor_.SetFloatingAccVel(0.00006f);
-            actor_.SetShiftingVel(0.04f);
+            actor_.SetShiftingVel(0.02f);
             actor_.SetJumpingVel(0.025f);
 
             actor_.SetMaxFloatingVel(0.012f);
@@ -82,9 +82,11 @@ namespace Test
                 actor_.GetUserInput().Reset();
                 actor_.GetEnvirInput().Reset();
 
-                //给予重力加速度，做碰撞检测
+                //给予重力加速度
                 actor_.GetAccVelocity().y += -0.00008f;
                 actor_.UpdateVelocity(clock_.ElapsedTime());
+
+                //移动和碰撞检测
                 actor_.GetPosition() += actor_.GetVelocity() *
                                         static_cast<float>(clock_.ElapsedTime());
                 if(actor_.GetPosition().y < 1.0f)
