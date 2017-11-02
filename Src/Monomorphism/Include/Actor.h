@@ -21,7 +21,8 @@ namespace _ActorAux
         Standing,
         Running,
         Jumping,
-        Shifting
+        Shifting,
+        AttackingWithSword,
     };
 
     enum class ActorDirection
@@ -39,16 +40,18 @@ namespace _ActorAux
 
         void Reset(void)
         {
-            left  = false;
-            right = false;
-            jump  = false;
-            shift = false;
+            left   = false;
+            right  = false;
+            jump   = false;
+            shift  = false;
+            attack = false;
         }
 
         bool left;
         bool right;
         bool jump;
         bool shift;
+        bool attack;
     };
 
     struct ActorEnvirInput
@@ -91,6 +94,8 @@ public:
     using UserInput = _ActorAux::ActorUserInput;
     using EnvirInput = _ActorAux::ActorEnvirInput;
 
+    using TransSeq = std::vector<glm::mat3>;
+
     Actor(void);
 
     void Initialize(void);
@@ -109,25 +114,29 @@ public:
     glm::vec2 &GetVelocity(void);
     glm::vec2 &GetAccVelocity(void);
 
-    void SetRunningVel(float Vel);      //移动时自给的水平加速度
-    void SetFloatingAccVel(float accVel);     //在空中时自给的水平加速度
-    void SetJumpingVel(float vel);         //跳跃竖直方向带来的初速度
-    void SetShiftingVel(float vel);        //闪避速度
+    void SetRunningVel(float Vel);        //移动时自给的水平加速度
+    void SetFloatingAccVel(float accVel); //在空中时自给的水平加速度
+    void SetJumpingVel(float vel);        //跳跃竖直方向带来的初速度
+    void SetShiftingVel(float vel);       //闪避速度
 
     void SetMaxFloatingVel(float vel);
     void SetFloatingFricAccVel(float accVel);
+
+    void SetWeapon(Weapon *weapon);
 
 private:
     void _UpdateStanding(double time);
     void _UpdateRunning(double time);
     void _UpdateJumping(double time);
     void _UpdateShifting(double time);
+    void _UpdateAttackingWithSword(double time);
 
     void _DrawNormalAction(const OWE::ScreenScale &scale);
     void _DrawStanding(const OWE::ScreenScale &scale);
     void _DrawRunning(const OWE::ScreenScale &scale);
     void _DrawJumping(const OWE::ScreenScale &scale);
     void _DrawShifting(const OWE::ScreenScale &scale);
+    void _DrawAttackingWithSword(const OWE::ScreenScale &scale);
 
 private:
     glm::vec2 pos_;
@@ -138,9 +147,10 @@ private:
     glm::vec2 airFricAccVel_; //阻力加速度
 
     /*
-        地面移动完全由玩家控制
+        地面移动直接给速度
         空中有阻力，移动由加速度给出
     */
+
     float runningVel_;          //水平移动速度
     float floatingAccVel_;      //空中移动加速度
 
@@ -171,6 +181,21 @@ private:
 
     Action::TexSeq actTexShifting_;
     Action::KpSeq  actKpShifting_;
+
+    Action::TexSeq actTexAttackingWithSword_;
+    Action::KpSeq  actKpAttackingWithSword_;
+
+    //携带的武器
+
+    Weapon *weapon_;
+
+    //武器的仿射变换
+
+    TransSeq weaponTransAttackingWithSword_;
+
+    //攻击行为是否发生在跳跃时
+
+    bool attackWhenFloating_;
 };
 
 #endif //__ACTOR_H__

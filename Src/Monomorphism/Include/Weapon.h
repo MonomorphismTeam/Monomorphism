@@ -12,21 +12,20 @@ Created by AirGuanZ
 #include <OWE.h>
 
 class DamageArea;
+class Actor;
 
 class Weapon
 {
 public:
     virtual ~Weapon(void) { }
 
-    virtual void Update(const glm::mat3 &trans, const OWE::ScreenScale &scale) = 0;
-    virtual void Draw(void) = 0;
+    virtual void Restart(void) = 0;
+    virtual void Update(double time) = 0;
+    virtual void Draw(const Actor &actor, const OWE::ScreenScale &scale) = 0;
 
     virtual std::vector<OWE::BoundingArea> GetDamageAreas(void) = 0;
-    
-    virtual void Attack(void) = 0;
-    virtual void Terminate(void) = 0;
 
-    virtual bool IsBusy(void) const = 0;
+    virtual bool Busy(void) const = 0;
 };
 
 #endif //__WEAPON_H__

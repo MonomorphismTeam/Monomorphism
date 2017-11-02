@@ -20,6 +20,8 @@ using namespace OWE;
 
 namespace
 {
+    //从ConfigureFile中提取指定动作的纹理资源路径和关键帧时间点
+    //动作名 == Section名
     void _LoadActionRsc(const ConfigureFile &conf, const string &action,
                         Actor::Action::TexSeq &texSeq, Actor::Action::KpSeq &kpSeq)
     {
@@ -63,6 +65,10 @@ Actor::Actor(void)
 
     user_.Reset();
     envir_.Reset();
+
+    weapon_ = nullptr;
+
+    attackWhenFloating_ = true;
 }
 
 void Actor::Initialize(void)
@@ -119,13 +125,22 @@ void Actor::Update(double time)
     case State::Shifting:
         _UpdateShifting(time);
         break;
+    case State::AttackingWithSword:
+        _UpdateAttackingWithSword(time);
+        break;
     }
+
+    if(weapon_)
+        weapon_->Update(time);
 }
 
 void Actor::UpdateVelocity(double time)
 {
     float t = static_cast<float>(time);
-    vel_ += t * accVel_;
+
+    if(state_ != State::AttackingWithSword || !attackWhenFloating_) //空中挥剑保持浮空
+        vel_.y += t * accVel_.y;
+    vel_.x += t * accVel_.x;
 
     if(sign(vel_.x) != sign(airFricAccVel_.x))
     {
@@ -145,6 +160,13 @@ void Actor::_UpdateStanding(double time)
 {
     State oldState = state_;
     state_ = State::Standing;
+
+    //若按了攻击键且武器处于可用状态，进入攻击状态
+    if(user_.attack && weapon_ && !weapon_->Busy())
+    {
+        _UpdateAttackingWithSword(time);
+        return;
+    }
 
     //若脚下悬空或按了跳跃键，进入跳跃姿态
     if(!envir_.colDown || user_.jump)
@@ -183,6 +205,13 @@ void Actor::_UpdateRunning(double time)
 {
     State oldState = state_;
     state_ = State::Running;
+
+    //若按了攻击键且武器处于可用状态，进入攻击状态
+    if(user_.attack && weapon_ && !weapon_->Busy())
+    {
+        _UpdateAttackingWithSword(time);
+        return;
+    }
 
     //若脚下悬空或按了跳跃键，进入跳跃姿态
     if(!envir_.colDown || user_.jump)
@@ -226,6 +255,13 @@ void Actor::_UpdateJumping(double time)
 {
     State oldState = state_;
     state_ = State::Jumping;
+
+    //在空中也是能进入攻击状体的...
+    if(user_.attack && weapon_ && !weapon_->Busy())
+    {
+        _UpdateAttackingWithSword(time);
+        return;
+    }
 
     //若脚下着地，进入站立姿态
     //加上!jump条件是因为主动起跳时也符合colDown条件
@@ -274,6 +310,8 @@ void Actor::_UpdateShifting(double time)
     State oldState = state_;
     state_ = State::Shifting;
 
+    //攻击? ...Shifting的时候还是算了
+
     //时间结束，自动转移为Standing状态
     if(act_.End())
     {
@@ -302,6 +340,44 @@ void Actor::_UpdateShifting(double time)
     act_.Tick(time);
 }
 
+//从别的状态转移到_UpdateAttackingWithSword，!weapon_->Busy()的确认由调用方负责
+void Actor::_UpdateAttackingWithSword(double time)
+{
+    assert(weapon_);
+
+    State oldState = state_;
+    state_ = State::AttackingWithSword;
+
+    //时间结束，自动转移为Standing
+    if(oldState == State::AttackingWithSword && act_.End())
+    {
+        _UpdateStanding(time);
+        return;
+    }
+
+    //是否是新进入Attacking状态
+    if(oldState != state_)
+    {
+        assert(!weapon_->Busy());
+
+        //如果是跳跃->攻击转移，置空中攻击标志为true
+        attackWhenFloating_ = (oldState == State::Jumping);
+
+        //刚进入攻击状态的时候还有机会改方向
+        if(user_.left)
+            dir_ = Direction::Left;
+        else if(user_.right)
+            dir_ = Direction::Right;
+
+        act_.SetData(&actTexAttackingWithSword_, &actKpAttackingWithSword_);
+        act_.EnableLoop(false);
+        act_.Restart();
+        weapon_->Restart();
+    }
+
+    act_.Tick(time);
+}
+
 void Actor::Draw(const ScreenScale &scale)
 {
     switch(state_)
@@ -318,9 +394,15 @@ void Actor::Draw(const ScreenScale &scale)
     case State::Shifting:
         _DrawShifting(scale);
         break;
+    case State::AttackingWithSword:
+        _DrawAttackingWithSword(scale);
+        break;
     default:
         abort();
     }
+
+    if(weapon_)
+        weapon_->Draw(*this, scale);
 }
 
 void Actor::_DrawNormalAction(const ScreenScale &scale)
@@ -385,6 +467,11 @@ void Actor::_DrawShifting(const ScreenScale &scale)
     _DrawNormalAction(scale);
 }
 
+void Actor::_DrawAttackingWithSword(const ScreenScale &scale)
+{
+    _DrawNormalAction(scale);
+}
+
 vec2 &Actor::GetPosition(void)
 {
     return pos_;
@@ -433,4 +520,9 @@ void Actor::SetMaxFloatingVel(float vel)
 void Actor::SetFloatingFricAccVel(float accVel)
 {
     floatingFricAccVel_ = accVel;
+}
+
+void Actor::SetWeapon(Weapon *weapon)
+{
+    weapon_ = weapon;
 }
