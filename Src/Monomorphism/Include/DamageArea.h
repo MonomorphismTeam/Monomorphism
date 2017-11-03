@@ -18,9 +18,15 @@ class DamageArea
 {
 public:
     virtual ~DamageArea(void) { }
+
+    virtual void Update(double time) = 0;
+    virtual void Draw(const OWE::ScreenScale &scale) = 0;
+
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) = 0;
     virtual void Damage(Monster *monster) = 0;
     virtual void Damage(Actor *actor) = 0;
+
+    virtual bool IsDead(void) const = 0;
 };
 
 #endif //__DAMAGE_AREA_H__

@@ -17,12 +17,14 @@ class Item
 public:
     virtual ~Item(void) { }
 
-    virtual void Update(void) = 0;
-    virtual void Draw(void) = 0;
+    virtual void Update(double time) = 0;
+    virtual void Draw(const OWE::ScreenScale &scale) = 0;
 
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) const = 0;
     virtual void InteractWithCreature(Creature *creature) = 0;
     virtual void InteractWithActor(Actor *actor) = 0;
+
+    virtual bool IsDead(void) const = 0;
 };
 
 #endif //__ITEM_H__
