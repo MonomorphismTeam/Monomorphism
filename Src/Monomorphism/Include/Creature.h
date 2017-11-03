@@ -14,8 +14,8 @@ class Creature
 public:
     virtual ~Creature(void) { }
 
-    virtual void Update(void) = 0;
-    virtual void Draw(void) = 0;
+    virtual void Update(double time) = 0;
+    virtual void Draw(const OWE::ScreenScale &scale) = 0;
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) const = 0;
 
     glm::vec2 SetPosition(const glm::vec2 &pos);
