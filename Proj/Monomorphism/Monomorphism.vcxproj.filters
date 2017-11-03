@@ -38,6 +38,12 @@
     <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp">
       <Filter>ConfigureFile</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp">
+      <Filter>Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\NormalBlock.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -71,14 +77,17 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
-    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h">
-      <Filter>ConfigureFile</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h">
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_ActorMoving.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h">
+      <Filter>Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\NormalBlock.h">
+      <Filter>BlockArea</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -12,8 +12,7 @@ Created by AirGuanZ
 class Creature
 {
 public:
-    Creature(void);
-    virtual ~Creature(void);
+    virtual ~Creature(void) { }
 
     virtual void Update(void) = 0;
     virtual void Draw(void) = 0;
@@ -22,10 +21,6 @@ public:
     glm::vec2 SetPosition(const glm::vec2 &pos);
     glm::vec2 GetPosition(void) const;
     glm::vec2 GetVelocity(void) const;
-
-private:
-    glm::vec2 position_;
-    glm::vec2 velocity_;
 };
 
 #endif //__CREATURE_AREA_H__
