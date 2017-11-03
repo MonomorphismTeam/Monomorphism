@@ -21,6 +21,8 @@ public:
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) = 0;
     virtual void Damage(Monster *monster) = 0;
     virtual void Damage(Actor *actor) = 0;
+
+    virtual bool IsDead(void) const = 0;
 };
 
 #endif //__DAMAGE_AREA_H__

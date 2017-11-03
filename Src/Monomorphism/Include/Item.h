@@ -23,6 +23,8 @@ public:
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) const = 0;
     virtual void InteractWithCreature(Creature *creature) = 0;
     virtual void InteractWithActor(Actor *actor) = 0;
+
+    virtual bool IsDead(void) const = 0;
 };
 
 #endif //__ITEM_H__

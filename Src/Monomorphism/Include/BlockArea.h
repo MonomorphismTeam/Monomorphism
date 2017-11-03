@@ -18,6 +18,8 @@ public:
     virtual void Draw(void) const = 0;
 
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) const = 0;
+
+    virtual bool IsDead(void) const = 0;
 };
 
 #endif //__BLOCK_AREA_H__
