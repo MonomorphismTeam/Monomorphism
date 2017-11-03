@@ -32,6 +32,11 @@ inline glm::mat3 Scale(const glm::vec2 &s)
                      0.0f, 0.0f, 1.0f);
 }
 
+inline glm::mat3 Rotate(float radian)
+{
+    return glm::mat3();
+}
+
 __OWE_END_NAMESPACE__(Transform)
 __OWE_END_NAMESPACE__(OWE)
 

@@ -5,6 +5,7 @@ Created by AirGuanZ
 ================================================================*/
 #include <limits>
 #include <numeric>
+#include <sstream>
 #include <string>
 
 #include <glm\glm.hpp>
@@ -39,6 +40,25 @@ namespace
             if(!LoadTexture2DFromFile(texFilename, Texture2D::Desc(), texSeq[i]))
                 throw FatalError("Failed to load texture from file: " + texFilename);
             kpSeq[i] = stod(conf(action, "Kp" + stri)) + (i ? kpSeq[i - 1] : 0.0);
+        }
+    }
+
+    //从ConfigureFile中提取指定攻击动作中武器的仿射变换序列
+    //动作名 == Section名
+    void _LoadWeaponTrans(const ConfigureFile &conf, const string &action, Actor::WeaponTransSeq &transSeq)
+    {
+        transSeq.clear();
+
+        int cnt = stoi(conf(action));
+        transSeq.resize(cnt);
+
+        for(int i = 0; i != cnt; ++i)
+        {
+            //Weaponi = 旋转角 + x位移 + y位移
+            float delta;
+            stringstream sst(conf("Weapon" + to_string(i)));
+            sst >> delta >> transSeq[i].pos.x >> transSeq[i].pos.y;
+            transSeq[i].delta = degrees(delta);
         }
     }
 }
@@ -83,6 +103,9 @@ void Actor::Initialize(void)
     _LoadActionRsc(conf, "Running",  actTexRunning_,  actKpRunning_);
     _LoadActionRsc(conf, "Jumping",  actTexJumping_,  actKpJumping_);
     _LoadActionRsc(conf, "Shifting", actTexShifting_, actKpShifting_);
+    
+    _LoadActionRsc(conf, "Sword", actTexAttackingWithSword_, actKpAttackingWithSword_);
+    _LoadWeaponTrans(conf, "Sword", weaponTransAttackingWithSword_);
 
     conf.Clear();
 }
@@ -525,4 +548,10 @@ void Actor::SetFloatingFricAccVel(float accVel)
 void Actor::SetWeapon(Weapon *weapon)
 {
     weapon_ = weapon;
+}
+
+const Actor::WeaponTrans &Actor::GetWeaponTrans(void) const
+{
+    assert(state_ == State::AttackingWithSword);
+    return weaponTransAttackingWithSword_[act_.CurrentTexIdx()];
 }

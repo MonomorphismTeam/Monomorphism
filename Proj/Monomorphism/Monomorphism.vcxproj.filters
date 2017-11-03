@@ -38,6 +38,9 @@
     <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp">
       <Filter>ConfigureFile</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\Sword.cpp">
+      <Filter>Weapon</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -71,14 +74,14 @@
       <Filter>Test</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
-    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h">
-      <Filter>ConfigureFile</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h">
       <Filter>Actor</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_ActorMoving.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Sword.h">
+      <Filter>Weapon</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -22,6 +22,7 @@
     <ClCompile Include="..\..\Src\Monomorphism\Actor.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\Sword.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\Actor.h" />
@@ -31,6 +32,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Item.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Sword.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp2.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp3.h" />

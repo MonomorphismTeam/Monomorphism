@@ -74,6 +74,13 @@ namespace _ActorAux
         bool colUp;
         bool colDown;
     };
+
+    //武器的位置变换
+    struct _WeaponTrans
+    {
+        float delta;
+        glm::vec2 pos;
+    };
 }
 
 /* 状态更新流程：
@@ -94,7 +101,8 @@ public:
     using UserInput = _ActorAux::ActorUserInput;
     using EnvirInput = _ActorAux::ActorEnvirInput;
 
-    using TransSeq = std::vector<glm::mat3>;
+    using WeaponTrans = _ActorAux::_WeaponTrans;
+    using WeaponTransSeq = std::vector<WeaponTrans>;
 
     Actor(void);
 
@@ -123,6 +131,7 @@ public:
     void SetFloatingFricAccVel(float accVel);
 
     void SetWeapon(Weapon *weapon);
+    const WeaponTrans &GetWeaponTrans(void) const;
 
 private:
     void _UpdateStanding(double time);
@@ -186,15 +195,12 @@ private:
     Action::KpSeq  actKpAttackingWithSword_;
 
     //携带的武器
-
     Weapon *weapon_;
 
     //武器的仿射变换
-
-    TransSeq weaponTransAttackingWithSword_;
+    WeaponTransSeq weaponTransAttackingWithSword_;
 
     //攻击行为是否发生在跳跃时
-
     bool attackWhenFloating_;
 };
 
