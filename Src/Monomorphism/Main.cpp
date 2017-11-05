@@ -8,12 +8,13 @@ Created by AirGuanZ
 #include "Include\TestApp3.h"
 #include "Include\TestApp4_TextureAnimation.h"
 #include "Include\TestApp_ActorMoving.h"
+#include "Include\TestApp_ActorAttackingWithSword.h"
 
 int main(void)
 {
     try
     {
-        Test::TestApp_ActorMoving app;
+        Test::TestApp_ActorAttackingWithSword app;
         app.Run();
     }
     catch(const OWE::FatalError &err)

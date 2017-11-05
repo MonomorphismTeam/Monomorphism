@@ -78,8 +78,14 @@ namespace _ActorAux
             return idx_;
         }
 
-        void SetData(const TexSeq *texSeq, const KpSeq *kpSeq)
+        glm::vec2 CurrentTexSize(void) const
         {
+            return texSize_;
+        }
+
+        void SetData(const TexSeq *texSeq, const KpSeq *kpSeq, const glm::vec2 &texSize)
+        {
+            texSize_ = texSize;
             if(!texSeq || !kpSeq)
             {
                 Clear();
@@ -104,6 +110,7 @@ namespace _ActorAux
 
         const TexSeq *texSeq_;
         const KpSeq *kpSeq_;
+        glm::vec2 texSize_;
     };
 }
 

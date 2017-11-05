@@ -24,7 +24,7 @@ namespace
     //从ConfigureFile中提取指定动作的纹理资源路径和关键帧时间点
     //动作名 == Section名
     void _LoadActionRsc(const ConfigureFile &conf, const string &action,
-                        Actor::Action::TexSeq &texSeq, Actor::Action::KpSeq &kpSeq)
+                        Actor::Action::TexSeq &texSeq, Actor::Action::KpSeq &kpSeq, vec2 &texSizeRatio)
     {
         texSeq.clear();
         kpSeq.clear();
@@ -41,25 +41,11 @@ namespace
                 throw FatalError("Failed to load texture from file: " + texFilename);
             kpSeq[i] = stod(conf(action, "Kp" + stri)) + (i ? kpSeq[i - 1] : 0.0);
         }
-    }
 
-    //从ConfigureFile中提取指定攻击动作中武器的仿射变换序列
-    //动作名 == Section名
-    void _LoadWeaponTrans(const ConfigureFile &conf, const string &action, Actor::WeaponTransSeq &transSeq)
-    {
-        transSeq.clear();
-
-        int cnt = stoi(conf(action));
-        transSeq.resize(cnt);
-
-        for(int i = 0; i != cnt; ++i)
-        {
-            //Weaponi = 旋转角 + x位移 + y位移
-            float delta;
-            stringstream sst(conf("Weapon" + to_string(i)));
-            sst >> delta >> transSeq[i].pos.x >> transSeq[i].pos.y;
-            transSeq[i].delta = degrees(delta);
-        }
+        stringstream sst(conf(action, "TexSize"));
+        sst >> texSizeRatio.x >> texSizeRatio.y;
+        if(!sst)
+            throw FatalError("Failed to load texture size ratio for action: " + action);
     }
 }
 
@@ -99,13 +85,11 @@ void Actor::Initialize(void)
     if(!conf.Load(ACTOR_ACTION_RESOURCE))
         throw FatalError(string("Failed to load configure file: ") + ACTOR_ACTION_RESOURCE);
 
-    _LoadActionRsc(conf, "Standing", actTexStanding_, actKpStanding_);
-    _LoadActionRsc(conf, "Running",  actTexRunning_,  actKpRunning_);
-    _LoadActionRsc(conf, "Jumping",  actTexJumping_,  actKpJumping_);
-    _LoadActionRsc(conf, "Shifting", actTexShifting_, actKpShifting_);
-    
-    _LoadActionRsc(conf, "Sword", actTexAttackingWithSword_, actKpAttackingWithSword_);
-    _LoadWeaponTrans(conf, "Sword", weaponTransAttackingWithSword_);
+    _LoadActionRsc(conf, "Standing", actTexStanding_, actKpStanding_, actTexSizeStanding_);
+    _LoadActionRsc(conf, "Running",  actTexRunning_,  actKpRunning_, actTexSizeRunning_);
+    _LoadActionRsc(conf, "Jumping",  actTexJumping_,  actKpJumping_, actTexSizeJumping_);
+    _LoadActionRsc(conf, "Shifting", actTexShifting_, actKpShifting_, actTexSizeShifting_);
+    _LoadActionRsc(conf, "Sword", actTexAttackingWithSword_, actKpAttackingWithSword_, actTexSizeAttackingWithSword_);
 
     conf.Clear();
 }
@@ -154,7 +138,7 @@ void Actor::Update(double time)
     }
 
     if(weapon_)
-        weapon_->Update(time);
+        weapon_->Update(*this, time);
 }
 
 void Actor::UpdateVelocity(double time)
@@ -215,7 +199,7 @@ void Actor::_UpdateStanding(double time)
     //是否是新进入Standing状态
     if(state_ != oldState)
     {
-        act_.SetData(&actTexStanding_, &actKpStanding_);
+        act_.SetData(&actTexStanding_, &actKpStanding_, actTexSizeStanding_);
         act_.EnableLoop(true);
         act_.Restart();
     }
@@ -264,7 +248,7 @@ void Actor::_UpdateRunning(double time)
     if(state_ != oldState || newDir != dir_)
     {
         dir_ = newDir;
-        act_.SetData(&actTexRunning_, &actKpRunning_);
+        act_.SetData(&actTexRunning_, &actKpRunning_, actTexSizeRunning_);
         act_.EnableLoop(true);
         act_.Restart();
     }
@@ -297,7 +281,7 @@ void Actor::_UpdateJumping(double time)
     //是否是新进入Jumping状态
     if(state_ != oldState)
     {
-        act_.SetData(&actTexJumping_, &actKpJumping_);
+        act_.SetData(&actTexJumping_, &actKpJumping_, actTexSizeJumping_);
         act_.EnableLoop(true);
         act_.Restart();
 
@@ -352,7 +336,7 @@ void Actor::_UpdateShifting(double time)
         else if(user_.right)
             dir_ = Direction::Right;
 
-        act_.SetData(&actTexShifting_, &actKpShifting_);
+        act_.SetData(&actTexShifting_, &actKpShifting_, actTexSizeShifting_);
         act_.EnableLoop(false);
         act_.Restart();
     }
@@ -392,12 +376,13 @@ void Actor::_UpdateAttackingWithSword(double time)
         else if(user_.right)
             dir_ = Direction::Right;
 
-        act_.SetData(&actTexAttackingWithSword_, &actKpAttackingWithSword_);
+        act_.SetData(&actTexAttackingWithSword_, &actKpAttackingWithSword_, actTexSizeAttackingWithSword_);
         act_.EnableLoop(false);
         act_.Restart();
         weapon_->Restart();
     }
 
+    vel_.x = dir_ == Direction::Right ? runningVel_ / 3.0f : -runningVel_ / 3.0f;
     act_.Tick(time);
 }
 
@@ -423,15 +408,12 @@ void Actor::Draw(const ScreenScale &scale)
     default:
         abort();
     }
-
-    if(weapon_)
-        weapon_->Draw(*this, scale);
 }
 
 void Actor::_DrawNormalAction(const ScreenScale &scale)
 {
-    vec2 LB = pos_ - vec2(texSize_.x / 2.0f, 0.0f);
-    vec2 RT = pos_ + vec2(texSize_.x / 2.0f, texSize_.y);
+    vec2 LB = pos_ - vec2(act_.CurrentTexSize().x * texSize_.x / 2.0f, 0.0f);
+    vec2 RT = pos_ + vec2(act_.CurrentTexSize().x * texSize_.x / 2.0f, act_.CurrentTexSize().y * texSize_.y);
     vec2 uvLB, uvRT;
     if(dir_ == Direction::Left)
     {
@@ -461,8 +443,8 @@ void Actor::_DrawRunning(const ScreenScale &scale)
 
 void Actor::_DrawJumping(const ScreenScale &scale)
 {
-    vec2 LB = pos_ - vec2(texSize_.x / 2.0f, 0.0f);
-    vec2 RT = pos_ + vec2(texSize_.x / 2.0f, texSize_.y);
+    vec2 LB = pos_ - vec2(act_.CurrentTexSize().x * texSize_.x / 2.0f, 0.0f);
+    vec2 RT = pos_ + vec2(act_.CurrentTexSize().x * texSize_.x / 2.0f, act_.CurrentTexSize().y * texSize_.y);
     vec2 uvLB, uvRT;
     if(dir_ == Direction::Left)
     {
@@ -548,10 +530,4 @@ void Actor::SetFloatingFricAccVel(float accVel)
 void Actor::SetWeapon(Weapon *weapon)
 {
     weapon_ = weapon;
-}
-
-const Actor::WeaponTrans &Actor::GetWeaponTrans(void) const
-{
-    assert(state_ == State::AttackingWithSword);
-    return weaponTransAttackingWithSword_[act_.CurrentTexIdx()];
 }

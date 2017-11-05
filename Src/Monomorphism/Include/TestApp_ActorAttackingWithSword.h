@@ -1,15 +1,16 @@
 /*================================================================
-Filename: TestApp_ActorMoving.h
-Date: 2017.10.30
+Filename: TestApp_ActorAttackingWithSword.h
+Date: 2017.11.5
 Created by AirGuanZ
 ================================================================*/
-#ifndef __TEST_ACTOR_MOVING_H__
-#define __TEST_ACTOR_MOVING_H__
+#ifndef __TEST_APP_ACTOR_ATTACKING_WITH_SWORD_H__
+#define __TEST_APP_ACTOR_ATTACKING_WITH_SWORD_H__
 
 #include <glm\glm.hpp>
 #include <OWE.h>
 
 #include "Actor.h"
+#include "Sword.h"
 
 namespace Test
 {
@@ -17,7 +18,7 @@ namespace Test
     using namespace glm;
     using namespace OWE;
 
-    class TestApp_ActorMoving : public KeyboardListener
+    class TestApp_ActorAttackingWithSword : public KeyboardListener
     {
         Actor actor_;
 
@@ -26,6 +27,7 @@ namespace Test
 
         bool done_;
         bool space_;
+        bool mouseLeft_;
 
     public:
         void KeyDown(KEY_CODE kc)
@@ -69,12 +71,15 @@ namespace Test
             scale_.Reinit(40.0f, 40.0f);
             done_ = false;
             space_ = false;
+            mouseLeft_ = false;
             clock_.Restart();
-            
+
+            actor_.SetWeapon(new Sword());
+
             while(!done_)
             {
                 clock_.Tick();
-                
+
                 actor_.ClearAccVel();
                 actor_.Update(clock_.ElapsedTime());
 
@@ -88,14 +93,14 @@ namespace Test
 
                 //移动和碰撞检测
                 actor_.GetPosition() += actor_.GetVelocity() *
-                                        static_cast<float>(clock_.ElapsedTime());
+                    static_cast<float>(clock_.ElapsedTime());
                 if(actor_.GetPosition().y < 1.0f)
                 {
                     actor_.GetPosition().y = 1.0f;
                     actor_.GetVelocity().y = 0.0f;
                     actor_.GetEnvirInput().colDown = true;
                 }
-                
+
                 //读取用户操作
                 if(im.IsKeyPressed(KEY_CODE::KEY_A))
                     actor_.GetUserInput().left = true;
@@ -112,6 +117,15 @@ namespace Test
                     }
                 }
                 else space_ = false;
+                if(im.IsMouseButtonPressed(MOUSE_BUTTON::BUTTON_LEFT))
+                {
+                    if(!mouseLeft_)
+                    {
+                        actor_.GetUserInput().attack = true;
+                        mouseLeft_ = true;
+                    }
+                }
+                else mouseLeft_ = false;
 
                 rc.ClearColorAndDepth();
                 actor_.Draw(scale_);
@@ -122,4 +136,4 @@ namespace Test
     };
 }
 
-#endif //__TEST_ACTOR_MOVING_H__
+#endif //__TEST_APP_ACTOR_ATTACKING_WITH_SWORD_H__

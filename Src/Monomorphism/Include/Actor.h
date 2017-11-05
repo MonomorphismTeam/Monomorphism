@@ -101,9 +101,6 @@ public:
     using UserInput = _ActorAux::ActorUserInput;
     using EnvirInput = _ActorAux::ActorEnvirInput;
 
-    using WeaponTrans = _ActorAux::_WeaponTrans;
-    using WeaponTransSeq = std::vector<WeaponTrans>;
-
     Actor(void);
 
     void Initialize(void);
@@ -131,7 +128,6 @@ public:
     void SetFloatingFricAccVel(float accVel);
 
     void SetWeapon(Weapon *weapon);
-    const WeaponTrans &GetWeaponTrans(void) const;
 
 private:
     void _UpdateStanding(double time);
@@ -181,24 +177,26 @@ private:
 
     Action::TexSeq actTexStanding_;
     Action::KpSeq  actKpStanding_;
+    glm::vec2      actTexSizeStanding_;
 
     Action::TexSeq actTexRunning_;
     Action::KpSeq  actKpRunning_;
+    glm::vec2      actTexSizeRunning_;
 
     Action::TexSeq actTexJumping_;
     Action::KpSeq  actKpJumping_;
+    glm::vec2      actTexSizeJumping_;
 
     Action::TexSeq actTexShifting_;
     Action::KpSeq  actKpShifting_;
+    glm::vec2      actTexSizeShifting_;
 
     Action::TexSeq actTexAttackingWithSword_;
     Action::KpSeq  actKpAttackingWithSword_;
+    glm::vec2      actTexSizeAttackingWithSword_;
 
     //携带的武器
     Weapon *weapon_;
-
-    //武器的仿射变换
-    WeaponTransSeq weaponTransAttackingWithSword_;
 
     //攻击行为是否发生在跳跃时
     bool attackWhenFloating_;

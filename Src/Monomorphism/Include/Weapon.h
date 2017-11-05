@@ -20,10 +20,10 @@ public:
     virtual ~Weapon(void) { }
 
     virtual void Restart(void) = 0;
-    virtual void Update(double time) = 0;
+    virtual void Update(const Actor &actor, double time) = 0;
     virtual void Draw(const Actor &actor, const OWE::ScreenScale &scale) = 0;
 
-    virtual std::vector<OWE::BoundingArea> GetDamageAreas(void) = 0;
+    virtual std::vector<DamageArea*> GetDamageAreas(void) const = 0;
 
     virtual bool Busy(void) const = 0;
 };
