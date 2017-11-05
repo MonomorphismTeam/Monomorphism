@@ -383,6 +383,7 @@ void Actor::_UpdateAttackingWithSword(double time)
     }
 
     vel_.x = dir_ == Direction::Right ? runningVel_ / 3.0f : -runningVel_ / 3.0f;
+    vel_.y = 0.0f;
     act_.Tick(time);
 }
 
