@@ -12,7 +12,7 @@ Created by AirGuanZ
 #include <OWE.h>
 
 class Actor;
-class Monster;
+class Creature;
 
 class DamageArea
 {
@@ -22,8 +22,8 @@ public:
     virtual void Update(double time) = 0;
     virtual void Draw(const OWE::ScreenScale &scale) = 0;
 
-    virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) = 0;
-    virtual void Damage(Monster *monster) = 0;
+    virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) const = 0;
+    virtual void Damage(Creature *monster) = 0;
     virtual void Damage(Actor *actor) = 0;
 
     virtual bool IsDead(void) const = 0;

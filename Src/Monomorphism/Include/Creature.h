@@ -22,6 +22,8 @@ public:
     glm::vec2 GetPosition(void) const;
     glm::vec2 GetVelocity(void) const;
 
+    virtual void AddHP(float ch) = 0;
+
     virtual bool IsDead(void) const = 0;
 };
 

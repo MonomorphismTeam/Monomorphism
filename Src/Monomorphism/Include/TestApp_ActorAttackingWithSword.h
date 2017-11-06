@@ -127,6 +127,8 @@ namespace Test
                 }
                 else mouseLeft_ = false;
 
+                //scale_.SetCentrePosition(actor_.GetPosition() + vec2(0.0f, 3.0f));
+
                 rc.ClearColorAndDepth();
                 actor_.Draw(scale_);
                 rc.DoEvents();

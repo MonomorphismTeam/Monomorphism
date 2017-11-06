@@ -426,7 +426,7 @@ void Actor::_DrawNormalAction(const ScreenScale &scale)
         uvLB = vec2(0.0f, 0.0f);
         uvRT = vec2(1.0f, 1.0f);
     }
-    ImmediateRenderer::DrawTexturedBox(
+    ImmediateRenderer::DrawTexturedBoxWithScreenTrans(
         LB, RT, uvLB, uvRT,
         act_.CurrentTex(), scale,
         ImmediateRenderer::RenderMode::AlphaTest);
@@ -462,7 +462,7 @@ void Actor::_DrawJumping(const ScreenScale &scale)
         tex = actTexJumping_[0];
     else
         tex = actTexJumping_[1];
-    ImmediateRenderer::DrawTexturedBox(
+    ImmediateRenderer::DrawTexturedBoxWithScreenTrans(
         LB, RT, uvLB, uvRT,
         tex, scale,
         ImmediateRenderer::RenderMode::AlphaTest);
