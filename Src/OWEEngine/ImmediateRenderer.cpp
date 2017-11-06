@@ -203,5 +203,56 @@ void _ImmediateRenderer::DrawTexturedBox(
     }
 }
 
+void _ImmediateRenderer::DrawTexturedBoxWithScreenTrans(
+    const glm::vec2 &LB, const glm::vec2 &RT,
+    const glm::vec2 &uvLB, const glm::vec2 &uvRT,
+    const Texture2DView tex, const ScreenScale &scale,
+    RenderMode mode, const RenderDesc &desc)
+{
+    assert(IsAvailable());
+    glm::mat3 posTransMat = scale.ProjMatrix() *
+                            scale.TransMatrix() *
+                            Transform::Translate(LB) *
+                            Transform::Scale(RT - LB);
+    glm::mat3 texTransMat = Transform::Translate(uvLB) *
+                            Transform::Scale(uvRT - uvLB);
+    switch(mode)
+    {
+    case RenderMode::Basic:
+    {
+        shaderBasic.Bind();
+        attribsBasic->Bind();
+
+        posTransBasic.SetAndApply(posTransMat);
+        texTransBasic.SetAndApply(texTransMat);
+        texBasic.SetAndApply(tex);
+
+        RenderContext::GetInstance().DrawTriangles(6);
+
+        attribsBasic->Unbind();
+        shaderBasic.Unbind();
+        break;
+    }
+    case RenderMode::AlphaTest:
+    {
+        shaderAlphaTest.Bind();
+        attribsAlphaTest->Bind();
+
+        posTransBasic.SetAndApply(posTransMat);
+        texTransBasic.SetAndApply(texTransMat);
+        texBasic.SetAndApply(tex);
+        minAlphaAlphaTest.SetAndApply(desc.alphaThreshold);
+
+        RenderContext::GetInstance().DrawTriangles(6);
+
+        attribsAlphaTest->Unbind();
+        shaderAlphaTest.Unbind();
+        break;
+    }
+    default:
+        abort();
+    }
+}
+
 __OWE_END_NAMESPACE__(_ImmediateRendererAux)
 __OWE_END_NAMESPACE__(OWE)

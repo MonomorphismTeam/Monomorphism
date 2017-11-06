@@ -57,7 +57,11 @@ public:
     glm::vec2 GLToScreen(const glm::vec2 &GLCoord) const;
     glm::vec2 ClientToScreen(const glm::vec2 &clientCoord) const;
 
-    glm::mat3 ProjMatrix(void) const;
+    void SetCentrePosition(const glm::vec2 &cen);
+    glm::vec2 GetCentrePosition(void) const;
+
+    const glm::mat3 &ProjMatrix(void) const;
+    const glm::mat3 &TransMatrix(void) const;
 
 private:
     float xpp_;
@@ -69,6 +73,9 @@ private:
     float screenHeight_;
 
     glm::mat3 projMat_;
+
+    glm::vec2 cen_;
+    glm::mat3 transMat_;
 };
 
 __OWE_END_NAMESPACE__(OWE)

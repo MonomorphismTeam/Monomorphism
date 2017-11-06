@@ -47,6 +47,13 @@ public:
         RenderMode mode = RenderMode::Basic,
         const RenderDesc &desc = RenderDesc());
 
+    static void DrawTexturedBoxWithScreenTrans(
+        const glm::vec2 &LB, const glm::vec2 &RT,
+        const glm::vec2 &uvLB, const glm::vec2 &uvRT,
+        const Texture2DView tex, const ScreenScale &scale,
+        RenderMode mode = RenderMode::Basic,
+        const RenderDesc &desc = RenderDesc());
+
 private:
     static void Initialize(void);
     static bool IsAvailable(void);
