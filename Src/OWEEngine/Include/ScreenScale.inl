@@ -3,6 +3,8 @@ Filename: ScreenScale.inl
 Date: 2017.10.15
 Created by AirGuanZ
 ================================================================*/
+#include "Transform2D.h"
+
 __OWE_BEGIN_NAMESPACE__(OWE)
 
 inline ScreenScale::ScreenScale(void)
@@ -117,9 +119,25 @@ inline glm::vec2 ScreenScale::ClientToScreen(const glm::vec2 &coord) const
     return glm::vec2{ ClientToScreenX(coord.x), ClientToScreenY(coord.y) };
 }
 
-inline glm::mat3 ScreenScale::ProjMatrix(void) const
+inline void ScreenScale::SetCentrePosition(const glm::vec2 &cen)
+{
+    cen_ = cen;
+    transMat_ = Transform::Translate(0.5f * glm::vec2(screenWidth_, screenHeight_) - cen);
+}
+
+inline glm::vec2 ScreenScale::GetCentrePosition(void) const
+{
+    return cen_;
+}
+
+inline const glm::mat3 &ScreenScale::ProjMatrix(void) const
 {
     return projMat_;
+}
+
+inline const glm::mat3 &ScreenScale::TransMatrix(void) const
+{
+    return transMat_;
 }
 
 __OWE_END_NAMESPACE__(OWE)
