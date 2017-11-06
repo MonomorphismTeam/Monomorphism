@@ -532,3 +532,13 @@ void Actor::SetWeapon(Weapon *weapon)
 {
     weapon_ = weapon;
 }
+
+double Actor::GetHP(void) const
+{
+    return HP_;
+}
+
+void Actor::SetHP(double HP)
+{
+    HP_ = HP;
+}

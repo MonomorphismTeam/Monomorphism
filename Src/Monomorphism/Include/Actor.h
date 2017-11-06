@@ -129,6 +129,10 @@ public:
 
     void SetWeapon(Weapon *weapon);
 
+    //生命值
+    double GetHP(void) const;
+    void SetHP(double HP);
+
 private:
     void _UpdateStanding(double time);
     void _UpdateRunning(double time);
@@ -200,6 +204,9 @@ private:
 
     //攻击行为是否发生在跳跃时
     bool attackWhenFloating_;
+
+    //血量
+    double HP_;
 };
 
 #endif //__ACTOR_H__
