@@ -498,6 +498,11 @@ vec2 &Actor::GetAccVelocity(void)
     return accVel_;
 }
 
+Actor::Direction Actor::GetDirection(void) const
+{
+    return dir_;
+}
+
 void Actor::SetRunningVel(float accVel)
 {
     runningVel_ = accVel;
