@@ -45,7 +45,7 @@ public:
         std::vector<T*> rt;
         std::copy_if(objs_.begin(), objs_.end(), std::back_inserter(rt), [&](T *pObj) -> bool
         {
-            for(const BoundingArea &b : pObj->GetBoundingArea())
+            for(const BoundingArea &b : pObj->GetBoundingAreas())
             {
                 if(bound.Intersect(b))
                     return true;
@@ -60,7 +60,7 @@ public:
         std::vector<T*> rt;
         std::copy_if(objs_.begin(), objs_.end(), std::back_inserter(rt), [&](T *pObj) -> bool
         {
-            for(const BoundingArea &b : pObj->GetBoundingArea())
+            for(const BoundingArea &b : pObj->GetBoundingAreas())
             {
                 if(b.Intersect(p, d))
                     return true;

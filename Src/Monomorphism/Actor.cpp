@@ -110,6 +110,12 @@ Actor::EnvirInput &Actor::GetEnvirInput(void)
     return envir_;
 }
 
+void Actor::ResetInput(void)
+{
+    user_.Reset();
+    envir_.Reset();
+}
+
 /*
     根据当前动作决定是否要转移到其他动作
 */
@@ -535,6 +541,8 @@ void Actor::SetFloatingFricAccVel(float accVel)
 
 void Actor::SetWeapon(Weapon *weapon)
 {
+    if(weapon_)
+        delete weapon_;
     weapon_ = weapon;
 }
 

@@ -29,6 +29,9 @@
     <Filter Include="ConfigureFile">
       <UniqueIdentifier>{cce67b36-0fc7-4eb7-8303-79143b209226}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{fc0bf87d-6daa-41dd-9b89-ef9a38a9bde4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
@@ -43,6 +46,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\DamageAreaSword.cpp">
       <Filter>DamageArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\Scene.cpp">
+      <Filter>Scene</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +97,13 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageAreaSword.h">
       <Filter>DamageArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\KeyDown.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_SceneWithActor.h">
+      <Filter>Test</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

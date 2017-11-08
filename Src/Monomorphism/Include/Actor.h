@@ -108,6 +108,7 @@ public:
 
     UserInput &GetUserInput(void);
     EnvirInput &GetEnvirInput(void);
+    void ResetInput(void);
 
     void Update(double time);
     void UpdateVelocity(double time);
@@ -121,6 +122,8 @@ public:
 
     Direction GetDirection(void) const;
 
+    std::vector<OWE::BoundingArea> GetBoundingAreas(void) const;
+
     void SetRunningVel(float Vel);        //移动时自给的水平加速度
     void SetFloatingAccVel(float accVel); //在空中时自给的水平加速度
     void SetJumpingVel(float vel);        //跳跃竖直方向带来的初速度
@@ -129,6 +132,7 @@ public:
     void SetMaxFloatingVel(float vel);
     void SetFloatingFricAccVel(float accVel);
 
+    //设置持有的武器，所有权转移到actor
     void SetWeapon(Weapon *weapon);
 
     //生命值
