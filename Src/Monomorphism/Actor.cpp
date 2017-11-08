@@ -509,6 +509,12 @@ Actor::Direction Actor::GetDirection(void) const
     return dir_;
 }
 
+std::vector<BoundingArea> Actor::GetBoundingAreas(void) const
+{
+    float dx = 17 * texSize_.x, dy = 108 * texSize_.y;
+    return { BoundingArea(BoundingArea::AABB(pos_.x - dx, pos_.y, pos_.x + dx, pos_.y + dy)) };
+}
+
 void Actor::SetRunningVel(float accVel)
 {
     runningVel_ = accVel;
