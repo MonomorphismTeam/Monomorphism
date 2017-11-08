@@ -50,6 +50,12 @@
     <ClCompile Include="..\..\Src\Monomorphism\Scene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\NormalBlock.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp">
+      <Filter>Creature</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -104,6 +110,12 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\KeyDown.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_SceneWithActor.h">
       <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\NormalBlock.h">
+      <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h">
+      <Filter>Creature</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
