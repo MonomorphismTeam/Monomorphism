@@ -89,5 +89,8 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalBlock.h">
       <Filter>BlockArea</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\MosterDamage.h">
+      <Filter>DamageArea</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
