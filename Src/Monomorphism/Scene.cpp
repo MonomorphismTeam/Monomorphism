@@ -58,8 +58,11 @@ void Scene::AddItem(Item *item)
     itemColMgr_.AddObject(item);
 }
 
-void Scene::Initialize(void)
+void Scene::Initialize(float leftBound, float rightBound)
 {
+    leftBound_ = leftBound;
+    rightBound_ = rightBound;
+
     actor_.Initialize();
     scale_.Reinit(35.0f, 35.0f);
     
@@ -78,11 +81,10 @@ void Scene::Initialize(void)
     actor_.SetWeapon(new Sword());
 }
 
-void Scene::Run(void)
+Scene::RunningResult Scene::Run(void)
 {
-    mainLoopDone_ = false;
     clock_.Restart();
-    while(!mainLoopDone_)
+    while(true)
     {
         clock_.Tick();
         
@@ -106,7 +108,11 @@ void Scene::Run(void)
         rc_.DoEvents();
         
         if(im_.IsKeyPressed(KEY_CODE::KEY_ESCAPE))
-            mainLoopDone_ = true;
+            return RunningResult::Closed;
+        if(actor_.GetPosition().x < leftBound_)
+            return RunningResult::OutOfLeftBound;
+        if(actor_.GetPosition().y > rightBound_)
+            return RunningResult::OutOfRightBound;
     }
 }
 

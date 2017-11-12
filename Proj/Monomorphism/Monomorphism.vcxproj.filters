@@ -35,6 +35,9 @@
     <Filter Include="MainMenu">
       <UniqueIdentifier>{105a738c-5f04-42ba-b423-74f9edec09ee}</UniqueIdentifier>
     </Filter>
+    <Filter Include="SceneGenerator">
+      <UniqueIdentifier>{f7821939-1635-4e1f-9547-3c2bab6354db}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
@@ -56,14 +59,14 @@
     <ClCompile Include="..\..\Src\Monomorphism\NormalBlock.cpp">
       <Filter>BlockArea</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Monomorphism\SimpleAABBBlock.cpp">
-      <Filter>BlockArea</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp">
       <Filter>Creature</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\Mainmenu.cpp">
       <Filter>MainMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\SceneGenerator.cpp">
+      <Filter>SceneGenerator</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,11 +129,11 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h">
       <Filter>Creature</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Src\Monomorphism\Include\SimpleAABBBlock.h">
-      <Filter>BlockArea</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h">
       <Filter>MainMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\SceneGenerator.h">
+      <Filter>SceneGenerator</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
