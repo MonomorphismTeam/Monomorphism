@@ -110,7 +110,7 @@ void NormalCreature::Setposition(glm::vec2 poi)
 	lp_ = poi;
 	rp_ = poi + (rp1 - lp1);
 }
-void NormalCreature::Draw(OWE::ScreenScale &screenscale)
+void NormalCreature::Draw(const OWE::ScreenScale &screenscale)
 {
 	if (velocity_.x > 0)//heading left
 	{

@@ -32,6 +32,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{fc0bf87d-6daa-41dd-9b89-ef9a38a9bde4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="MainMenu">
+      <UniqueIdentifier>{105a738c-5f04-42ba-b423-74f9edec09ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
@@ -58,6 +61,9 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\SimpleAABBBlock.cpp">
       <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\Mainmenu.cpp">
+      <Filter>MainMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -122,6 +128,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\SimpleAABBBlock.h">
       <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h">
+      <Filter>MainMenu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

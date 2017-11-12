@@ -8,7 +8,7 @@ enum class  CreatureRelation
 	FRIENDLY
 };
 
-class NormalCreature : Creature
+class NormalCreature : public Creature
 {
 public:
 	enum class Status
@@ -26,12 +26,12 @@ public:
 	//add constructor with all 
 	~NormalCreature(void);// May add kill here
 	void SetHp(int);
-	void minusHp(int s) { hp_ -= s; };
+	void MinusHp(int s) { hp_ -= s; };
 	void Update(glm::vec2, double time);
-	void Draw(OWE::ScreenScale &screenscale);// temp Void need add 
+	void Draw(const OWE::ScreenScale &screenscale);// temp Void need add 
 	std::vector<OWE::BoundingArea> GetBoundingAreas(void) const;
 
-	void Attack1();
+	void Attack1(void);
 
 	void setArea(OWE::BoundingArea);
 
