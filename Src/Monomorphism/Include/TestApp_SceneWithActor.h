@@ -11,6 +11,8 @@ Created by AirGuanZ
 #include "Scene.h"
 #include "NormalBlock.h"
 
+#include "NormalCreature.h"
+
 namespace Test
 {
     using namespace std;

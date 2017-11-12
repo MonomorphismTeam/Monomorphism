@@ -13,7 +13,6 @@ void Mainmenu::draw(ScreenScale &screenscale)
 {
 	for (int i = 1; i < textnum; i++)
 	{
-		OWE::_Texture2DAux::Desc tmp;
 		OWE::ImmediateRenderer::DrawTexturedBox(lp_[i], rp_[i], glm::vec2(0, 0), glm::vec2(1, 1),
 			loadpic_[i].GetTextureView(), screenscale);
 	}

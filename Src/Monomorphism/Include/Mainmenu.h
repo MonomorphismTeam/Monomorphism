@@ -42,7 +42,7 @@ namespace menu
 			_Texture2DAux::Desc des;
 			_Texture2DAux::_LoadTexture2DFromFile(filepath, des, tmpTeux);
 			
-			loadpic_.push_back(tmpTeux);
+			loadpic_.push_back(std::move(tmpTeux));
 			lp_.push_back(glm::vec2(tmpo, tmpq));
 			rp_.push_back(glm::vec2(tmpo1, tmp2));
 

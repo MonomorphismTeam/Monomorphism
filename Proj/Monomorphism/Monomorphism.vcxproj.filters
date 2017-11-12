@@ -56,11 +56,11 @@
     <ClCompile Include="..\..\Src\Monomorphism\NormalBlock.cpp">
       <Filter>BlockArea</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp">
-      <Filter>Creature</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\SimpleAABBBlock.cpp">
       <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp">
+      <Filter>Creature</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\Mainmenu.cpp">
       <Filter>MainMenu</Filter>
