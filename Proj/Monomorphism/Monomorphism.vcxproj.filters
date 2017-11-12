@@ -56,6 +56,9 @@
     <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp">
       <Filter>Creature</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\SimpleAABBBlock.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -116,6 +119,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h">
       <Filter>Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\SimpleAABBBlock.h">
+      <Filter>BlockArea</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

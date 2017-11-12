@@ -6,7 +6,7 @@ Created by AirGuanZ
 #ifndef __SCENE_H__
 #define __SCENE_H__
 
-#include <vector>
+#include <set>
 
 #include <glm\glm.hpp>
 #include <OWE.h>
@@ -26,11 +26,15 @@ public:
     
     Scene(void);
 
+    void AddBlockArea(BlockArea *area);
+
     void Initialize(void);
     void Run(void);
 
 private:
     void _UpdateActor(void);
+    void _UpdateBlockAreas(void);
+    void _DrawBlockAreas(void);
 
 private:
     OWE::RenderContext &rc_;
@@ -49,10 +53,10 @@ private:
     KeyDown keyAttack_;
 
     //场景元素集合
-    std::vector<BlockArea*>  blockAreas_;
-    std::vector<Creature*>   creatures_;
-    std::vector<DamageArea*> damageAreas_;
-    std::vector<Item*>       items_;
+    std::set<BlockArea*>  blockAreas_;
+    std::set<Creature*>   creatures_;
+    std::set<DamageArea*> damageAreas_;
+    std::set<Item*>       items_;
 
     //碰撞体管理
     CollisionManager<BlockArea>  blockColMgr_;

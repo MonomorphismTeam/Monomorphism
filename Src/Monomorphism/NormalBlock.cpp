@@ -30,21 +30,26 @@ void NormalBlock::SetTexture(std::string filename)
 	OWE::_Texture2DAux::_LoadTexture2DFromFile(filename, tmp, blockTexture);
 }
 
-std::vector<OWE::BoundingArea> NormalBlock::GetBoundingAreas(void)
+std::vector<OWE::BoundingArea> NormalBlock::GetBoundingAreas(void) const
 {
 	return blockarea;
 }
 
-void NormalBlock::Draw(OWE::ScreenScale &screenscale)
+void NormalBlock::Update(double time)
+{
+    //do nothing
+}
+
+void NormalBlock::Draw(const OWE::ScreenScale &screenscale)
 {
 	//now
 	std::vector<OWE::BoundingArea>::iterator it;
 	std::vector<glm::vec2>::iterator lpit = _lpSet.begin(), rpit = _rpSet.begin();
-	for (it = blockarea.begin(); it !=blockarea.end(); it++)
+	for (it = blockarea.begin(); it !=blockarea.end(); it++, lpit++, rpit++)
 	{
 		if (it->GetType() == OWE::BoundingArea::Type::AABB)
 		{
-			OWE::ImmediateRenderer::DrawTexturedBox(*(lpit), *(rpit), glm::vec2(0,0), glm::vec2(1,1), 
+			OWE::ImmediateRenderer::DrawTexturedBoxWithScreenTrans(*(lpit), *(rpit), glm::vec2(0,0), glm::vec2(1,1), 
 				blockTexture.GetTextureView(), screenscale);
 		}
 	}
@@ -54,4 +59,9 @@ void NormalBlock::_AddAreaPoint(glm::vec2 &lp, glm::vec2 &rp)
 {
 	_lpSet.push_back(lp);
 	_rpSet.push_back(rp);
+}
+
+bool NormalBlock::IsDead(void) const
+{
+    return false;
 }

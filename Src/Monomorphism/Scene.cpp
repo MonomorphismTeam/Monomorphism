@@ -37,6 +37,13 @@ Scene::Scene(void)
     
 }
 
+void Scene::AddBlockArea(BlockArea *area)
+{
+    assert(area);
+    blockAreas_.insert(area);
+    blockColMgr_.AddObject(area);
+}
+
 void Scene::Initialize(void)
 {
     actor_.Initialize();
@@ -51,7 +58,7 @@ void Scene::Initialize(void)
     actor_.SetMaxFloatingVel    (ACTOR_MAX_FLOATING_VEL);
     actor_.SetFloatingFricAccVel(ACTOR_FLOATING_FRIC_ACC_VEL);
 
-    actor_.GetPosition() = vec2(3.0f, 2.0f);
+    actor_.GetPosition() = vec2(0.0f, 2.0f);
     actor_.GetTexSize()  = vec2(0.02f, 0.02f);
 
     actor_.SetWeapon(new Sword());
@@ -66,10 +73,13 @@ void Scene::Run(void)
         clock_.Tick();
         
         _UpdateActor();
+        _UpdateBlockAreas();
         
         //场景渲染
         rc_.ClearColorAndDepth();
         
+        scale_.SetCentrePosition(actor_.GetPosition());
+        _DrawBlockAreas();
         actor_.Draw(scale_);
 
         rc_.Present();
@@ -149,4 +159,31 @@ void Scene::_UpdateActor(void)
     userInput.shift  = im_.IsKeyPressed(ACTOR_INPUT_KEY_SHIFT);
     userInput.jump   = keyJump_.Update(im_.IsKeyPressed(ACTOR_INPUT_KEY_JUMP));
     userInput.attack = keyAttack_.Update(im_.IsMouseButtonPressed(ACTOR_INPUT_BUTTON_ATTACK));
+}
+
+void Scene::_UpdateBlockAreas(void)
+{
+    //update
+    for(auto *pArea : blockAreas_)
+        pArea->Update(clock_.ElapsedTime());
+
+    //删去dead block
+    std::set<BlockArea*> newBlockAreas;
+    for(auto *pArea : blockAreas_)
+    {
+        if(pArea->IsDead())
+        {
+            blockColMgr_.DelObject(pArea);
+            delete pArea;
+        }
+        else
+            newBlockAreas.insert(pArea);
+    }
+    blockAreas_ = std::move(newBlockAreas);
+}
+
+void Scene::_DrawBlockAreas(void)
+{
+    for(auto *pArea : blockAreas_)
+        pArea->Draw(scale_);
 }
