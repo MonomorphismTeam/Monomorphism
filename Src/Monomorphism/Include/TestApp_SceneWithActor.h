@@ -8,10 +8,8 @@ Created by AirGuanZ
 
 #include <string>
 
-#include "Scene.h"
 #include "NormalBlock.h"
-
-#include "NormalCreature.h"
+#include "Scene.h"
 
 namespace Test
 {
@@ -48,7 +46,6 @@ namespace Test
                 b->AddArea(BoundingArea(BoundingArea::AABB(i * BRICK_SIZE, -BRICK_SIZE, (i + 1) * BRICK_SIZE, 0.0f)),
                     vec2(i * BRICK_SIZE, -BRICK_SIZE), vec2((i + 1) * BRICK_SIZE, 0.0f));
             }
-
             for(int i = 5; i != 10; ++i)
             {
                 b->AddArea(BoundingArea(BoundingArea::AABB(i * BRICK_SIZE, BRICK_SIZE - 1.0f, (i + 1) * BRICK_SIZE, 2.0f * BRICK_SIZE - 1.0f)),

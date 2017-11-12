@@ -11,7 +11,7 @@ void Mainmenu::callmainloop(ScreenScale &screenscale)
 
 void Mainmenu::draw(ScreenScale &screenscale)
 {
-	for (int i = 1; i < textnum; i++)
+	for (int i = 0; i < textnum; i++)
 	{
 		OWE::ImmediateRenderer::DrawTexturedBox(lp_[i], rp_[i], glm::vec2(0, 0), glm::vec2(1, 1),
 			loadpic_[i].GetTextureView(), screenscale);
