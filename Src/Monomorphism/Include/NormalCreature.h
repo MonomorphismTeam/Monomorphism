@@ -26,10 +26,10 @@ public:
 	//add constructor with all 
 	~NormalCreature(void);// May add kill here
 	void SetHp(int);
-	void MinusHp(int s) { hp_ -= s; };
+	void MinusHp(int s) { hp_ -= s; delaytime = 400; };
 	void Update(glm::vec2, double time);
 	void Draw(const OWE::ScreenScale &screenscale);// temp Void need add 
-	OWE::BoundingArea GetBoundingAreas(void) const;
+	std::vector<OWE::BoundingArea> GetBoundingAreas(void) const;
 
 	void Attack1(void);
 
@@ -56,6 +56,7 @@ private:
 	const double standtim = 1998;
 	int hp_;
 	double deadlasttime = 2500;
+	double delaytime = 400;
 	glm::vec2 lp_, rp_;
 	glm::vec2 velocity_;
 	OWE::Texture2D texture_;

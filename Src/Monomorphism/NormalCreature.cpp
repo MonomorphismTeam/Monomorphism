@@ -140,9 +140,11 @@ void NormalCreature::SetHp(int hp)
 	hp_ = hp;
 }
 
-OWE::BoundingArea NormalCreature::GetBoundingAreas(void) const
+std::vector<OWE::BoundingArea> NormalCreature::GetBoundingAreas(void) const
 {
-	return OWE::BoundingArea::AABB(lp_.x, lp_.y, rp_.x, rp_.y);
+	OWE::BoundingArea::AABB area(lp_.x, lp_.y, rp_.x, rp_.y);
+	
+	return area;
 }
 
 CreatureRelation NormalCreature::RelationwithActor(void) const
