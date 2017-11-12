@@ -20,7 +20,7 @@ public:
 	};
 
 
-	NormalCreature(int, glm::vec2, glm::vec2, OWE::BoundingArea &, std::string);
+	NormalCreature(int, glm::vec2, glm::vec2, std::string);
 
 
 	//add constructor with all 
@@ -29,15 +29,17 @@ public:
 	void MinusHp(int s) { hp_ -= s; };
 	void Update(glm::vec2, double time);
 	void Draw(const OWE::ScreenScale &screenscale);// temp Void need add 
-	std::vector<OWE::BoundingArea> GetBoundingAreas(void) const;
+	OWE::BoundingArea GetBoundingAreas(void) const;
 
 	void Attack1(void);
 
-	void setArea(OWE::BoundingArea);
 
 
 	CreatureRelation RelationwithActor(void) const;
 	void Setposition(glm::vec2) ;
+
+	glm::vec2 GetPosition(void) const;
+
 	void SetRelation(CreatureRelation);
 	void Setvelocity(glm::vec2 vec) 
 	{ 
@@ -46,17 +48,15 @@ public:
 			status = NormalCreature::Status::STANDING;
 	};
 	//void deleteArea(OWE::BoundingArea);
-
+	bool IsDead(void);
 	//setPosition
 	//
 
 private:
 	const double standtim = 1998;
 	int hp_;
-	OWE::BoundingArea area_;//onluAABB
 	double deadlasttime = 2500;
 	glm::vec2 lp_, rp_;
-	std::vector<OWE::BoundingArea> Are;
 	glm::vec2 velocity_;
 	OWE::Texture2D texture_;
 	CreatureRelation relation_;

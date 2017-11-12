@@ -1,15 +1,11 @@
 #include"Include\NormalCreature.h"
 #include<OWE.h>
 
-NormalCreature::NormalCreature(int hp, glm::vec2 lp, glm::vec2 rp,
-	OWE::BoundingArea &_area, std::string filepath)
-	: area_(_area)
+NormalCreature::NormalCreature(int hp, glm::vec2 lp, glm::vec2 rp , std::string filepath)
 {
 	lp_ = lp;
 	rp_ = rp;
 	hp_ = 0;
-	area_ = _area;
-	Are.push_back(_area);
 	status = NormalCreature::Status::STANDING;
 	standingtime = 0;
 	//loading Texture;
@@ -19,7 +15,7 @@ NormalCreature::NormalCreature(int hp, glm::vec2 lp, glm::vec2 rp,
 
 NormalCreature::~NormalCreature(void)
 {
-	Are.clear();
+	
 	//improve
 }
 
@@ -35,6 +31,7 @@ void NormalCreature::Update(glm::vec2 playerPoi, double time)
 		{_updateDEAD(time);return;}
 	//gravity;
 	//attack;
+	
 	if (attack1CoolDown_ < 0) 
 	{
 		Attack1();
@@ -42,9 +39,13 @@ void NormalCreature::Update(glm::vec2 playerPoi, double time)
 	attack1CoolDown_ -= time;
 	if (status == NormalCreature::Status::STANDING)standingtime += time;
 
-	velocity_ -= glm::vec2(0, time * 0.025);
+	velocity_ -= glm::vec2(0, time * 0.025f);
 
-	if (hp_ <= 0) status = NormalCreature::Status::DEAD;
+	if (hp_ <= 0) 
+	{ 
+		
+		status = NormalCreature::Status::DEAD; 
+	}
 }
 // ---- update---------
 void NormalCreature::_updateSTANDING(glm::vec2 playerPoi, double time)
@@ -71,7 +72,10 @@ void NormalCreature::_updateSTANDING(glm::vec2 playerPoi, double time)
 		}
 	}
 }
-
+glm::vec2 NormalCreature::GetPosition(void) const
+{
+	return lp_;
+}
 void NormalCreature::_updateFLOATING(glm::vec2 playerPoi, double time)
 {
 	const float xSpeed = 0.012;
@@ -124,10 +128,6 @@ void NormalCreature::Draw(const OWE::ScreenScale &screenscale)
 	}
 }
 
-void NormalCreature::setArea(OWE::BoundingArea c)
-{
-	area_ = c;
-}
 
 
 void NormalCreature::SetRelation(CreatureRelation c)
@@ -140,9 +140,9 @@ void NormalCreature::SetHp(int hp)
 	hp_ = hp;
 }
 
-std::vector<OWE::BoundingArea> NormalCreature::GetBoundingAreas(void) const
+OWE::BoundingArea NormalCreature::GetBoundingAreas(void) const
 {
-	return Are;
+	return OWE::BoundingArea::AABB(lp_.x, lp_.y, rp_.x, rp_.y);
 }
 
 CreatureRelation NormalCreature::RelationwithActor(void) const
@@ -159,3 +159,10 @@ void NormalCreature::Attack1()
 	//
 	attack1CoolDown_ = attack1Col;
 }
+
+bool NormalCreature::IsDead(void)
+{
+	if (hp_ < 0) return true;
+	else return false;
+}
+
