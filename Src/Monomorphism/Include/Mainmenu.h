@@ -9,7 +9,7 @@ namespace menu
 	class Mainmenu
 	{
 	public:
-		Mainmenu(std::string);
+		Mainmenu(const std::string&);
 		//~Mainmenu();
 		void callmainloop(ScreenScale &screenscale);
 	private:
@@ -29,11 +29,11 @@ namespace menu
 		void input();
 	};
 
-	Mainmenu::Mainmenu(std::string configfile)
+	inline Mainmenu::Mainmenu(const std::string &configfile)
 	{
 		loadpic_.clear(); lp_.clear(); rp_.clear();
 		std::ifstream fin(configfile);
-		for (int i = 0; i < fuctionnumber; i++)
+		for (int i = 0; i < textnum; i++)
 		{
 			std::string filepath;
 			float tmpo, tmpq, tmpo1, tmp2;

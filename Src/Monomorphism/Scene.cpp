@@ -44,6 +44,20 @@ void Scene::AddBlockArea(BlockArea *area)
     blockColMgr_.AddObject(area);
 }
 
+void Scene::AddCreature(Creature *creature)
+{
+    assert(creature);
+    creatures_.insert(creature);
+    creatureColMgr_.AddObject(creature);
+}
+
+void Scene::AddItem(Item *item)
+{
+    assert(item);
+    items_.insert(item);
+    itemColMgr_.AddObject(item);
+}
+
 void Scene::Initialize(void)
 {
     actor_.Initialize();
@@ -74,6 +88,10 @@ void Scene::Run(void)
         
         _UpdateActor();
         _UpdateBlockAreas();
+        _UpdateCreatures();
+        _UpdateItems();
+
+        _InteractWithItems();
         
         //场景渲染
         rc_.ClearColorAndDepth();
@@ -128,7 +146,14 @@ void Scene::_UpdateActor(void)
             if(deltaPos.y > 0.0f)
                 actor_.GetEnvirInput().colUp = true;
             else
+            {
                 actor_.GetEnvirInput().colDown = true;
+                //搜索一个合适的恢复位置
+                constexpr float deltaY = 1e-2f;
+                float dy = 0.0f;
+                while(!testNewPos(oldPos + deltaPos + vec2(0.0f, dy)))
+                    dy += deltaY;
+            }
         }
         else //只恢复y坐标不行
         {
@@ -164,12 +189,12 @@ void Scene::_UpdateActor(void)
 void Scene::_UpdateBlockAreas(void)
 {
     //update
-    for(auto *pArea : blockAreas_)
+    for(BlockArea *pArea : blockAreas_)
         pArea->Update(clock_.ElapsedTime());
 
     //删去dead block
     std::set<BlockArea*> newBlockAreas;
-    for(auto *pArea : blockAreas_)
+    for(BlockArea *pArea : blockAreas_)
     {
         if(pArea->IsDead())
         {
@@ -184,6 +209,74 @@ void Scene::_UpdateBlockAreas(void)
 
 void Scene::_DrawBlockAreas(void)
 {
-    for(auto *pArea : blockAreas_)
+    for(BlockArea *pArea : blockAreas_)
         pArea->Draw(scale_);
+}
+
+void Scene::_UpdateCreatures(void)
+{
+    //update
+    for(Creature *pCreature : creatures_)
+        pCreature->Update(actor_.GetPosition(), clock_.ElapsedTime());
+
+    //删去dead block
+    std::set<Creature*> newCreatures;
+    for(Creature *pCreature : creatures_)
+    {
+        if(pCreature->IsDead())
+        {
+            creatureColMgr_.DelObject(pCreature);
+            delete pCreature;
+        }
+        else
+            newCreatures.insert(pCreature);
+    }
+    creatures_ = std::move(newCreatures);
+}
+
+void Scene::_DrawCreatures(void)
+{
+    for(Creature *pC : creatures_)
+        pC->Draw(scale_);
+}
+
+void Scene::_UpdateItems(void)
+{
+    //Update
+    for(Item *item : items_)
+        item->Update(clock_.ElapsedTime());
+
+    //删除死掉的item
+    std::set<Item*> newItems;
+    for(Item *item : items_)
+    {
+        if(item->IsDead())
+        {
+            itemColMgr_.DelObject(item);
+            delete item;
+        }
+        else
+            newItems.insert(item);
+    }
+    items_ = std::move(newItems);
+}
+
+void Scene::_DrawItems(void)
+{
+    for(Item *item : items_)
+        item->Draw(scale_);
+}
+
+void Scene::_InteractWithItems(void)
+{
+    std::set<Item*> inItems;
+    for(auto &area : actor_.GetBoundingAreas())
+    {
+        auto it = itemColMgr_.CollisionWithBoundingArea(area);
+        for(auto *p : it)
+            inItems.insert(p);
+    }
+
+    for(auto *p : inItems)
+        p->InteractWithActor(&actor_);
 }

@@ -27,14 +27,25 @@ public:
     Scene(void);
 
     void AddBlockArea(BlockArea *area);
+    void AddCreature(Creature *creature);
+    void AddItem(Item *item);
 
     void Initialize(void);
     void Run(void);
 
 private:
     void _UpdateActor(void);
+
     void _UpdateBlockAreas(void);
     void _DrawBlockAreas(void);
+
+    void _UpdateCreatures(void);
+    void _DrawCreatures(void);
+
+    void _UpdateItems(void);
+    void _DrawItems(void);
+
+    void _InteractWithItems(void);
 
 private:
     OWE::RenderContext &rc_;
