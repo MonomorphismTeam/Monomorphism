@@ -120,6 +120,8 @@ public:
     glm::vec2 &GetVelocity(void);
     glm::vec2 &GetAccVelocity(void);
 
+    const glm::vec2 &GetPosition(void) const;
+
     Direction GetDirection(void) const;
 
     std::vector<OWE::BoundingArea> GetBoundingAreas(void) const;

@@ -504,6 +504,11 @@ vec2 &Actor::GetAccVelocity(void)
     return accVel_;
 }
 
+const vec2 &Actor::GetPosition(void) const
+{
+    return pos_;
+}
+
 Actor::Direction Actor::GetDirection(void) const
 {
     return dir_;

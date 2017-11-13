@@ -36,7 +36,7 @@ std::vector<OWE::BoundingArea> DamageAreaSword::GetBoundingAreas(void) const
 void DamageAreaSword::Damage(Creature *creature)
 {
     assert(creature);
-    creature->minusHP(-damage_);
+    creature->MinusHP(damage_);
 }
 
 void DamageAreaSword::Damage(Actor *actor)

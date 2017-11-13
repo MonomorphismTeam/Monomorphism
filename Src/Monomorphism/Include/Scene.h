@@ -49,13 +49,19 @@ private:
     void _UpdateBlockAreas(void);
     void _DrawBlockAreas(void);
 
+    bool _CreatureTestCoi(const Creature *);
     void _UpdateCreatures(void);
     void _DrawCreatures(void);
+
+    void _InteractWithDamageAreas(void);
+    void _UpdateDamageArea(void);
+    void _DrawDamageArea(void);
 
     void _UpdateItems(void);
     void _DrawItems(void);
 
     void _InteractWithItems(void);
+
 
 private:
     OWE::RenderContext &rc_;

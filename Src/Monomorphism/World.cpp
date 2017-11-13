@@ -65,6 +65,7 @@ void World::_InitializeSavingPoint(Scene *scene)
     
     scene->SetBound(SAVING_POINT_LEFT_BOUND, SAVING_POINT_RIGHT_BOUND);
 
+    //×¼±¸tiled background
     BackgroundArea *bk = new BackgroundArea;
     TiledTexture &texs = bk->GetBackgroundTexture();
     texs.Initialize(SAVING_POINT_BRICK_CNT, SAVING_POINT_BRICK_CNT,
@@ -74,4 +75,5 @@ void World::_InitializeSavingPoint(Scene *scene)
         for(int j = 0; j != SAVING_POINT_BRICK_CNT; ++j)
             texs.SetTile(i, j, vec2(0.0f), vec2(1.0f), texMgr_.GetTexture("BackgroundBrick"));
     }
+    texs.SetPosition(vec2(-SAVING_POINT_BRICK_SIZE * SAVING_POINT_BRICK_CNT));
 }

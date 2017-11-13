@@ -3,12 +3,15 @@ Filename: Scene.cpp
 Date: 2017.11.7
 Created by AirGuanZ
 ================================================================*/
+#include <set>
+
 #include <glm\glm.hpp>
 #include <OWE.h>
 
 #include "Include\Scene.h"
 #include "Include\Sword.h"
 
+using namespace std;
 using namespace glm;
 using namespace OWE;
 
@@ -51,6 +54,13 @@ void Scene::AddCreature(Creature *creature)
     creatureColMgr_.AddObject(creature);
 }
 
+void Scene::AddDamageArea(DamageArea *area)
+{
+    assert(area);
+    damageAreas_.insert(area);
+    damageColMgr_.AddObject(area);
+}
+
 void Scene::AddItem(Item *item)
 {
     assert(item);
@@ -75,7 +85,7 @@ void Scene::Initialize(void)
     actor_.SetMaxFloatingVel    (ACTOR_MAX_FLOATING_VEL);
     actor_.SetFloatingFricAccVel(ACTOR_FLOATING_FRIC_ACC_VEL);
 
-    actor_.GetPosition() = vec2(0.0f, 2.0f);
+    actor_.GetPosition() = vec2(1.0f, 5.0f);
     actor_.GetTexSize()  = vec2(0.02f, 0.02f);
 
     actor_.SetWeapon(new Sword());
@@ -100,13 +110,19 @@ Scene::RunningResult Scene::Run(void)
         _UpdateItems();
 
         _InteractWithItems();
+
+        _InteractWithDamageAreas();
+        _UpdateDamageArea();
         
         //场景渲染
         rc_.ClearColorAndDepth();
         
         scale_.SetCentrePosition(actor_.GetPosition());
+
         _DrawBlockAreas();
+        _DrawCreatures();
         actor_.Draw(scale_);
+        _DrawDamageArea();
 
         rc_.Present();
         
@@ -225,18 +241,82 @@ void Scene::_DrawBlockAreas(void)
         pArea->Draw(scale_);
 }
 
+bool Scene::_CreatureTestCoi(const Creature *p)
+{
+    for(auto &area : p->GetBoundingAreas())
+    {
+        if(!blockColMgr_.CollisionWithBoundingArea(area).empty())
+            return false;
+    }
+    return true;
+}
+
 void Scene::_UpdateCreatures(void)
 {
     //update
+    double timex = clock_.ElapsedTime();
     for(Creature *pCreature : creatures_)
-        pCreature->Update(actor_.GetPosition(), clock_.ElapsedTime());
+        pCreature->Update(actor_.GetPosition(), timex);
+    //向速度移动
+    for(Creature *pCreature : creatures_)
+    {
+        glm::vec2 oldPosition = pCreature->GetPosition();
+        glm::vec2 deltaPos = static_cast<float>(timex) * pCreature->GetVelocity();
+        pCreature->SetPosition(oldPosition + deltaPos);
 
-    //删去dead block
+        if(!_CreatureTestCoi(pCreature))//新位置产生了碰撞
+        {
+            //尝试恢复y轴坐标
+            pCreature->SetPosition(oldPosition + glm::vec2(deltaPos.x, 0.0f));
+            if(_CreatureTestCoi(pCreature))//恢复成功了
+            {
+                pCreature->SetVelocity(glm::vec2(pCreature->GetVelocity().x, 0.0));//把y的速度变为0
+                                                                                   //搜索一个合适的恢复位置(下落防止抖动)
+                if(deltaPos.y < 0)
+                {
+                    constexpr float deltaY = 1e-2f;
+                    float dy = 0.0f;
+                    //testNewPos(oldPos + deltaPos + vec2(0.0f, dy)
+                    do
+                    {
+                        pCreature->SetPosition(oldPosition + deltaPos + vec2(0.0f, dy));
+                        dy += deltaY;
+                    } while(!_CreatureTestCoi(pCreature));
+                }
+            }
+            else
+            {
+                //需要恢复x坐标
+                pCreature->SetPosition(oldPosition + glm::vec2(0.0f, deltaPos.y));
+                if(_CreatureTestCoi(pCreature))
+                {
+                    pCreature->SetVelocity(glm::vec2(0.0f, pCreature->GetVelocity().y));
+                }
+                else
+                {
+                    pCreature->SetPosition(oldPosition);
+                    pCreature->SetVelocity(glm::vec2(0.0f, 0.0f));
+                    //直接恢复上一帧的状态
+                }
+            }
+        }
+    }
+
+    //删去dead creature
     std::set<Creature*> newCreatures;
     for(Creature *pCreature : creatures_)
     {
         if(pCreature->IsDead())
         {
+            //物品几率掉落
+
+            /*int s = rand();
+            s = glm::abs(s) % 100;
+            if(s < 50)//add item;
+            {
+                std::string itempath = "";
+                //Item = new  create new item;
+            }*/
             creatureColMgr_.DelObject(pCreature);
             delete pCreature;
         }
@@ -250,6 +330,61 @@ void Scene::_DrawCreatures(void)
 {
     for(Creature *pC : creatures_)
         pC->Draw(scale_);
+}
+
+void Scene::_InteractWithDamageAreas(void)
+{
+    //人的伤害判定
+    {
+        set<DamageArea*> as;
+        for(const BoundingArea &area : actor_.GetBoundingAreas())
+        {
+            auto damageA = damageColMgr_.CollisionWithBoundingArea(area);
+            copy(begin(damageA), end(damageA), inserter(as, begin(as)));
+        }
+        for(DamageArea *a : as)
+            a->Damage(&actor_);
+    }
+
+    //其他生物的伤害判定
+    for(Creature *c : creatures_)
+    {
+        set<DamageArea*> as;
+        for(const BoundingArea &area : c->GetBoundingAreas())
+        {
+            auto damageA = damageColMgr_.CollisionWithBoundingArea(area);
+            copy(begin(damageA), end(damageA), inserter(as, begin(as)));
+        }
+        for(DamageArea *a : as)
+            a->Damage(c);
+    }
+}
+
+void Scene::_UpdateDamageArea(void)
+{
+    //update
+    for(DamageArea *pArea : damageAreas_)
+        pArea->Update(clock_.ElapsedTime());
+
+    //删去dead block
+    std::set<DamageArea*> newDamageAreas;
+    for(DamageArea *pArea : damageAreas_)
+    {
+        if(pArea->IsDead())
+        {
+            damageColMgr_.DelObject(pArea);
+            delete pArea;
+        }
+        else
+            newDamageAreas.insert(pArea);
+    }
+    damageAreas_ = std::move(newDamageAreas);
+}
+
+void Scene::_DrawDamageArea(void)
+{
+    for(DamageArea *area : damageAreas_)
+        area->Draw(scale_);
 }
 
 void Scene::_UpdateItems(void)
