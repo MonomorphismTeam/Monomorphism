@@ -161,7 +161,7 @@ void Scene::_UpdateActor(void)
             {
                 actor_.GetEnvirInput().colDown = true;
                 //搜索一个合适的恢复位置
-                constexpr float deltaY = 1e-2f;
+                constexpr float deltaY = 1e-3f;
                 float dy = 0.0f;
                 while(!testNewPos(oldPos + deltaPos + vec2(0.0f, dy)))
                     dy += deltaY;

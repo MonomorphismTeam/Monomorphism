@@ -62,10 +62,16 @@ void World::_InitializeResources(void)
 void World::_InitializeSavingPoint(Scene *scene)
 {
     assert(scene);
-
+    
     scene->SetBound(SAVING_POINT_LEFT_BOUND, SAVING_POINT_RIGHT_BOUND);
 
     BackgroundArea *bk = new BackgroundArea;
     TiledTexture &texs = bk->GetBackgroundTexture();
-    texs.Initialize();
+    texs.Initialize(SAVING_POINT_BRICK_CNT, SAVING_POINT_BRICK_CNT,
+                    SAVING_POINT_BRICK_SIZE, SAVING_POINT_BRICK_SIZE);
+    for(int i = 0; i != SAVING_POINT_BRICK_CNT; ++i)
+    {
+        for(int j = 0; j != SAVING_POINT_BRICK_CNT; ++j)
+            texs.SetTile(i, j, vec2(0.0f), vec2(1.0f), texMgr_.GetTexture("BackgroundBrick"));
+    }
 }

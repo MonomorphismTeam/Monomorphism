@@ -29,7 +29,7 @@ private:
 
     void _InitializeResources(void);
 
-    static void _InitializeSavingPoint(Scene *scene);
+    void _InitializeSavingPoint(Scene *scene);
 
 private:
     friend class SingletonType;
