@@ -4,6 +4,7 @@ Date: 2017.11.12
 Created by AirGuanZ
 ================================================================*/
 #include "Include\BackgroundArea.h"
+#include "Include\SimpleAABBBlock.h"
 #include "Include\ResourceNames.h"
 #include "Include\World.h"
 
@@ -13,15 +14,6 @@ using namespace OWE;
 
 namespace
 {
-    //存档点场景左右边界
-    constexpr float SAVING_POINT_LEFT_BOUND = 0.0f;
-    constexpr float SAVING_POINT_RIGHT_BOUND = 20.0f;
-    //存档点背景墙大小
-    constexpr float SAVING_POINT_BRICK_SIZE = 1.5f;
-    constexpr int SAVING_POINT_BRICK_CNT =
-        4 * static_cast<int>((SAVING_POINT_RIGHT_BOUND - SAVING_POINT_LEFT_BOUND) /
-                             SAVING_POINT_BRICK_SIZE);
-
     inline SceneGenerator::SeedType _ConstructStageSeed(SceneGenerator::SeedType world, World::StageNumber stage)
     {
         return static_cast<SceneGenerator::SeedType>(world + stage);
@@ -29,6 +21,11 @@ namespace
 }
 
 OWE_SINGLETON_INSTANCE_PTR(World);
+
+TextureManager &World::GetTextureManager(void)
+{
+    return texMgr_;
+}
 
 void World::InitializeScene(SceneGenerator::SeedType worldSeed, StageNumber stage)
 {
@@ -39,12 +36,49 @@ void World::InitializeScene(SceneGenerator::SeedType worldSeed, StageNumber stag
 
     scene_ = new Scene;
     scene_->Initialize();
-    _InitializeSavingPoint(scene_);
+    SceneGenerator::GenerateSavingPoint(scene_, &leftBound_, &rightBound_);
 }
 
-TextureManager &World::GetTextureManager(void)
+void World::Run(void)
 {
-    return texMgr_;
+    assert(scene_);
+
+    while(true)
+    {
+        Scene::RunningResult rt = scene_->Run();
+
+        //以关闭的方式离开场景
+        if(rt == Scene::RunningResult::Closed)
+            break;
+
+        //关卡转移
+        if(rt == Scene::RunningResult::OutOfLeftBound && stage_ <= 0)
+            abort();
+        stage_ += (rt == Scene::RunningResult::OutOfRightBound ? 1 : -1);
+
+        delete scene_;
+        scene_ = new Scene;
+        scene_->Initialize();
+        if(stage_ & 1)
+            SceneGenerator::GenerateScene(worldSeed_, scene_, &leftBound_, &rightBound_);
+        else
+            SceneGenerator::GenerateSavingPoint(scene_, &leftBound_, &rightBound_);
+        scene_->SetBound(leftBound_, rightBound_);
+
+        if(rt == Scene::RunningResult::OutOfLeftBound)
+            scene_->GetActor().GetPosition() = vec2(rightBound_ - 3.0f, 3.0f);
+        else
+            scene_->GetActor().GetPosition() = vec2(leftBound_ + 3.0f, 3.0f);
+    }
+
+    delete scene_;
+    scene_ = nullptr;
+}
+
+Scene &World::GetCurrentScene(void)
+{
+    assert(scene_);
+    return *scene_;
 }
 
 World::World(void)
@@ -57,23 +91,4 @@ void World::_InitializeResources(void)
 {
     texMgr_.Clear();
     texMgr_.Initialize(GLOBAL_TEXTURE_RESOURCE);
-}
-
-void World::_InitializeSavingPoint(Scene *scene)
-{
-    assert(scene);
-    
-    scene->SetBound(SAVING_POINT_LEFT_BOUND, SAVING_POINT_RIGHT_BOUND);
-
-    //准备tiled background
-    BackgroundArea *bk = new BackgroundArea;
-    TiledTexture &texs = bk->GetBackgroundTexture();
-    texs.Initialize(SAVING_POINT_BRICK_CNT, SAVING_POINT_BRICK_CNT,
-                    SAVING_POINT_BRICK_SIZE, SAVING_POINT_BRICK_SIZE);
-    for(int i = 0; i != SAVING_POINT_BRICK_CNT; ++i)
-    {
-        for(int j = 0; j != SAVING_POINT_BRICK_CNT; ++j)
-            texs.SetTile(i, j, vec2(0.0f), vec2(1.0f), texMgr_.GetTexture("BackgroundBrick"));
-    }
-    texs.SetPosition(vec2(-SAVING_POINT_BRICK_SIZE * SAVING_POINT_BRICK_CNT));
 }

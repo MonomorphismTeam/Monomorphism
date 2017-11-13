@@ -30,6 +30,7 @@
     <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Scene.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\SceneGenerator.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\SimpleAABBBlock.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Sword.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\TextureManager.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\World.cpp" />
@@ -49,6 +50,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalBlock.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\SimpleAABBBlock.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TextureManager.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Item.h" />

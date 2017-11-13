@@ -133,9 +133,14 @@ Scene::RunningResult Scene::Run(void)
             return RunningResult::Closed;
         if(actor_.GetPosition().x < leftBound_)
             return RunningResult::OutOfLeftBound;
-        if(actor_.GetPosition().y > rightBound_)
+        if(actor_.GetPosition().x > rightBound_)
             return RunningResult::OutOfRightBound;
     }
+}
+
+Actor &Scene::GetActor(void)
+{
+    return actor_;
 }
 
 void Scene::_UpdateActor(void)

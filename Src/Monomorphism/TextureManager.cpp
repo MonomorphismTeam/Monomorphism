@@ -21,7 +21,9 @@ bool TextureManager::Initialize(const std::string &configFile)
             throw OWE::FatalError("Failed to load texture from file: " + filename);
         texs_.insert(std::make_pair(texName, std::move(tex)));
     };
-    conf.ForEach(loadTex);
+    conf.ForEach(loadTex, "Land");
+
+    return true;
 }
 
 OWE::Texture2DView TextureManager::GetTexture(const std::string &name) const

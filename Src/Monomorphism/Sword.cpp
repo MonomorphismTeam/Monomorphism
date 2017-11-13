@@ -7,6 +7,7 @@ Created by AirGuanZ
 #include "Include\Scene.h"
 #include "Include\Sword.h"
 #include "Include\DamageAreaSword.h"
+#include "Include\World.h"
 
 Sword::Sword(void)
     : restarted_(false)
@@ -25,7 +26,6 @@ void Sword::Restart(void)
     damageAreas_.clear();
 }
 
-Scene *g_scene;
 void Sword::Update(const Actor &actor, double time)
 {
     if(restarted_)
@@ -39,16 +39,16 @@ void Sword::Update(const Actor &actor, double time)
         if(dir == Actor::Direction::Right)
         {
             area = new DamageAreaSword(
-                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x, pos.y, pos.x + 3.0f, pos.y + 2.0f)),
+                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x, pos.y, pos.x + 4.0f, pos.y + 2.0f)),
                 3.0f, 2.0f);
         }
         else
         {
             area = new DamageAreaSword(
-                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x - 3.0f, pos.y, pos.x, pos.y + 2.0f)),
+                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x - 4.0f, pos.y, pos.x, pos.y + 2.0f)),
                 3.0f, 2.0f);
         }
-        g_scene->AddDamageArea(area);
+        World::GetInstance().GetCurrentScene().AddDamageArea(area);
     }
     else
         damageAreas_.clear();

@@ -11,11 +11,13 @@ Created by AirGuanZ
 #include "Include\TestApp_ActorAttackingWithSword.h"
 #include "Include\TestApp_SceneWithActor.h"
 
+#include "Include\App.h"
+
 int main(void)
 {
     try
     {
-        Test::TestApp_SceneWithActor app;
+        App app;
         app.Run();
     }
     catch(const OWE::FatalError &err)

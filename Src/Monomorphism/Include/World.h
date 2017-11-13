@@ -20,6 +20,7 @@ public:
     TextureManager &GetTextureManager(void);
 
     void InitializeScene(SceneGenerator::SeedType worldSeed, StageNumber stage);
+
     void Run(void);
 
     Scene &GetCurrentScene(void);
@@ -29,13 +30,12 @@ private:
 
     void _InitializeResources(void);
 
-    void _InitializeSavingPoint(Scene *scene);
-
 private:
     friend class SingletonType;
 
     SceneGenerator::SeedType worldSeed_;
 
+    //关卡编号为非负整数，偶数代表存档点，奇数代表战斗关卡
     StageNumber stage_;
     
     float leftBound_;

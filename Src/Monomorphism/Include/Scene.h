@@ -43,6 +43,8 @@ public:
     void SetBound(float left, float right);
     RunningResult Run(void);
 
+    Actor &GetActor(void);
+
 private:
     void _UpdateActor(void);
 

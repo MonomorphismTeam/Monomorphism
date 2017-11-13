@@ -12,9 +12,6 @@ Created by AirGuanZ
 #include "NormalCreature.h"
 #include "Scene.h"
 
-//IMPROVE£∫∏…µÙ’‚ÕÊ“‚∂˘
-extern Scene *g_scene;
-
 namespace Test
 {
     using namespace std;
@@ -78,8 +75,6 @@ namespace Test
 
             Creature *ct3 = new NormalCreature(10.0f, vec2(20.0f, 8.0f), vec2(22.0f, 12.0f), creatureFilepath, 0.002f, 10.0f);
             scene.AddCreature(ct3);
-
-            g_scene = &scene;
 
             scene.AddBlockArea(b);
 
