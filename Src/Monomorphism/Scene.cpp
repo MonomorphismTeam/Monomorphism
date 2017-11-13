@@ -5,10 +5,9 @@ Created by AirGuanZ
 ================================================================*/
 #include <glm\glm.hpp>
 #include <OWE.h>
-
 #include "Include\Scene.h"
 #include "Include\Sword.h"
-
+#include <cstdlib>
 using namespace glm;
 using namespace OWE;
 
@@ -60,6 +59,9 @@ void Scene::AddItem(Item *item)
 
 void Scene::Initialize(void)
 {
+    leftBound_ = std::numeric_limits<float>::lowest();
+    rightBound_ = std::numeric_limits<float>::max();
+
     actor_.Initialize();
     scale_.Reinit(35.0f, 35.0f);
     
@@ -78,11 +80,16 @@ void Scene::Initialize(void)
     actor_.SetWeapon(new Sword());
 }
 
-void Scene::Run(void)
+void Scene::SetBound(float left, float right)
 {
-    mainLoopDone_ = false;
+    leftBound_ = left;
+    rightBound_ = right;
+}
+
+Scene::RunningResult Scene::Run(void)
+{
     clock_.Restart();
-    while(!mainLoopDone_)
+    while(true)
     {
         clock_.Tick();
         
@@ -106,7 +113,11 @@ void Scene::Run(void)
         rc_.DoEvents();
         
         if(im_.IsKeyPressed(KEY_CODE::KEY_ESCAPE))
-            mainLoopDone_ = true;
+            return RunningResult::Closed;
+        if(actor_.GetPosition().x < leftBound_)
+            return RunningResult::OutOfLeftBound;
+        if(actor_.GetPosition().y > rightBound_)
+            return RunningResult::OutOfRightBound;
     }
 }
 
@@ -212,19 +223,82 @@ void Scene::_DrawBlockAreas(void)
     for(BlockArea *pArea : blockAreas_)
         pArea->Draw(scale_);
 }
-
+//---new----
+bool Scene::_CreatureTestCoi(const Creature *p)
+{
+	for (auto &area : p->GetBoundingAreas())
+	{
+		if (!blockColMgr_.CollisionWithBoundingArea(area).empty())
+			return false;
+	}
+	return true;
+}
 void Scene::_UpdateCreatures(void)
 {
     //update
+	double timex = clock_.ElapsedTime();
     for(Creature *pCreature : creatures_)
-        pCreature->Update(actor_.GetPosition(), clock_.ElapsedTime());
-
-    //删去dead block
+        pCreature->Update(actor_.GetPosition(), timex);
+	//向速度移动
+	for (Creature *pCreature : creatures_)
+	{
+		glm::vec2 oldPosition = pCreature->GetPosition();
+		glm::vec2 deltaPos = static_cast<float>(timex) * pCreature->GetVelocity();
+		pCreature->SetPosition(oldPosition + deltaPos);
+		
+		if (!_CreatureTestCoi(pCreature))//新位置产生了碰撞
+		{
+		 //尝试恢复y轴坐标
+			pCreature->SetPosition(oldPosition + glm::vec2(deltaPos.x, 0.0f));
+			if (_CreatureTestCoi(pCreature))//恢复成功了
+			{
+				pCreature->SetVelocity(glm::vec2(pCreature->GetVelocity().x, 0.0));//把y的速度变为0
+			   //搜索一个合适的恢复位置(下落防止抖动)
+				if (deltaPos.y < 0)
+				{
+					constexpr float deltaY = 1e-2f;
+					float dy = 0.0f;
+					//testNewPos(oldPos + deltaPos + vec2(0.0f, dy)
+					do
+					{
+						pCreature->SetPosition(oldPosition + deltaPos + vec2(0.0f, dy));
+						dy += deltaY;
+					}while (_CreatureTestCoi(pCreature));
+				}							
+			}
+			else
+			{
+			//需要恢复x坐标
+				pCreature->SetPosition(oldPosition + glm::vec2(0.0f, deltaPos.y));
+				if (_CreatureTestCoi(pCreature))
+				{
+					pCreature->SetVelocity(glm::vec2(0.0f, pCreature->GetVelocity().y));
+				}
+				else
+				{
+					pCreature->SetPosition(oldPosition);
+					pCreature->SetVelocity(glm::vec2(0.0f, 0.0f));
+					//直接恢复上一帧的状态
+				}
+			}
+		}
+	}
+	
+    //删去dead creature
     std::set<Creature*> newCreatures;
     for(Creature *pCreature : creatures_)
     {
         if(pCreature->IsDead())
         {
+			//物品几率掉落
+			
+			int s = rand(); 
+			s = glm::abs(s) % 100;
+			if (s < 50)//add item;
+			{
+				std::string itempath = "";
+				//Item = new  create new item;
+			}
             creatureColMgr_.DelObject(pCreature);
             delete pCreature;
         }

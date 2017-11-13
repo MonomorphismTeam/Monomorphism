@@ -20,7 +20,7 @@ public:
 	};
 
 
-	NormalCreature(int, glm::vec2, glm::vec2, std::string);
+	NormalCreature(int, glm::vec2, glm::vec2, std::string[3], float, int);
 
 
 	//add constructor with all 
@@ -36,12 +36,14 @@ public:
 
 
 	CreatureRelation RelationwithActor(void) const;
-	void Setposition(glm::vec2) ;
 
+
+	void SetPosition(const glm::vec2 &) ;
 	glm::vec2 GetPosition(void) const;
+	glm::vec2 GetVelocity(void) const;
 
 	void SetRelation(CreatureRelation);
-	void Setvelocity(glm::vec2 vec) 
+	void SetVelocity(glm::vec2 vec) 
 	{ 
 		velocity_ = vec; 
 		if (velocity_.y == 0 && status == NormalCreature::Status::FLOATING)
@@ -59,12 +61,15 @@ private:
 	double delaytime = 400;
 	glm::vec2 lp_, rp_;
 	glm::vec2 velocity_;
-	OWE::Texture2D texture_;
+	OWE::Texture2D texture_, texdead, texattacked;
 	CreatureRelation relation_;
 	double attack1CoolDown_;
 	Status status;
 
-
+	float attackedspeedy = 0.0002f;
+	float gravity = 0.00007f;
+	float xspeed ;
+	int damage_ = 10;
 	// update here;
 	void _updateSTANDING(glm::vec2 playerPoi, double time);
 	void _updateFLOATING(glm::vec2 playerPoi, double time);

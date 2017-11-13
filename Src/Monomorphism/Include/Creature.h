@@ -16,11 +16,12 @@ public:
 
     virtual void Update(glm::vec2, double time) = 0;
     virtual void Draw(const OWE::ScreenScale &scale) = 0;
-    virtual OWE::BoundingArea GetBoundingAreas(void) const = 0;
+	virtual std::vector<OWE::BoundingArea>GetBoundingAreas(void) const = 0;
 
     virtual void MinusHp(int s) = 0;
 
-    glm::vec2 SetPosition(const glm::vec2 &pos);
+    virtual void SetPosition(const glm::vec2);
+	virtual void SetVelocity(glm::vec2);
     glm::vec2 GetPosition(void) const;
     glm::vec2 GetVelocity(void) const;
 

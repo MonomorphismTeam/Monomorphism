@@ -23,7 +23,7 @@ void CreaturedamageA::Draw(const OWE::ScreenScale &scale)
 
 std::vector<OWE::BoundingArea> CreaturedamageA::GetBoundingAreas(void) const
 {
-	return area_;
+	return { OWE::BoundingArea(area_) };
 }
 
 void CreaturedamageA::Damage(Creature * monster)
@@ -33,7 +33,7 @@ void CreaturedamageA::Damage(Creature * monster)
 
 void CreaturedamageA::Damage(Actor *actor)
 {
-	actor->SetHP(actor->GetHP - damage_);
+	actor->SetHP(actor->GetHP() - damage_);
 }
 
 bool CreaturedamageA::IsDead(void) const
