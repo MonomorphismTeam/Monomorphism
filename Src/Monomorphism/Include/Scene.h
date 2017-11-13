@@ -33,6 +33,7 @@ public:
     };
     
     Scene(void);
+    ~Scene(void);
     
     void AddBlockArea(BlockArea *area);
     void AddCreature(Creature *creature);

@@ -10,6 +10,7 @@ Created by AirGuanZ
 
 #include "Include\BackgroundArea.h"
 #include "Include\NormalBlock.h"
+#include "Include\NormalCreature.h"
 #include "Include\SceneGenerator.h"
 #include "Include\SimpleAABBBlock.h"
 #include "Include\World.h"
@@ -42,11 +43,11 @@ void SceneGenerator::GenerateSavingPoint(Scene *scene, float *left, float *right
     //准备tiled background
     BackgroundArea *bk = new BackgroundArea;
     TiledTexture &texs = bk->GetBackgroundTexture();
-    texs.Initialize(SAVING_POINT_BRICK_CNT, SAVING_POINT_BRICK_CNT,
+    texs.Initialize(SAVING_POINT_BRICK_CNT, SAVING_POINT_BRICK_CNT / 2,
         SAVING_POINT_BRICK_SIZE, SAVING_POINT_BRICK_SIZE);
-    for(int i = 0; i != SAVING_POINT_BRICK_CNT; ++i)
+    for(int i = 0; i != texs.Width(); ++i)
     {
-        for(int j = 0; j != SAVING_POINT_BRICK_CNT; ++j)
+        for(int j = 0; j != texs.Height(); ++j)
             texs.SetTile(i, j, vec2(0.0f), vec2(1.0f), World::GetInstance().GetTextureManager().GetTexture("BackgroundBrick"));
     }
     texs.SetPosition(vec2(0.0f));
@@ -92,4 +93,14 @@ void SceneGenerator::GenerateLand(RandomEngine *eng, Scene *scene, float left, f
     }
 
     scene->AddBlockArea(brick);
+
+    //在中央放一只水母
+    std::string ctTexs[] =
+    {
+        "Bin\\Creature\\Medusa.png",
+        "Bin\\Creature\\MedusaAttacked.png",
+        "Bin\\Creature\\MedusaDead.png"
+    };
+    NormalCreature *ct = new NormalCreature(9.0f, vec2(6.0f, 1.0f), vec2(8.0f, 3.0f), ctTexs, 0.005f, 10.0f);
+    scene->AddCreature(ct);
 }

@@ -52,9 +52,8 @@ void World::Run(void)
             break;
 
         //¹Ø¿¨×ªÒÆ
-        if(rt == Scene::RunningResult::OutOfLeftBound && stage_ <= 0)
-            abort();
         stage_ += (rt == Scene::RunningResult::OutOfRightBound ? 1 : -1);
+        stage_ = std::max(stage_, 0);
 
         delete scene_;
         scene_ = new Scene;
@@ -66,9 +65,9 @@ void World::Run(void)
         scene_->SetBound(leftBound_, rightBound_);
 
         if(rt == Scene::RunningResult::OutOfLeftBound)
-            scene_->GetActor().GetPosition() = vec2(rightBound_ - 3.0f, 3.0f);
+            scene_->GetActor().GetPosition() = vec2(rightBound_ - 1.5f, 1e-2f);
         else
-            scene_->GetActor().GetPosition() = vec2(leftBound_ + 3.0f, 3.0f);
+            scene_->GetActor().GetPosition() = vec2(leftBound_ + 1.5f, 1e-2f);
     }
 
     delete scene_;

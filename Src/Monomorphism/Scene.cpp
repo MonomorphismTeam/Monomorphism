@@ -40,6 +40,18 @@ Scene::Scene(void)
     
 }
 
+Scene::~Scene(void)
+{
+    for(BlockArea *area : blockAreas_)
+        delete area;
+    for(Creature *creature : creatures_)
+        delete creature;
+    for(DamageArea *area : damageAreas_)
+        delete area;
+    for(Item *item : items_)
+        delete item;
+}
+
 void Scene::AddBlockArea(BlockArea *area)
 {
     assert(area);

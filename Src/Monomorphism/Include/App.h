@@ -17,11 +17,13 @@ public:
     {
         //≥ı ºªØRenderContext
         OWE::RenderContext::Desc desc;
-        desc.bordered = true;
+        desc.bordered = false;
         desc.resizable = false;
         desc.fullscreen = false;
-        desc.winWidth = 800;
-        desc.winHeight = 600;
+        desc.winLeft   = 50;
+        desc.winTop    = 50;
+        desc.winWidth  = 1600;
+        desc.winHeight = 900;
         desc.title = "Monomorphism";
         desc.glVersion = "4.3";
 
