@@ -12,6 +12,7 @@ Created by AirGuanZ
 #include "NormalCreature.h"
 #include "Scene.h"
 
+//IMPROVE£∫∏…µÙ’‚ÕÊ“‚∂˘
 extern Scene *g_scene;
 
 namespace Test
@@ -72,10 +73,10 @@ namespace Test
             Creature *ct = new NormalCreature(10.0f, vec2(15.0f, 8.0f), vec2(16.0f, 10.0f), creatureFilepath, 0.005f, 10.0f);
             scene.AddCreature(ct);
 
-            Creature *ct2 = new NormalCreature(10.0f, vec2(17.0f, 8.0f), vec2(19.0f, 10.0f), creatureFilepath, 0.005f, 10.0f);
+            Creature *ct2 = new NormalCreature(10.0f, vec2(17.0f, 8.0f), vec2(19.0f, 10.0f), creatureFilepath, 0.0035f, 10.0f);
             scene.AddCreature(ct2);
 
-            Creature *ct3 = new NormalCreature(10.0f, vec2(20.0f, 8.0f), vec2(22.0f, 12.0f), creatureFilepath, 0.005f, 10.0f);
+            Creature *ct3 = new NormalCreature(10.0f, vec2(20.0f, 8.0f), vec2(22.0f, 12.0f), creatureFilepath, 0.002f, 10.0f);
             scene.AddCreature(ct3);
 
             g_scene = &scene;

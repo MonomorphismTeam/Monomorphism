@@ -259,7 +259,6 @@ void Actor::_UpdateRunning(double time)
         act_.Restart();
     }
 
-    //accVel_ += vec2((dir_ == Direction::Right ? runningAccVel_ : -runningAccVel_), 0.0f);
     vel_.x = (dir_ == Direction::Right ? runningVel_ : -runningVel_);
     act_.Tick(time);
 }
