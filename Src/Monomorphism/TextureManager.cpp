@@ -22,6 +22,8 @@ bool TextureManager::Initialize(const std::string &configFile)
         texs_.insert(std::make_pair(texName, std::move(tex)));
     };
     conf.ForEach(loadTex, "Land");
+    conf.ForEach(loadTex, "Creature");
+    conf.ForEach(loadTex, "Light");
 
     return true;
 }

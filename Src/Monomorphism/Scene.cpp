@@ -8,8 +8,10 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 #include <OWE.h>
 
+#include "Include\ResourceNames.h"
 #include "Include\Scene.h"
 #include "Include\Sword.h"
+#include "Include\World.h"
 
 using namespace std;
 using namespace glm;
@@ -82,6 +84,8 @@ void Scene::AddItem(Item *item)
 
 void Scene::Initialize(void)
 {
+    _InitializeShader();
+
     leftBound_ = std::numeric_limits<float>::lowest();
     rightBound_ = std::numeric_limits<float>::max();
 
@@ -101,6 +105,18 @@ void Scene::Initialize(void)
     actor_.GetTexSize()  = vec2(0.02f, 0.02f);
 
     actor_.SetWeapon(new Sword());
+
+    //准备画布
+    int winWidth = RenderContext::GetInstance().ClientWidth();
+    int winHeight = RenderContext::GetInstance().ClientHeight();
+
+    fbBasic_.Initialize(winWidth, winHeight, 1);
+    fbBasic_.AddTex(0, OWE::Texture2D::Desc());
+    fbBasic_.AddDepth();
+
+    fbLight_.Initialize(winWidth, winHeight, 1);
+    fbLight_.AddTex(0, OWE::Texture2D::Desc());
+    fbLight_.AddDepth();
 }
 
 void Scene::SetBound(float left, float right)
@@ -125,16 +141,46 @@ Scene::RunningResult Scene::Run(void)
 
         _InteractWithDamageAreas();
         _UpdateDamageArea();
-        
-        //场景渲染
-        rc_.ClearColorAndDepth();
-        
+
         scale_.SetCentrePosition(actor_.GetPosition());
 
-        _DrawBlockAreas();
-        _DrawCreatures();
-        actor_.Draw(scale_);
-        _DrawDamageArea();
+        //光源遮罩渲染
+        fbLight_.Begin();
+        {
+            rc_.ClearColorAndDepth();
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_ONE, GL_ONE); //亮度直接相加，虽然物理正确的实现是平方相加再开方
+
+            actor_.DrawLight(scale_);
+
+            glDisable(GL_BLEND);
+        }
+        fbLight_.End();
+
+        //场景渲染
+        fbBasic_.Begin();
+        {
+            rc_.ClearColorAndDepth();
+
+            _DrawBlockAreas();
+            _DrawCreatures();
+            actor_.Draw(scale_);
+            _DrawDamageArea();
+        }
+        fbBasic_.End();
+
+        //最后合成场景和光照
+        rc_.ClearColorAndDepth();
+
+        chainShader_.Bind();
+        chainAttribs_->Bind();
+
+        chainBasicTex_.SetAndApply(fbBasic_.GetTex(0));
+        chainLightTex_.SetAndApply(fbLight_.GetTex(0));
+        rc_.DrawTriangles(6);
+
+        chainAttribs_->Unbind();
+        chainShader_.Unbind();
 
         rc_.Present();
         
@@ -153,6 +199,41 @@ Scene::RunningResult Scene::Run(void)
 Actor &Scene::GetActor(void)
 {
     return actor_;
+}
+
+void Scene::_InitializeShader(void)
+{
+    assert(!chainShader_.IsAvailable() && !chainVtxPosBuf_.IsAvailable() && !chainVtxUVBuf_.IsAvailable());
+
+    //准备顶点缓存
+
+    int winW = RenderContext::GetInstance().ClientWidth();
+    int winH = RenderContext::GetInstance().ClientHeight();
+
+    glm::vec2 vtxPosBufData[6];
+    glm::vec2 vtxUVBufData[6];
+    Utility::GenBoxVertices(vec2(-1.0f), vec2(1.0f), vtxPosBufData);
+    Utility::GenBoxVertices(vec2(0.0f), vec2(1.0f), vtxUVBufData);
+    chainVtxPosBuf_.Initialize(6, vtxPosBufData);
+    chainVtxUVBuf_.Initialize(6, vtxUVBufData);
+
+    //加载源代码
+    string vtxSrc, fragSrc, errMsg;
+    if(!Utility::ASCIIFile::Read(SCENE_LIGHT_VERTEX_SHADER, vtxSrc) ||
+       !Utility::ASCIIFile::Read(SCENE_LIGHT_FRAGMENT_SHADER, fragSrc))
+        throw FatalError("Failed to load shader source for scene lighting");
+
+    if(chainShader_.Initialize(errMsg, VSSrc(vtxSrc), FSSrc(fragSrc)) != Shader::InitState::Success)
+        throw FatalError("Failed to initialize shader for scene lighting: " + errMsg);
+
+    chainUniforms_ = chainShader_.GetUniformMgrPtr();
+    chainAttribs_ = chainShader_.GetAttribMgrPtr();
+    
+    chainAttribs_->GetAttrib<glm::vec2>("pos").SetBuffer(chainVtxPosBuf_);
+    chainAttribs_->GetAttrib<glm::vec2>("uv").SetBuffer(chainVtxUVBuf_);
+
+    chainBasicTex_ = chainUniforms_->GetUniform<Texture2DView>("basic");
+    chainLightTex_ = chainUniforms_->GetUniform<Texture2DView>("light");
 }
 
 void Scene::_UpdateActor(void)

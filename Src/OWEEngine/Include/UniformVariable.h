@@ -28,7 +28,7 @@ inline void _SetUniform(GLint loc, GLfloat fv0)
 }
 inline void _SetUniform(GLint loc, GLint v0)
 {
-    glUniform1d(loc, v0);
+    glUniform1i(loc, v0);
 }
 inline void _SetUniform(GLint loc, const glm::vec2 &v)
 {

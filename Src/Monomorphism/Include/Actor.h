@@ -114,6 +114,7 @@ public:
     void UpdateVelocity(double time);
 
     void Draw(const OWE::ScreenScale &scale);
+    void DrawLight(const OWE::ScreenScale &scale);
 
     glm::vec2 &GetPosition(void);
     glm::vec2 &GetTexSize(void);

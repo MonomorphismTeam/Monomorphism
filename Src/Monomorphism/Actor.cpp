@@ -14,6 +14,7 @@ Created by AirGuanZ
 #include "Include\Actor.h"
 #include "Include\ConfigureFile.h"
 #include "Include\ResourceNames.h"
+#include "Include\World.h"
 
 using namespace std;
 using namespace glm;
@@ -387,7 +388,7 @@ void Actor::_UpdateAttackingWithSword(double time)
         weapon_->Restart();
     }
 
-    vel_.x = dir_ == Direction::Right ? runningVel_ / 3.0f : -runningVel_ / 3.0f;
+    vel_.x = dir_ == Direction::Right ? runningVel_ / 4.0f : -runningVel_ / 4.0f;
     vel_.y = 0.0f;
     act_.Tick(time);
 }
@@ -414,6 +415,15 @@ void Actor::Draw(const ScreenScale &scale)
     default:
         abort();
     }
+}
+
+void Actor::DrawLight(const ScreenScale &scale)
+{
+    //人物光的话...直接上个环境光吧...
+    ImmediateRenderer::DrawTexturedBox(vec2(0.0f), vec2(scale.ScreenWidth(), scale.ScreenHeight()),
+                                       vec2(0.0f), vec2(1.0f),
+                                       World::GetInstance().GetTextureManager().GetTexture("AmbientLight"),
+                                       scale);
 }
 
 void Actor::_DrawNormalAction(const ScreenScale &scale)

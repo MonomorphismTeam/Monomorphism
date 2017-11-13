@@ -39,13 +39,13 @@ void Sword::Update(const Actor &actor, double time)
         if(dir == Actor::Direction::Right)
         {
             area = new DamageAreaSword(
-                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x, pos.y, pos.x + 4.0f, pos.y + 2.0f)),
+                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x, pos.y, pos.x + 3.5f, pos.y + 2.0f)),
                 3.0f, 2.0f);
         }
         else
         {
             area = new DamageAreaSword(
-                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x - 4.0f, pos.y, pos.x, pos.y + 2.0f)),
+                OWE::BoundingArea(OWE::BoundingArea::AABB(pos.x - 3.5f, pos.y, pos.x, pos.y + 2.0f)),
                 3.0f, 2.0f);
         }
         World::GetInstance().GetCurrentScene().AddDamageArea(area);

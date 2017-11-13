@@ -17,4 +17,7 @@ Created by AirGuanZ
 #define ACTOR_ACTION_RESOURCE MM_FILENAME("Actor\\actionRsc.conf")
 #define GLOBAL_TEXTURE_RESOURCE MM_FILENAME("texs.conf")
 
+#define SCENE_LIGHT_VERTEX_SHADER MM_FILENAME("Shader\\SceneLight.vs")
+#define SCENE_LIGHT_FRAGMENT_SHADER MM_FILENAME("Shader\\SceneLight.fs")
+
 #endif //__RESOURCE_NAMES_H__

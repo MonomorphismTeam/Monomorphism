@@ -101,6 +101,6 @@ void SceneGenerator::GenerateLand(RandomEngine *eng, Scene *scene, float left, f
         "Bin\\Creature\\MedusaAttacked.png",
         "Bin\\Creature\\MedusaDead.png"
     };
-    NormalCreature *ct = new NormalCreature(9.0f, vec2(6.0f, 1.0f), vec2(8.0f, 3.0f), ctTexs, 0.005f, 10.0f);
+    NormalCreature *ct = new NormalCreature(9.0f, vec2(6.0f, 1.0f), vec2(8.0f, 3.0f), ctTexs, 0.0025f, 10.0f);
     scene->AddCreature(ct);
 }

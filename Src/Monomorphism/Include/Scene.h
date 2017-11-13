@@ -47,6 +47,8 @@ public:
     Actor &GetActor(void);
 
 private:
+    void _InitializeShader(void);
+
     void _UpdateActor(void);
 
     void _UpdateBlockAreas(void);
@@ -64,7 +66,6 @@ private:
     void _DrawItems(void);
 
     void _InteractWithItems(void);
-
 
 private:
     OWE::RenderContext &rc_;
@@ -96,6 +97,21 @@ private:
     CollisionManager<Creature>   creatureColMgr_;
     CollisionManager<DamageArea> damageColMgr_;
     CollisionManager<Item>       itemColMgr_;
+
+    //合成链相关
+    OWE::FrameBuffer fbBasic_; //基本着色
+    OWE::FrameBuffer fbLight_; //光源遮罩
+
+    OWE::Shader chainShader_;
+
+    OWE::Shader::UniformMgrPtr chainUniforms_;
+    OWE::Shader::AttribMgrPtr  chainAttribs_;
+
+    OWE::UniformVariable<OWE::Texture2DView> chainBasicTex_;
+    OWE::UniformVariable<OWE::Texture2DView> chainLightTex_;
+
+    OWE::VertexBuffer<glm::vec2> chainVtxPosBuf_;
+    OWE::VertexBuffer<glm::vec2> chainVtxUVBuf_;
 };
 
 #endif //__SCENE_H__
