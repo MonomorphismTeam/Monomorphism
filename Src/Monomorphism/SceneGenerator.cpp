@@ -18,6 +18,17 @@ using namespace OWE;
 constexpr float MIN_RIGHT_BOUND = 150.0f;
 constexpr float MAX_RIGHT_BOUND = 250.0f;
 
+void SceneGenerator::GenerateSavingPoint(Scene *scene, float *left, float *right)
+{
+    assert(scene && left && right);
+
+    //关于存档点的各种常量
+    constexpr float LEFT_BOUND = 0.0f;
+    constexpr float RIGHT_BOUND = 20.0f;
+
+    //TODO
+}
+
 void SceneGenerator::GenerateScene(SeedType seed, Scene *scene, float *left, float *right)
 {
     assert(scene && left && right);

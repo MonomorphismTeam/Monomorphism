@@ -58,10 +58,10 @@ void Scene::AddItem(Item *item)
     itemColMgr_.AddObject(item);
 }
 
-void Scene::Initialize(float leftBound, float rightBound)
+void Scene::Initialize(void)
 {
-    leftBound_ = leftBound;
-    rightBound_ = rightBound;
+    leftBound_ = std::numeric_limits<float>::lowest();
+    rightBound_ = std::numeric_limits<float>::max();
 
     actor_.Initialize();
     scale_.Reinit(35.0f, 35.0f);
@@ -79,6 +79,12 @@ void Scene::Initialize(float leftBound, float rightBound)
     actor_.GetTexSize()  = vec2(0.02f, 0.02f);
 
     actor_.SetWeapon(new Sword());
+}
+
+void Scene::SetBound(float left, float right)
+{
+    leftBound_ = left;
+    rightBound_ = right;
 }
 
 Scene::RunningResult Scene::Run(void)

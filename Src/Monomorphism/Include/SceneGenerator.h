@@ -15,6 +15,7 @@ public:
     using RandomEngine = std::minstd_rand;
     using SeedType = RandomEngine::result_type;
 
+    static void GenerateSavingPoint(Scene *scene, float *left, float *right);
     static void GenerateScene(SeedType seed, Scene *scene, float *left, float *right);
 
 private:

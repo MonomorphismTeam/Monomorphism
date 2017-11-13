@@ -24,7 +24,7 @@ namespace Test
             RenderContext::Desc desc;
             desc.bordered = true;
             desc.resizable = false;
-            desc.fullscreen = false;
+            desc.fullscreen = true;
             desc.winWidth = 800;
             desc.winHeight = 600;
             desc.title = "Monomorphism";

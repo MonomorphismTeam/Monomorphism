@@ -19,6 +19,22 @@ public:
 
     void Clear(void);
 
+    static std::string DefaultSectionName(void)
+    {
+        return "__DefaultSection";
+    }
+
+    template<typename Func>
+    void ForEach(Func func, const std::string &section = DefaultSectionName())
+    {
+        std::string head = section + "::";
+        for(const auto &it : items_)
+        {
+            if(it.first.find(head) != std::string::npos)
+                func(it.first.substr(head.length()), it.second);
+        }
+    }
+
 private:
     std::map<std::string, std::string> items_;
 };

@@ -36,10 +36,11 @@ public:
     
     void AddBlockArea(BlockArea *area);
     void AddCreature(Creature *creature);
+    void AddDamageArea(DamageArea *area);
     void AddItem(Item *item);
 
-    void Initialize(float leftBound  = std::numeric_limits<float>::lowest(),
-                    float rightBound = std::numeric_limits<float>::max());
+    void Initialize(void);
+    void SetBound(float left, float right);
     RunningResult Run(void);
 
 private:

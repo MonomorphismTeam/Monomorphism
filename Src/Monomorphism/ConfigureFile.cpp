@@ -30,7 +30,7 @@ bool ConfigureFile::Load(const std::string &filename)
     items_.clear();
     ifstream fin(filename, ifstream::in);
     string line;
-    string sectionName = "__DefaultSection";
+    string sectionName = DefaultSectionName();
     if(!fin)
         goto FAILED;
 

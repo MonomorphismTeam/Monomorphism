@@ -38,6 +38,12 @@
     <Filter Include="SceneGenerator">
       <UniqueIdentifier>{f7821939-1635-4e1f-9547-3c2bab6354db}</UniqueIdentifier>
     </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{ec93707a-bd37-4273-8d55-274b8eb78323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{4d00eac4-7213-4b91-a847-61abdb8dc462}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
@@ -67,6 +73,15 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\SceneGenerator.cpp">
       <Filter>SceneGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\World.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\TextureManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\BackgroundArea.cpp">
+      <Filter>BlockArea</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -134,6 +149,19 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\SceneGenerator.h">
       <Filter>SceneGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\World.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TextureManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h">
+      <Filter>ConfigureFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\App.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\BackgroundArea.h">
+      <Filter>BlockArea</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

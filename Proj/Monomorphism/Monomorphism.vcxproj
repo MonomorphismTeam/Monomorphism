@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Actor.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\BackgroundArea.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\DamageAreaSword.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
@@ -29,11 +30,16 @@
     <ClCompile Include="..\..\Src\Monomorphism\Scene.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\SceneGenerator.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Sword.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\TextureManager.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\World.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\Actor.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\ActorAction.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\App.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\BackgroundArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\BlockArea.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Creature.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageAreaSword.h" />
@@ -41,6 +47,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalBlock.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TextureManager.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Item.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Scene.h" />
@@ -54,6 +61,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_ActorMoving.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_SceneWithActor.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Weapon.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\World.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

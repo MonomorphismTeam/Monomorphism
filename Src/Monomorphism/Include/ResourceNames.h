@@ -15,5 +15,6 @@ Created by AirGuanZ
 #define _MM_FILENAME(X) "Bin\\"##X
 
 #define ACTOR_ACTION_RESOURCE MM_FILENAME("Actor\\actionRsc.conf")
+#define GLOBAL_TEXTURE_RESOURCE MM_FILENAME("texs.conf")
 
 #endif //__RESOURCE_NAMES_H__
