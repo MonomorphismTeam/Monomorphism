@@ -81,8 +81,8 @@ void NormalCreature::_updateSTANDING(glm::vec2 playerPoi, double time)
         //转化为跳跃状态判定
         if(playerPoi.y >= (lp_.y) && standingtime > standtim)
         {
-            velocity_.y = 0.025f;
-            standingtime = 0;
+            velocity_.y = 0.015f + 0.01f * rand() / RAND_MAX;
+            standingtime = abs(rand() * rand()) % 1998 + 200;
             status = NormalCreature::Status::FLOATING;
         }
     }

@@ -25,6 +25,7 @@
     <ClCompile Include="..\..\Src\Monomorphism\Creaturedamage.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\DamageAreaSword.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\DecorateArea.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\HPMedicine.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Mainmenu.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\NormalBlock.cpp" />
@@ -47,6 +48,7 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\Creaturedamage.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageAreaSword.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\HPMedicine.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\KeyDown.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DecorateArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h" />

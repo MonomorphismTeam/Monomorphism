@@ -1,6 +1,9 @@
 #include <cstdlib>
+#include <fstream>
 #include <OWE.h>
+
 #include "Include\Mainmenu.h"
+#include "Include\ResourceNames.h"
 #include "Include\World.h"
 
 using namespace menu;
@@ -8,7 +11,7 @@ using namespace menu;
 void Mainmenu::callmainloop(ScreenScale &screenscale)
 {
 	_down = 0;
-	selected = 1;
+	selected = 0;
 	mainloop(screenscale);
 }
 
@@ -30,19 +33,33 @@ bool Mainmenu::runselectedfunctions()
         if(World::IsInstanceAvailable())
             World::DelInstance();
         World::InitInstance();
-        World::GetInstance().InitializeScene(128, 0);
+        World::GetInstance().InitializeScene(static_cast<SceneGenerator::SeedType>(rand()), 0);
         World::GetInstance().Run();
         return true;
 	}
 	else if (selected == 1)
 	{
-		//LOAD
+        std::ifstream fin(SAVE_FILENAME, std::ifstream::in);
+        if(!fin)
+            throw OWE::FatalError("Failed to load saving file: " + std::string(SAVE_FILENAME));
+        SceneGenerator::SeedType worldSeed;
+        World::StageNumber stage;
+        if(!(fin >> worldSeed >> stage))
+            throw OWE::FatalError("Save is broken!");
+        fin.close();
+
+        if(World::IsInstanceAvailable())
+            World::DelInstance();
+        World::InitInstance();
+        World::GetInstance().InitializeScene(worldSeed, stage);
+        World::GetInstance().Run();
         return true;
 	}
 	else if (selected == 2)
 	{
         return false;
 	}
+    return true;
 }
 
 void Mainmenu::mainloop(ScreenScale &screenscale)

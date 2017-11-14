@@ -1,6 +1,7 @@
 #include "Include\Creaturedamage.h"
 #include "Include\Actor.h"
 #include "Include\Creature.h"
+#include "Include\World.h"
 CreaturedamageA::CreaturedamageA(const OWE::BoundingArea &area, float damage, double restLife)
     : area_(area), damage_(damage), restLife_(restLife)
 {
@@ -46,9 +47,9 @@ bool CreaturedamageA::IsDead(void) const
 
 //-------------------------B-------------------
 CreaturedamageB::CreaturedamageB(glm::vec2 shooting, glm::vec2 poi, float damage,
-    double restLife, bool who, float speed, std::string filepath)
+    double restLife, bool who, float speed, OWE::Texture2DView tex)
 {
-    sizet_ = glm::vec2(0.3f, 0.3f);
+    sizet_ = glm::vec2(0.3f, 1.6f);
     float length = glm::sqrt(shooting.x * shooting.x + shooting.y * shooting.y);
     length /= speed;
     velocity_ = glm::vec2(shooting.x / length, shooting.y / length);
@@ -59,8 +60,7 @@ CreaturedamageB::CreaturedamageB(glm::vec2 shooting, glm::vec2 poi, float damage
     if(who)creat_ = Creator::MONSTER;
     else creat_ = Creator::ACTOR;
 
-    OWE::_Texture2DAux::Desc tmp;
-    OWE::_Texture2DAux::_LoadTexture2DFromFile(filepath, tmp, text_);
+    text_ = tex;
 }
 
 CreaturedamageB::~CreaturedamageB()
@@ -77,8 +77,23 @@ void CreaturedamageB::Update(double time)
 
 void CreaturedamageB::Draw(const OWE::ScreenScale &scale)
 {
-    OWE::ImmediateRenderer::DrawTexturedBoxWithScreenTrans(lp_, lp_ + sizet_, glm::vec2(0, 0), glm::vec2(0, 0),
-        text_.GetTextureView(), scale, OWE::ImmediateRenderer::RenderMode::AlphaTest);
+    if(velocity_.x > 0.0f)
+    {
+        OWE::ImmediateRenderer::DrawTexturedBoxWithScreenTrans(lp_, lp_ + sizet_, glm::vec2(0, 0), glm::vec2(1, 1),
+            text_, scale, OWE::ImmediateRenderer::RenderMode::AlphaTest);
+    }
+    else
+    {
+        OWE::ImmediateRenderer::DrawTexturedBoxWithScreenTrans(lp_, lp_ + sizet_, glm::vec2(1), glm::vec2(0),
+            text_, scale, OWE::ImmediateRenderer::RenderMode::AlphaTest);
+    }
+}
+
+void CreaturedamageB::DrawLight(const OWE::ScreenScale &scale)
+{
+    OWE::ImmediateRenderer::DrawTexturedBoxWithScreenTrans(lp_ + 0.5f * sizet_ - glm::vec2(7.0f), lp_ + 0.5f * sizet_ + glm::vec2(7.0f),
+        glm::vec2(0.0f), glm::vec2(1.0f),
+        World::GetInstance().GetTextureManager().GetTexture("WaveLight"), scale);
 }
 
 std::vector<OWE::BoundingArea> CreaturedamageB::GetBoundingAreas(void) const

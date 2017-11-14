@@ -79,6 +79,8 @@ Actor::Actor(void)
 
     timeToHurtable_ = 0.0;
     timeToShiftable_ = -1.0;
+
+    HPLocked_ = false;
 }
 
 void Actor::Initialize(void)
@@ -591,10 +593,23 @@ void Actor::SetHP(float HP)
 
 void Actor::Hurt(float delta)
 {
-    constexpr double INIT_TIME_TO_HURTABLE = 1000.0;
-    if(timeToHurtable_ <= 0.0f && state_ != State::Shifting)
+    if(!HPLocked_)
     {
-        HP_ -= delta;
-        timeToHurtable_ = INIT_TIME_TO_HURTABLE;
+        constexpr double INIT_TIME_TO_HURTABLE = 1000.0;
+        if(timeToHurtable_ <= 0.0f && state_ != State::Shifting)
+        {
+            HP_ -= delta;
+            timeToHurtable_ = INIT_TIME_TO_HURTABLE;
+        }
     }
+}
+
+void Actor::LockHP(bool locked)
+{
+    HPLocked_ = locked;
+}
+
+bool Actor::IsHPLocked(void) const
+{
+    return HPLocked_;
 }

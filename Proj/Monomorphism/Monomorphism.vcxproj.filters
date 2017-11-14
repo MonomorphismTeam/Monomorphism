@@ -92,6 +92,9 @@
     <ClCompile Include="..\..\Src\Monomorphism\DecorateArea.cpp">
       <Filter>BlockArea</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\HPMedicine.cpp">
+      <Filter>Item</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp1.h">
@@ -183,6 +186,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\PauseMenu.h">
       <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\HPMedicine.h">
+      <Filter>Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

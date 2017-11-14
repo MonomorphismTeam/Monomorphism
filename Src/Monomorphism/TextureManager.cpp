@@ -26,6 +26,7 @@ bool TextureManager::Initialize(const std::string &configFile)
     conf.ForEach(loadTex, "Light");
     conf.ForEach(loadTex, "Other");
     conf.ForEach(loadTex, "GUI");
+    conf.ForEach(loadTex, "Item");
 
     return true;
 }

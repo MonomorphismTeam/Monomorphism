@@ -16,7 +16,7 @@ class PauseMenu
 public:
     enum Selected
     {
-        Back, Load, Quit
+        Back, Quit
     };
 
     bool Pause(void)
@@ -40,7 +40,7 @@ public:
             else if(down_.Update(im.IsKeyPressed(OWE::KEY_CODE::KEY_DOWN)))
             {
                 selected_ = static_cast<Selected>(selected_ + 1);
-                if(selected_ > 2)
+                if(selected_ > 1)
                     selected_ = Selected::Back;
             }
             else if(im.IsKeyPressed(OWE::KEY_CODE::KEY_ENTER))
@@ -54,13 +54,6 @@ public:
                     vec2(0.0f), vec2(scale.ScreenWidth(), scale.ScreenHeight()),
                     vec2(0.0f), vec2(1.0f),
                     World::GetInstance().GetTextureManager().GetTexture("PauseBack"),
-                    scale);
-                break;
-            case Load:
-                OWE::ImmediateRenderer::DrawTexturedBox(
-                    vec2(0.0f), vec2(scale.ScreenWidth(), scale.ScreenHeight()),
-                    vec2(0.0f), vec2(1.0f),
-                    World::GetInstance().GetTextureManager().GetTexture("PauseLoad"),
                     scale);
                 break;
             case Quit:
@@ -78,14 +71,12 @@ public:
             rc.Present();
         }
 
-        switch(selected_)
+        if(selected_ == Quit)
         {
-        case Back:
-            return true;
-        case Load:
-            return true;
+            OWE::InputManager::GetInstance()._KeyUp(OWE::KEY_CODE::KEY_ENTER);
+            return false;
         }
-        return false;
+        return true;
     }
 
 private:

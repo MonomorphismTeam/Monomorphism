@@ -30,6 +30,8 @@ private:
 
     void _InitializeResources(void);
 
+    void _Save(void);
+
 private:
     friend class SingletonType;
 

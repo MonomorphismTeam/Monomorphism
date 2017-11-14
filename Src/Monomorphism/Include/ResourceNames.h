@@ -20,4 +20,6 @@ Created by AirGuanZ
 #define SCENE_LIGHT_VERTEX_SHADER MM_FILENAME("Shader\\SceneLight.vs")
 #define SCENE_LIGHT_FRAGMENT_SHADER MM_FILENAME("Shader\\SceneLight.fs")
 
+#define SAVE_FILENAME MM_FILENAME("Save.dat")
+
 #endif //__RESOURCE_NAMES_H__

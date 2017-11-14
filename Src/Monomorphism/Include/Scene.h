@@ -66,6 +66,7 @@ private:
     void _InteractWithDamageAreas(void);
     void _UpdateDamageArea(void);
     void _DrawDamageArea(void);
+    void _DrawDamageAreasLight(void);
 
     void _UpdateItems(void);
     void _DrawItems(void);
@@ -92,6 +93,7 @@ private:
     //角色输入管理
     KeyDown keyJump_;
     KeyDown keyAttack_;
+    KeyDown keyLockHP_;
 
     //场景元素集合
     std::set<BlockArea*>  blockAreas_;

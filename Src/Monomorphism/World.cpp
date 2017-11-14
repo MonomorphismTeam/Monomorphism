@@ -3,6 +3,8 @@ Filename: World.cpp
 Date: 2017.11.12
 Created by AirGuanZ
 ================================================================*/
+#include <fstream>
+
 #include "Include\BackgroundArea.h"
 #include "Include\SimpleAABBBlock.h"
 #include "Include\ResourceNames.h"
@@ -59,9 +61,12 @@ void World::Run(void)
         scene_ = new Scene;
         scene_->Initialize();
         if(stage_ & 1)
-            SceneGenerator::GenerateScene(worldSeed_, scene_, &leftBound_, &rightBound_);
+            SceneGenerator::GenerateScene(worldSeed_, scene_, stage_, &leftBound_, &rightBound_);
         else
+        {
+            _Save();
             SceneGenerator::GenerateSavingPoint(scene_, &leftBound_, &rightBound_);
+        }
         scene_->SetBound(leftBound_, rightBound_);
 
         if(rt == Scene::RunningResult::OutOfLeftBound)
@@ -90,4 +95,13 @@ void World::_InitializeResources(void)
 {
     texMgr_.Clear();
     texMgr_.Initialize(GLOBAL_TEXTURE_RESOURCE);
+}
+
+void World::_Save(void)
+{
+    std::ofstream fout(SAVE_FILENAME, std::ofstream::trunc);
+    if(!fout)
+        throw OWE::FatalError("Failed to save progress into file: " + std::string(SAVE_FILENAME));
+    fout << worldSeed_ << " " << stage_;
+    fout.close();
 }

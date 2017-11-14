@@ -8,6 +8,7 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 #include <OWE.h>
 
+#include "Include\HPMedicine.h"
 #include "Include\PauseMenu.h"
 #include "Include\ResourceNames.h"
 #include "Include\Scene.h"
@@ -22,11 +23,12 @@ using namespace OWE;
 
 constexpr float ACTOR_RUNNING_VEL           = 0.012f;       //移动速度
 constexpr float ACTOR_FLOATING_ACC_VEL      = 0.00006f;     //悬空时自给水平加速度
-constexpr float ACTOR_SHIFTING_VEL          = 0.035f;        //闪避速度
+constexpr float ACTOR_SHIFTING_VEL          = 0.035f * 1.1f;        //闪避速度
 constexpr float ACTOR_JUMPING_VEL           = 0.025f;       //跳跃初速度
 constexpr float ACTOR_MAX_FLOATING_VEL      = 0.012f;       //悬空时最大水平速度
 constexpr float ACTOR_FLOATING_FRIC_ACC_VEL = 0.00003f;     //悬空时空气阻力带来的水平加速度
 constexpr float ACTOR_GRAVITY_ACC           = -0.00008f;    //重力加速度
+
 
 constexpr KEY_CODE ACTOR_INPUT_KEY_MOVE_LEFT     = KEY_CODE::KEY_A;             //向左移动
 constexpr KEY_CODE ACTOR_INPUT_KEY_MOVE_RIGHT    = KEY_CODE::KEY_D;             //向右移动
@@ -37,6 +39,7 @@ constexpr MOUSE_BUTTON ACTOR_INPUT_BUTTON_ATTACK = MOUSE_BUTTON::BUTTON_LEFT;   
 constexpr float ACTOR_INIT_HP = 100.0f; //人物初始血量
 
 //==================================================================================
+constexpr int ITEMDROP = 30;
 
 Scene::Scene(void)
     : rc_(RenderContext::GetInstance()),
@@ -158,7 +161,7 @@ Scene::RunningResult Scene::Run(void)
         _InteractWithDamageAreas();
         _UpdateDamageArea();
 
-        scale_.SetCentrePosition(actor_.GetPosition());
+        scale_.SetCentrePosition(actor_.GetPosition() + vec2(0.0f, scale_.ScreenHeight() * 0.25f));
 
         //光源遮罩渲染
         fbLight_.Begin();
@@ -170,6 +173,7 @@ Scene::RunningResult Scene::Run(void)
 
             actor_.DrawLight(scale_);
             _DrawBlockAreasLight();
+            _DrawDamageAreasLight();
 
             glDisable(GL_BLEND);
         }
@@ -186,6 +190,7 @@ Scene::RunningResult Scene::Run(void)
 
             _DrawBlockAreas();
             _DrawCreatures();
+            _DrawItems();
             actor_.Draw(scale_);
             _DrawDamageArea();
         }
@@ -211,8 +216,6 @@ Scene::RunningResult Scene::Run(void)
         //外部输入处理
         rc_.DoEvents();
         
-        if(im_.IsKeyPressed(KEY_CODE::KEY_ESCAPE))
-            return RunningResult::Closed;
         if(actor_.GetPosition().x < leftBound_)
             return RunningResult::OutOfLeftBound;
         if(actor_.GetPosition().x > rightBound_)
@@ -229,6 +232,9 @@ Scene::RunningResult Scene::Run(void)
                 return RunningResult::Closed;
             clock_.Continue();
         }
+
+        if(keyLockHP_.Update(im_.IsKeyPressed(KEY_CODE::KEY_NUMPAD_0)))
+            actor_.LockHP(!actor_.IsHPLocked());
     }
 }
 
@@ -450,13 +456,16 @@ void Scene::_UpdateCreatures(void)
         {
             //物品几率掉落
 
-            /*int s = rand();
+            int s = rand();
             s = glm::abs(s) % 100;
-            if(s < 50)//add item;
+            if(s < ITEMDROP)//add item;
             {
-                std::string itempath = "";
+                Item *p = new HPMedicine(20000.0f, false, false, pCreature->GetPosition(), 
+                    pCreature->GetPosition() + vec2(1.0f, 1.0f), 
+                    World::GetInstance().GetTextureManager().GetTexture("Medicine"));
+                AddItem(p);
                 //Item = new  create new item;
-            }*/
+            }
             creatureColMgr_.DelObject(pCreature);
             delete pCreature;
         }
@@ -525,6 +534,12 @@ void Scene::_DrawDamageArea(void)
 {
     for(DamageArea *area : damageAreas_)
         area->Draw(scale_);
+}
+
+void Scene::_DrawDamageAreasLight(void)
+{
+    for(DamageArea *a : damageAreas_)
+        a->DrawLight(scale_);
 }
 
 void Scene::_UpdateItems(void)

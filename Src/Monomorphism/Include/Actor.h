@@ -142,6 +142,8 @@ public:
     float GetHP(void) const;
     void SetHP(float HP);
     void Hurt(float delta);
+    void LockHP(bool locked);
+    bool IsHPLocked(void) const;
 
 private:
     void _UpdateStanding(double time);
@@ -220,6 +222,7 @@ private:
     //ÑªÁ¿
     float HP_;
     double timeToHurtable_;
+    bool HPLocked_;
 };
 
 #endif //__ACTOR_H__

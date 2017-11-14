@@ -35,11 +35,12 @@ public:
         ACTOR,
         MONSTER
     };
-    CreaturedamageB(glm::vec2, glm::vec2, float damage, double restLife, bool, float, std::string);//0 = actor 
+    CreaturedamageB(glm::vec2, glm::vec2, float damage, double restLife, bool, float, OWE::Texture2DView tex);//0 = actor 
     ~CreaturedamageB(void);
 
     void Update(double time);
     void Draw(const OWE::ScreenScale &scale);
+    void DrawLight(const OWE::ScreenScale &scale);
 
     std::vector<OWE::BoundingArea> GetBoundingAreas(void) const;
 
@@ -57,6 +58,6 @@ private:
     float speed_;
     Creator creat_;
     double restLife_;
-    OWE::Texture2D text_;
+    OWE::Texture2DView text_;
 };
 

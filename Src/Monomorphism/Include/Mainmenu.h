@@ -39,7 +39,6 @@ namespace menu
 		for (int i = 0; i < textnum; i++)
 		{
 			std::string filepath;
-			float tmpo, tmpq, tmpo1, tmp2;
             fin >> filepath;
 			Texture2D tmpTeux;
 			_Texture2DAux::Desc des;
@@ -47,9 +46,8 @@ namespace menu
 			
 			loadpic_.push_back(std::move(tmpTeux));
 
-			selected = 0;
 		}
-
+        selected = 0;
 	}
 }
 
