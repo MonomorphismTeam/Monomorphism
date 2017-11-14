@@ -16,6 +16,7 @@ public:
 
     virtual void Update(double time) = 0;
     virtual void Draw(const OWE::ScreenScale &scale) = 0;
+    virtual void DrawLight(const OWE::ScreenScale &scale) { }
 
     virtual std::vector<OWE::BoundingArea> GetBoundingAreas(void) const = 0;
 

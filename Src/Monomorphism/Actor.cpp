@@ -76,6 +76,9 @@ Actor::Actor(void)
     weapon_ = nullptr;
 
     attackWhenFloating_ = true;
+
+    timeToHurtable_ = 0.0;
+    timeToShiftable_ = -1.0;
 }
 
 void Actor::Initialize(void)
@@ -146,6 +149,12 @@ void Actor::Update(double time)
 
     if(weapon_)
         weapon_->Update(*this, time);
+
+    if(timeToHurtable_ > 0.0)
+        timeToHurtable_ -= time;
+
+    if(timeToShiftable_ > 0.0)
+        timeToShiftable_ -= time;
 }
 
 void Actor::UpdateVelocity(double time)
@@ -166,7 +175,7 @@ void Actor::UpdateVelocity(double time)
 
     if(state_ == State::Jumping)
         vel_.x = clamp(vel_.x, -maxFloatingVel_, maxFloatingVel_);
-    else
+    else if(state_ != State::Shifting)
         vel_.x = clamp(vel_.x, -runningVel_, runningVel_);
 }
 
@@ -190,7 +199,7 @@ void Actor::_UpdateStanding(double time)
     }
 
     //若按下shift，进入闪避姿态
-    if(user_.shift)
+    if(user_.shift && timeToShiftable_ < 0.0)
     {
         _UpdateShifting(time);
         return;
@@ -235,7 +244,7 @@ void Actor::_UpdateRunning(double time)
     }
 
     //若按下shift，进入闪避姿态
-    if(user_.shift)
+    if(user_.shift && timeToShiftable_ < 0.0)
     {
         _UpdateShifting(time);
         return;
@@ -336,6 +345,10 @@ void Actor::_UpdateShifting(double time)
     //是否是新进入Shifting状态的
     if(state_ != oldState)
     {
+        constexpr double INIT_TIME_TO_SHIFTING = 400.0f;
+
+        timeToShiftable_ = INIT_TIME_TO_SHIFTING;
+
         //刚进Shifting时还有改方向的机会
         if(user_.left)
             dir_ = Direction::Left;
@@ -566,12 +579,22 @@ void Actor::SetWeapon(Weapon *weapon)
     weapon_ = weapon;
 }
 
-double Actor::GetHP(void) const
+float Actor::GetHP(void) const
 {
     return HP_;
 }
 
-void Actor::SetHP(double HP)
+void Actor::SetHP(float HP)
 {
     HP_ = HP;
+}
+
+void Actor::Hurt(float delta)
+{
+    constexpr double INIT_TIME_TO_HURTABLE = 1000.0;
+    if(timeToHurtable_ <= 0.0f && state_ != State::Shifting)
+    {
+        HP_ -= delta;
+        timeToHurtable_ = INIT_TIME_TO_HURTABLE;
+    }
 }

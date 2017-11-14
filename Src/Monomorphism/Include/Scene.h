@@ -42,6 +42,10 @@ public:
 
     void Initialize(void);
     void SetBound(float left, float right);
+
+    void SetBackgroundColor(float r = 0.0f, float g = 0.0f, float b = 0.0f, float a = 0.0f);
+    void SetTiledBackground(OWE::TiledTexture *bkgd);
+
     RunningResult Run(void);
 
     Actor &GetActor(void);
@@ -53,6 +57,7 @@ private:
 
     void _UpdateBlockAreas(void);
     void _DrawBlockAreas(void);
+    void _DrawBlockAreasLight(void);
 
     bool _CreatureTestCoi(const Creature *);
     void _UpdateCreatures(void);
@@ -66,6 +71,8 @@ private:
     void _DrawItems(void);
 
     void _InteractWithItems(void);
+
+    void _DrawActorState(void);
 
 private:
     OWE::RenderContext &rc_;
@@ -112,6 +119,12 @@ private:
 
     OWE::VertexBuffer<glm::vec2> chainVtxPosBuf_;
     OWE::VertexBuffer<glm::vec2> chainVtxUVBuf_;
+
+    //±³¾°É«
+    glm::vec4 bkgdColor_;
+
+    //±³¾°tiled texture
+    OWE::TiledTexture *tiledBackground_;
 };
 
 #endif //__SCENE_H__

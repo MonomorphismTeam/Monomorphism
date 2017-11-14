@@ -139,8 +139,9 @@ public:
     void SetWeapon(Weapon *weapon);
 
     //生命值
-    double GetHP(void) const;
-    void SetHP(double HP);
+    float GetHP(void) const;
+    void SetHP(float HP);
+    void Hurt(float delta);
 
 private:
     void _UpdateStanding(double time);
@@ -208,6 +209,8 @@ private:
     Action::KpSeq  actKpAttackingWithSword_;
     glm::vec2      actTexSizeAttackingWithSword_;
 
+    double timeToShiftable_; //距离下一次可闪避的最短时间
+
     //携带的武器
     Weapon *weapon_;
 
@@ -215,7 +218,8 @@ private:
     bool attackWhenFloating_;
 
     //血量
-    double HP_;
+    float HP_;
+    double timeToHurtable_;
 };
 
 #endif //__ACTOR_H__

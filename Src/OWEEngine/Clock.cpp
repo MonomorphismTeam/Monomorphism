@@ -15,6 +15,7 @@ Clock::Clock(void)
     QueryPerformanceFrequency(&freq);
     ratio_ = 1000.0 / freq.QuadPart;
 
+    paused_ = false;
     Restart();
 }
 
@@ -40,12 +41,24 @@ void Clock::Tick(void)
 
 double Clock::ElapsedTime(void) const
 {
-    return elapsedTime_;
+    return paused_ ? 0.0 : elapsedTime_;
 }
 
 double Clock::TotalTime(void) const
 {
     return lastTick_ - startTime_;
+}
+
+void Clock::Pause(void)
+{
+    paused_ = true;
+}
+
+void Clock::Continue(void)
+{
+    paused_ = false;
+    Tick();
+    Tick();
 }
 
 __OWE_END_NAMESPACE__(OWE)

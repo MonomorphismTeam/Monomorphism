@@ -1,5 +1,6 @@
 #include"Include\NormalCreature.h"
 #include "Include\Creaturedamage.h"
+#include "Include\World.h"
 #include<OWE.h>
 
 NormalCreature::NormalCreature(float hp, glm::vec2 lp, glm::vec2 rp, std::string filepath[3], float xSpeed_, float _damage)
@@ -181,10 +182,11 @@ CreatureRelation NormalCreature::RelationwithActor(void) const
 
 void NormalCreature::Attack1()
 {
-    const double attack1Col = 50.0f; //2500ms default
+    const double attack1Col = 20; //2500ms default
                                     //improve : create damage area
     OWE::BoundingArea::AABB area(lp_.x, lp_.y, rp_.x, rp_.y);
-    //DamageArea * demage = new CreaturedamageA(area, damage_, 40.0f);
+    DamageArea * damage = new CreaturedamageA(area, damage_, 20);
+    World::GetInstance().GetCurrentScene().AddDamageArea(damage);
     //add to sense
     //
     attack1CoolDown_ = attack1Col;

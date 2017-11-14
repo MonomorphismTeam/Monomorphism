@@ -24,6 +24,8 @@ bool TextureManager::Initialize(const std::string &configFile)
     conf.ForEach(loadTex, "Land");
     conf.ForEach(loadTex, "Creature");
     conf.ForEach(loadTex, "Light");
+    conf.ForEach(loadTex, "Other");
+    conf.ForEach(loadTex, "GUI");
 
     return true;
 }

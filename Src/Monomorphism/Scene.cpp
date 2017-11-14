@@ -8,6 +8,7 @@ Created by AirGuanZ
 #include <glm\glm.hpp>
 #include <OWE.h>
 
+#include "Include\PauseMenu.h"
 #include "Include\ResourceNames.h"
 #include "Include\Scene.h"
 #include "Include\Sword.h"
@@ -21,7 +22,7 @@ using namespace OWE;
 
 constexpr float ACTOR_RUNNING_VEL           = 0.012f;       //移动速度
 constexpr float ACTOR_FLOATING_ACC_VEL      = 0.00006f;     //悬空时自给水平加速度
-constexpr float ACTOR_SHIFTING_VEL          = 0.02f;        //闪避速度
+constexpr float ACTOR_SHIFTING_VEL          = 0.035f;        //闪避速度
 constexpr float ACTOR_JUMPING_VEL           = 0.025f;       //跳跃初速度
 constexpr float ACTOR_MAX_FLOATING_VEL      = 0.012f;       //悬空时最大水平速度
 constexpr float ACTOR_FLOATING_FRIC_ACC_VEL = 0.00003f;     //悬空时空气阻力带来的水平加速度
@@ -32,6 +33,8 @@ constexpr KEY_CODE ACTOR_INPUT_KEY_MOVE_RIGHT    = KEY_CODE::KEY_D;             
 constexpr KEY_CODE ACTOR_INPUT_KEY_JUMP          = KEY_CODE::KEY_SPACE;         //跳跃
 constexpr KEY_CODE ACTOR_INPUT_KEY_SHIFT         = KEY_CODE::KEY_LSHIFT;        //闪避
 constexpr MOUSE_BUTTON ACTOR_INPUT_BUTTON_ATTACK = MOUSE_BUTTON::BUTTON_LEFT;   //攻击
+
+constexpr float ACTOR_INIT_HP = 100.0f; //人物初始血量
 
 //==================================================================================
 
@@ -52,6 +55,8 @@ Scene::~Scene(void)
         delete area;
     for(Item *item : items_)
         delete item;
+    if(tiledBackground_)
+        delete tiledBackground_;
 }
 
 void Scene::AddBlockArea(BlockArea *area)
@@ -90,7 +95,7 @@ void Scene::Initialize(void)
     rightBound_ = std::numeric_limits<float>::max();
 
     actor_.Initialize();
-    scale_.Reinit(35.0f, 35.0f);
+    scale_.Reinit(50.0f, 50.0f);
     
     //初始化角色参数
     actor_.SetRunningVel        (ACTOR_RUNNING_VEL);
@@ -105,6 +110,7 @@ void Scene::Initialize(void)
     actor_.GetTexSize()  = vec2(0.02f, 0.02f);
 
     actor_.SetWeapon(new Sword());
+    actor_.SetHP(ACTOR_INIT_HP);
 
     //准备画布
     int winWidth = RenderContext::GetInstance().ClientWidth();
@@ -123,6 +129,16 @@ void Scene::SetBound(float left, float right)
 {
     leftBound_ = left;
     rightBound_ = right;
+}
+
+void Scene::SetBackgroundColor(float r, float g, float b, float a)
+{
+    bkgdColor_ = vec4(r, g, b, a);
+}
+
+void Scene::SetTiledBackground(TiledTexture *tex)
+{
+    tiledBackground_ = tex;
 }
 
 Scene::RunningResult Scene::Run(void)
@@ -147,11 +163,13 @@ Scene::RunningResult Scene::Run(void)
         //光源遮罩渲染
         fbLight_.Begin();
         {
+            rc_.SetClearColor(vec4(0.0f));
             rc_.ClearColorAndDepth();
             glEnable(GL_BLEND);
             glBlendFunc(GL_ONE, GL_ONE); //亮度直接相加，虽然物理正确的实现是平方相加再开方
 
             actor_.DrawLight(scale_);
+            _DrawBlockAreasLight();
 
             glDisable(GL_BLEND);
         }
@@ -160,7 +178,11 @@ Scene::RunningResult Scene::Run(void)
         //场景渲染
         fbBasic_.Begin();
         {
+            rc_.SetClearColor(bkgdColor_);
             rc_.ClearColorAndDepth();
+
+            if(tiledBackground_)
+                tiledBackground_->Draw(vec2(0.0f), scale_);
 
             _DrawBlockAreas();
             _DrawCreatures();
@@ -182,6 +204,8 @@ Scene::RunningResult Scene::Run(void)
         chainAttribs_->Unbind();
         chainShader_.Unbind();
 
+        _DrawActorState();
+
         rc_.Present();
         
         //外部输入处理
@@ -193,6 +217,18 @@ Scene::RunningResult Scene::Run(void)
             return RunningResult::OutOfLeftBound;
         if(actor_.GetPosition().x > rightBound_)
             return RunningResult::OutOfRightBound;
+
+        if(actor_.GetHP() < 0.0f)
+            return RunningResult::Closed;
+
+        if(im_.IsKeyPressed(KEY_CODE::KEY_P))
+        {
+            PauseMenu pause;
+            clock_.Pause();
+            if(!pause.Pause())
+                return RunningResult::Closed;
+            clock_.Continue();
+        }
     }
 }
 
@@ -337,6 +373,12 @@ void Scene::_DrawBlockAreas(void)
 {
     for(BlockArea *pArea : blockAreas_)
         pArea->Draw(scale_);
+}
+
+void Scene::_DrawBlockAreasLight(void)
+{
+    for(BlockArea *area : blockAreas_)
+        area->DrawLight(scale_);
 }
 
 bool Scene::_CreatureTestCoi(const Creature *p)
@@ -524,4 +566,13 @@ void Scene::_InteractWithItems(void)
 
     for(auto *p : inItems)
         p->InteractWithActor(&actor_);
+}
+
+void Scene::_DrawActorState(void)
+{
+    OWE::ImmediateRenderer::DrawTexturedBox(
+        vec2(1.0f, scale_.ScreenHeight() - 1.3f),
+        vec2(1.0f + actor_.GetHP() / 100.0f * 4.0f, scale_.ScreenHeight() - 1.2f),
+        vec2(0.0f), vec2(1.0f),
+        World::GetInstance().GetTextureManager().GetTexture("HPBar"), scale_);
 }

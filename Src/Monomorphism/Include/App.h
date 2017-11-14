@@ -8,6 +8,7 @@ Created by AirGuanZ
 
 #include <OWE.h>
 
+#include "Mainmenu.h"
 #include "World.h"
 
 class App
@@ -31,10 +32,10 @@ public:
         OWE::RenderContext &rc = OWE::RenderContext::GetInstance();
         OWE::InputManager &im  = OWE::InputManager::GetInstance();
 
-        //创建世界
-        World::InitInstance();
-        World::GetInstance().InitializeScene(128, 0);
-        World::GetInstance().Run();
+        OWE::ScreenScale scale;
+        scale.Reinit(1.0f, 1.0f);
+        menu::Mainmenu mainMenu("Bin\\MainMenu\\MainMenu.conf");
+        mainMenu.callmainloop(scale);
     }
 };
 

@@ -23,6 +23,9 @@ public:
 
     double TotalTime(void) const;
 
+    void Pause(void);
+    void Continue(void);
+
 private:
     using InternalFormat = double;
 
@@ -30,6 +33,8 @@ private:
     InternalFormat lastTick_;
     InternalFormat elapsedTime_;
     InternalFormat ratio_;
+
+    bool paused_;
 };
 
 __OWE_END_NAMESPACE__(OWE)

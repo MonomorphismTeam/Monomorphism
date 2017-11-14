@@ -24,6 +24,7 @@
     <ClCompile Include="..\..\Src\Monomorphism\ConfigureFile.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Creaturedamage.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\DamageAreaSword.cpp" />
+    <ClCompile Include="..\..\Src\Monomorphism\DecorateArea.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\Mainmenu.cpp" />
     <ClCompile Include="..\..\Src\Monomorphism\NormalBlock.cpp" />
@@ -47,9 +48,11 @@
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageAreaSword.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\KeyDown.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\DecorateArea.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalBlock.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\PauseMenu.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\SimpleAABBBlock.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\TextureManager.h" />
     <ClInclude Include="..\..\Src\Monomorphism\Include\ResourceNames.h" />

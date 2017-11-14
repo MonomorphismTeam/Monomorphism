@@ -32,9 +32,6 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{fc0bf87d-6daa-41dd-9b89-ef9a38a9bde4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MainMenu">
-      <UniqueIdentifier>{105a738c-5f04-42ba-b423-74f9edec09ee}</UniqueIdentifier>
-    </Filter>
     <Filter Include="SceneGenerator">
       <UniqueIdentifier>{f7821939-1635-4e1f-9547-3c2bab6354db}</UniqueIdentifier>
     </Filter>
@@ -43,6 +40,9 @@
     </Filter>
     <Filter Include="ResourceManager">
       <UniqueIdentifier>{4d00eac4-7213-4b91-a847-61abdb8dc462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{105a738c-5f04-42ba-b423-74f9edec09ee}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -69,7 +69,7 @@
       <Filter>Creature</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\Mainmenu.cpp">
-      <Filter>MainMenu</Filter>
+      <Filter>Menu</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\SceneGenerator.cpp">
       <Filter>SceneGenerator</Filter>
@@ -87,6 +87,9 @@
       <Filter>DamageArea</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\SimpleAABBBlock.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\DecorateArea.cpp">
       <Filter>BlockArea</Filter>
     </ClCompile>
   </ItemGroup>
@@ -151,7 +154,7 @@
       <Filter>Creature</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h">
-      <Filter>MainMenu</Filter>
+      <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\SceneGenerator.h">
       <Filter>SceneGenerator</Filter>
@@ -174,6 +177,12 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\SimpleAABBBlock.h">
       <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\DecorateArea.h">
+      <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\PauseMenu.h">
+      <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
