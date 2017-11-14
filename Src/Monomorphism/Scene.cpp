@@ -222,7 +222,26 @@ Scene::RunningResult Scene::Run(void)
             return RunningResult::OutOfRightBound;
 
         if(actor_.GetHP() < 0.0f)
+        {
+            im_._KeyUp(KEY_CODE::KEY_SPACE);
+            while(true)
+            {
+                rc_.ClearColorAndDepth();
+
+                OWE::ImmediateRenderer::DrawTexturedBox(
+                    vec2(0.0f), vec2(scale_.ScreenWidth(), scale_.ScreenHeight()),
+                    vec2(0.0f), vec2(1.0f),
+                    World::GetInstance().GetTextureManager().GetTexture("YouDie"),
+                    scale_);
+
+                if(im_.IsKeyPressed(KEY_CODE::KEY_SPACE))
+                    break;
+
+                rc_.DoEvents();
+                rc_.Present();
+            }
             return RunningResult::Closed;
+        }
 
         if(im_.IsKeyPressed(KEY_CODE::KEY_P))
         {
