@@ -14,6 +14,7 @@ Created by AirGuanZ
 #include "Include\Actor.h"
 #include "Include\ConfigureFile.h"
 #include "Include\ResourceNames.h"
+#include "Include\World.h"
 
 using namespace std;
 using namespace glm;
@@ -75,6 +76,11 @@ Actor::Actor(void)
     weapon_ = nullptr;
 
     attackWhenFloating_ = true;
+
+    timeToHurtable_ = 0.0;
+    timeToShiftable_ = -1.0;
+
+    HPLocked_ = false;
 }
 
 void Actor::Initialize(void)
@@ -110,6 +116,12 @@ Actor::EnvirInput &Actor::GetEnvirInput(void)
     return envir_;
 }
 
+void Actor::ResetInput(void)
+{
+    user_.Reset();
+    envir_.Reset();
+}
+
 /*
     根据当前动作决定是否要转移到其他动作
 */
@@ -139,6 +151,12 @@ void Actor::Update(double time)
 
     if(weapon_)
         weapon_->Update(*this, time);
+
+    if(timeToHurtable_ > 0.0)
+        timeToHurtable_ -= time;
+
+    if(timeToShiftable_ > 0.0)
+        timeToShiftable_ -= time;
 }
 
 void Actor::UpdateVelocity(double time)
@@ -159,7 +177,7 @@ void Actor::UpdateVelocity(double time)
 
     if(state_ == State::Jumping)
         vel_.x = clamp(vel_.x, -maxFloatingVel_, maxFloatingVel_);
-    else
+    else if(state_ != State::Shifting)
         vel_.x = clamp(vel_.x, -runningVel_, runningVel_);
 }
 
@@ -183,7 +201,7 @@ void Actor::_UpdateStanding(double time)
     }
 
     //若按下shift，进入闪避姿态
-    if(user_.shift)
+    if(user_.shift && timeToShiftable_ < 0.0)
     {
         _UpdateShifting(time);
         return;
@@ -228,7 +246,7 @@ void Actor::_UpdateRunning(double time)
     }
 
     //若按下shift，进入闪避姿态
-    if(user_.shift)
+    if(user_.shift && timeToShiftable_ < 0.0)
     {
         _UpdateShifting(time);
         return;
@@ -253,7 +271,6 @@ void Actor::_UpdateRunning(double time)
         act_.Restart();
     }
 
-    //accVel_ += vec2((dir_ == Direction::Right ? runningAccVel_ : -runningAccVel_), 0.0f);
     vel_.x = (dir_ == Direction::Right ? runningVel_ : -runningVel_);
     act_.Tick(time);
 }
@@ -330,6 +347,10 @@ void Actor::_UpdateShifting(double time)
     //是否是新进入Shifting状态的
     if(state_ != oldState)
     {
+        constexpr double INIT_TIME_TO_SHIFTING = 400.0f;
+
+        timeToShiftable_ = INIT_TIME_TO_SHIFTING;
+
         //刚进Shifting时还有改方向的机会
         if(user_.left)
             dir_ = Direction::Left;
@@ -382,7 +403,7 @@ void Actor::_UpdateAttackingWithSword(double time)
         weapon_->Restart();
     }
 
-    vel_.x = dir_ == Direction::Right ? runningVel_ / 3.0f : -runningVel_ / 3.0f;
+    vel_.x = dir_ == Direction::Right ? runningVel_ / 4.0f : -runningVel_ / 4.0f;
     vel_.y = 0.0f;
     act_.Tick(time);
 }
@@ -409,6 +430,15 @@ void Actor::Draw(const ScreenScale &scale)
     default:
         abort();
     }
+}
+
+void Actor::DrawLight(const ScreenScale &scale)
+{
+    //人物光的话...直接上个环境光吧...
+    ImmediateRenderer::DrawTexturedBox(vec2(0.0f), vec2(scale.ScreenWidth(), scale.ScreenHeight()),
+                                       vec2(0.0f), vec2(1.0f),
+                                       World::GetInstance().GetTextureManager().GetTexture("AmbientLight"),
+                                       scale);
 }
 
 void Actor::_DrawNormalAction(const ScreenScale &scale)
@@ -498,6 +528,22 @@ vec2 &Actor::GetAccVelocity(void)
     return accVel_;
 }
 
+const vec2 &Actor::GetPosition(void) const
+{
+    return pos_;
+}
+
+Actor::Direction Actor::GetDirection(void) const
+{
+    return dir_;
+}
+
+std::vector<BoundingArea> Actor::GetBoundingAreas(void) const
+{
+    float dx = 17 * texSize_.x, dy = 108 * texSize_.y;
+    return { BoundingArea(BoundingArea::AABB(pos_.x - dx, pos_.y, pos_.x + dx, pos_.y + dy)) };
+}
+
 void Actor::SetRunningVel(float accVel)
 {
     runningVel_ = accVel;
@@ -530,15 +576,40 @@ void Actor::SetFloatingFricAccVel(float accVel)
 
 void Actor::SetWeapon(Weapon *weapon)
 {
+    if(weapon_)
+        delete weapon_;
     weapon_ = weapon;
 }
 
-double Actor::GetHP(void) const
+float Actor::GetHP(void) const
 {
     return HP_;
 }
 
-void Actor::SetHP(double HP)
+void Actor::SetHP(float HP)
 {
     HP_ = HP;
+}
+
+void Actor::Hurt(float delta)
+{
+    if(!HPLocked_)
+    {
+        constexpr double INIT_TIME_TO_HURTABLE = 1000.0;
+        if(timeToHurtable_ <= 0.0f && state_ != State::Shifting)
+        {
+            HP_ -= delta;
+            timeToHurtable_ = INIT_TIME_TO_HURTABLE;
+        }
+    }
+}
+
+void Actor::LockHP(bool locked)
+{
+    HPLocked_ = locked;
+}
+
+bool Actor::IsHPLocked(void) const
+{
+    return HPLocked_;
 }

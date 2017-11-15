@@ -9,12 +9,15 @@ Created by AirGuanZ
 #include "Include\TestApp4_TextureAnimation.h"
 #include "Include\TestApp_ActorMoving.h"
 #include "Include\TestApp_ActorAttackingWithSword.h"
+#include "Include\TestApp_SceneWithActor.h"
+
+#include "Include\App.h"
 
 int main(void)
 {
     try
     {
-        Test::TestApp_ActorAttackingWithSword app;
+        App app;
         app.Run();
     }
     catch(const OWE::FatalError &err)

@@ -16,10 +16,10 @@ __OWE_BEGIN_NAMESPACE__(OWE)
 __OWE_BEGIN_NAMESPACE__(_CollisionManagerAux)
 
 template<typename T>
-struct _HasMemberAux_GetBoundingArea
+struct _HasMemberAux_GetBoundingAreas
 {
     template<typename U>
-    static char _Helper(decltype(&T::GetBoundingArea));
+    static char _Helper(decltype(&T::GetBoundingAreas));
     template<typename U>
     static std::uint32_t _Helper(...);
 
@@ -27,9 +27,9 @@ struct _HasMemberAux_GetBoundingArea
 };
 
 template<typename T>
-inline constexpr bool _HasMember_GetBoundingArea(void)
+inline constexpr bool _HasMember_GetBoundingAreas(void)
 {
-    return static_cast<int>(_HasMemberAux_GetBoundingArea<T>::value) == 1;
+    return static_cast<int>(_HasMemberAux_GetBoundingAreas<T>::value) == 1;
 }
 
 __OWE_END_NAMESPACE__(_CollisionManagerAux)
@@ -40,8 +40,8 @@ class CollisionManagerBase
 public:
     using ObjectType = T;
 
-    static_assert(_CollisionManagerAux::_HasMember_GetBoundingArea<ObjectType>(),
-        "CollisionManager: T must have member function 'GetBoundingArea`");
+    static_assert(_CollisionManagerAux::_HasMember_GetBoundingAreas<ObjectType>(),
+        "CollisionManager: T must have member function 'GetBoundingAreas`");
 
     void AddObject(T *obj)
     {

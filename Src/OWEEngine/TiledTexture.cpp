@@ -21,7 +21,7 @@ namespace
     inline void _DrawTileWithBasicMode(float xLB, float yLB, float width, float height,
                                        const _Tile &tile, const ScreenScale &scale)
     {
-        ImmediateRenderer::DrawTexturedBox(
+        ImmediateRenderer::DrawTexturedBoxWithScreenTrans(
             glm::vec2(xLB, yLB), glm::vec2(xLB, yLB) + glm::vec2(width, height),
             tile.uvLB, tile.uvRT, tile.tex, scale);
     }
@@ -29,7 +29,7 @@ namespace
     inline void _DrawTileWithAlphaTestMode(float xLB, float yLB, float width, float height,
                                            const _Tile &tile, const ScreenScale &scale, float minAlpha)
     {
-        ImmediateRenderer::DrawTexturedBox(
+        ImmediateRenderer::DrawTexturedBoxWithScreenTrans(
             glm::vec2(xLB, yLB), glm::vec2(xLB, yLB) + glm::vec2(width, height),
             tile.uvLB, tile.uvRT, tile.tex, scale,
             ImmediateRenderer::RenderMode::AlphaTest,

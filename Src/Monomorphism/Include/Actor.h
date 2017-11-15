@@ -108,16 +108,24 @@ public:
 
     UserInput &GetUserInput(void);
     EnvirInput &GetEnvirInput(void);
+    void ResetInput(void);
 
     void Update(double time);
     void UpdateVelocity(double time);
 
     void Draw(const OWE::ScreenScale &scale);
+    void DrawLight(const OWE::ScreenScale &scale);
 
     glm::vec2 &GetPosition(void);
     glm::vec2 &GetTexSize(void);
     glm::vec2 &GetVelocity(void);
     glm::vec2 &GetAccVelocity(void);
+
+    const glm::vec2 &GetPosition(void) const;
+
+    Direction GetDirection(void) const;
+
+    std::vector<OWE::BoundingArea> GetBoundingAreas(void) const;
 
     void SetRunningVel(float Vel);        //移动时自给的水平加速度
     void SetFloatingAccVel(float accVel); //在空中时自给的水平加速度
@@ -127,11 +135,15 @@ public:
     void SetMaxFloatingVel(float vel);
     void SetFloatingFricAccVel(float accVel);
 
+    //设置持有的武器，所有权转移到actor
     void SetWeapon(Weapon *weapon);
 
     //生命值
-    double GetHP(void) const;
-    void SetHP(double HP);
+    float GetHP(void) const;
+    void SetHP(float HP);
+    void Hurt(float delta);
+    void LockHP(bool locked);
+    bool IsHPLocked(void) const;
 
 private:
     void _UpdateStanding(double time);
@@ -199,6 +211,8 @@ private:
     Action::KpSeq  actKpAttackingWithSword_;
     glm::vec2      actTexSizeAttackingWithSword_;
 
+    double timeToShiftable_; //距离下一次可闪避的最短时间
+
     //携带的武器
     Weapon *weapon_;
 
@@ -206,7 +220,9 @@ private:
     bool attackWhenFloating_;
 
     //血量
-    double HP_;
+    float HP_;
+    double timeToHurtable_;
+    bool HPLocked_;
 };
 
 #endif //__ACTOR_H__

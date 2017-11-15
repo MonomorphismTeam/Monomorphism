@@ -29,6 +29,21 @@
     <Filter Include="ConfigureFile">
       <UniqueIdentifier>{cce67b36-0fc7-4eb7-8303-79143b209226}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{fc0bf87d-6daa-41dd-9b89-ef9a38a9bde4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SceneGenerator">
+      <UniqueIdentifier>{f7821939-1635-4e1f-9547-3c2bab6354db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="World">
+      <UniqueIdentifier>{ec93707a-bd37-4273-8d55-274b8eb78323}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ResourceManager">
+      <UniqueIdentifier>{4d00eac4-7213-4b91-a847-61abdb8dc462}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Menu">
+      <UniqueIdentifier>{105a738c-5f04-42ba-b423-74f9edec09ee}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\Src\Monomorphism\Main.cpp" />
@@ -43,6 +58,42 @@
     </ClCompile>
     <ClCompile Include="..\..\Src\Monomorphism\DamageAreaSword.cpp">
       <Filter>DamageArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\NormalBlock.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\NormalCreature.cpp">
+      <Filter>Creature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\Mainmenu.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\SceneGenerator.cpp">
+      <Filter>SceneGenerator</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\World.cpp">
+      <Filter>World</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\TextureManager.cpp">
+      <Filter>ResourceManager</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\BackgroundArea.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\Creaturedamage.cpp">
+      <Filter>DamageArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\SimpleAABBBlock.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\DecorateArea.cpp">
+      <Filter>BlockArea</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Src\Monomorphism\HPMedicine.cpp">
+      <Filter>Item</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -91,6 +142,53 @@
     </ClInclude>
     <ClInclude Include="..\..\Src\Monomorphism\Include\DamageAreaSword.h">
       <Filter>DamageArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\KeyDown.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TestApp_SceneWithActor.h">
+      <Filter>Test</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\NormalBlock.h">
+      <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\NormalCreature.h">
+      <Filter>Creature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Mainmenu.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\SceneGenerator.h">
+      <Filter>SceneGenerator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\World.h">
+      <Filter>World</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\TextureManager.h">
+      <Filter>ResourceManager</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\ConfigureFile.h">
+      <Filter>ConfigureFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\App.h" />
+    <ClInclude Include="..\..\Src\Monomorphism\Include\BackgroundArea.h">
+      <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\Creaturedamage.h">
+      <Filter>DamageArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\SimpleAABBBlock.h">
+      <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\DecorateArea.h">
+      <Filter>BlockArea</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\PauseMenu.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Src\Monomorphism\Include\HPMedicine.h">
+      <Filter>Item</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

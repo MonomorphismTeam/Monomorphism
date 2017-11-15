@@ -31,6 +31,10 @@ public:
     std::vector<DamageArea*> GetDamageAreas(void) const;
 
     bool Busy(void) const;
+
+private:
+    bool restarted_;
+    std::vector<DamageArea*> damageAreas_;
 };
 
 #endif //__SWORD_H__

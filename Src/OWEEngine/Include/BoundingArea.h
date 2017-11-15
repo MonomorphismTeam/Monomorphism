@@ -28,7 +28,7 @@ struct _BoundingArea_AABB
 {
     _BoundingArea_AABB(float _xLB = 0.0f, float _yLB = 0.0f,
                        float _xRT = 0.0f, float _yRT = 0.0f)
-        : LB(_xLB, _yRT), RT(_xRT, _yRT)
+        : LB(_xLB, _yLB), RT(_xRT, _yRT)
     {
 
     }

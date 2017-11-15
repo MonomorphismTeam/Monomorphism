@@ -11,7 +11,7 @@ Created by AirGuanZ
 class DamageAreaSword : public DamageArea
 {
 public:
-    DamageAreaSword(const OWE::BoundingArea &area, float damage, double restLift);
+    DamageAreaSword(const OWE::BoundingArea &area, float damage, double restLife);
     ~DamageAreaSword(void);
 
     void Update(double time);

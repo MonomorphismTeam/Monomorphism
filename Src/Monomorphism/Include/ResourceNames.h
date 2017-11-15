@@ -15,5 +15,11 @@ Created by AirGuanZ
 #define _MM_FILENAME(X) "Bin\\"##X
 
 #define ACTOR_ACTION_RESOURCE MM_FILENAME("Actor\\actionRsc.conf")
+#define GLOBAL_TEXTURE_RESOURCE MM_FILENAME("texs.conf")
+
+#define SCENE_LIGHT_VERTEX_SHADER MM_FILENAME("Shader\\SceneLight.vs")
+#define SCENE_LIGHT_FRAGMENT_SHADER MM_FILENAME("Shader\\SceneLight.fs")
+
+#define SAVE_FILENAME MM_FILENAME("Save.dat")
 
 #endif //__RESOURCE_NAMES_H__
