@@ -21,7 +21,7 @@ public:
         OWE::RenderContext::Desc desc;
         desc.bordered = false;
         desc.resizable = false;
-        desc.fullscreen = true;
+        desc.fullscreen = false;
         desc.winLeft   = 50;
         desc.winTop    = 50;
         desc.winWidth  = 800;
