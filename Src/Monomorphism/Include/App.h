@@ -24,8 +24,8 @@ public:
         desc.fullscreen = true;
         desc.winLeft   = 50;
         desc.winTop    = 50;
-        desc.winWidth  = 1600;
-        desc.winHeight = 900;
+        desc.winWidth  = 800;
+        desc.winHeight = 600;
         desc.title = "Monomorphism";
         desc.glVersion = "4.3";
 

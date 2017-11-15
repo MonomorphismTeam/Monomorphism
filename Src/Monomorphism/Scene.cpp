@@ -98,7 +98,7 @@ void Scene::Initialize(void)
     rightBound_ = std::numeric_limits<float>::max();
 
     actor_.Initialize();
-    scale_.Reinit(50.0f, 50.0f);
+    scale_.Reinit(50.0f * 2 / 3, 50.0f * 2 / 3);
     
     //初始化角色参数
     actor_.SetRunningVel        (ACTOR_RUNNING_VEL);
