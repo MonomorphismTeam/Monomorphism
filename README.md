@@ -7,7 +7,7 @@ Monomorphism - A 2D Action Game
 A 2D Action Game, Easy for greener, Fully for fun, Endless Playing
 
 <p align="center">
-  <img src="Image/Game2017.png" width="600">
+  <img src="Image/Game2017.png" width="500">
   <br />
   <br />
 </p>
